@@ -24,14 +24,9 @@ const userSocketMap = {};
 
 io.use((socket, next) => {
   try {
-    const cookieHeader = socket.handshake.headers.cookie;
-    if (!cookieHeader) return next(new Error("Authentication error"));
+    const token = socket.handshake.auth.token;
+    if (!token) return next(new Error("Authentication error"));
     
-    // Parse the "token" cookie
-    const tokenMatch = cookieHeader.split(";").find(c => c.trim().startsWith("token="));
-    if (!tokenMatch) return next(new Error("Authentication error"));
-    
-    const token = tokenMatch.split("=")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     socket.userId = decoded.userID;
     next();
