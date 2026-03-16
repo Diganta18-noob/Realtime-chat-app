@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
-import User from "../models/user.model.js";
-import generateTokens from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
+import AuditLog from "../models/auditLog.model.js";
+import generateTokens from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
   try {
@@ -17,11 +18,8 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "Username already exists" });
     }
 
-    // HASH PASSWORD HERE
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // https://avatar-placeholder.iran.liara.run/
 
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
@@ -35,15 +33,25 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      // Generate JWT token here
       const accessToken = generateTokens(newUser._id, res);
       await newUser.save();
+
+      // Log signup as login event
+      await AuditLog.create({
+        userId: newUser._id,
+        action: "LOGIN",
+        ipAddress: req.ip,
+        userAgent: req.headers["user-agent"],
+        details: "Account created",
+      });
 
       res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
         profilePic: newUser.profilePic,
+        role: newUser.role,
+        isBanned: newUser.isBanned,
         accessToken,
       });
     } else {
@@ -68,13 +76,30 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid username or password" });
     }
 
+    // Check if user is banned
+    if (user.isBanned) {
+      return res.status(403).json({
+        error: "Your account has been restricted by an administrator.",
+      });
+    }
+
     const accessToken = generateTokens(user._id, res);
+
+    // Log login event
+    await AuditLog.create({
+      userId: user._id,
+      action: user.role === "admin" ? "ADMIN_LOGIN" : "LOGIN",
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
 
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
       profilePic: user.profilePic,
+      role: user.role,
+      isBanned: user.isBanned,
       accessToken,
     });
   } catch (error) {
@@ -83,8 +108,24 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   try {
+    // Try to log the logout event
+    const refreshTokenCookie = req.cookies.refreshToken;
+    if (refreshTokenCookie) {
+      try {
+        const decoded = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH_SECRET);
+        await AuditLog.create({
+          userId: decoded.userID,
+          action: "LOGOUT",
+          ipAddress: req.ip,
+          userAgent: req.headers["user-agent"],
+        });
+      } catch {
+        // Token expired or invalid — still allow logout
+      }
+    }
+
     res.cookie("refreshToken", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -102,10 +143,9 @@ export const refreshToken = async (req, res) => {
     }
 
     const decoded = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH_SECRET);
-    
-    // Generate new tokens
+
     const accessToken = generateTokens(decoded.userID, res);
-    
+
     res.status(200).json({ accessToken });
   } catch (error) {
     console.log("Error in refresh token controller", error.message);
