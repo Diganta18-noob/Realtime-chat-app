@@ -1,6 +1,13 @@
-// Usage: node backend/seedAdmin.js <username>
+// Usage: node backend/seedAdmin.js <username> [password]
 // Promotes an existing user to admin role, or creates a new admin if not found.
-import "../config.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+
+// Load .env from project root (Chat_App-main/)
+const __dirname = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import User from "./models/user.model.js";
