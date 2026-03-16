@@ -1,15 +1,12 @@
 ## Current Position
-- **Phase**: 3 (completed)
-- **Task**: All Phase 3 executed and verified
-- **Status**: Ready for Phase 4
+- **Phase**: 4
+- **Task**: Planning complete
+- **Status**: Ready for execution
 
 ## Plans
-- `3/1-PLAN.md` — Wave 1: Data Models (User role/ban + AuditLog) [✓]
-- `3/2-PLAN.md` — Wave 1: Admin Middleware & Auth Audit Logging [✓]
-- `3/3-PLAN.md` — Wave 2: Admin API Routes & Controllers [✓]
-
-## Last Session Summary
-Phase 3 (Admin & Audit Backend) executed and formally verified successfully. All API surfaces for the Admin Dashboard are now complete.
+- `4/1-PLAN.md` — Wave 1: Admin Auth & API Hooks
+- `4/2-PLAN.md` — Wave 2: Admin Dashboard Page & User Management
+- `4/3-PLAN.md` — Wave 2: Audit Logs View & Pagination
 
 ## Next Steps
-1. /plan 4  — plan the Admin Dashboard UI (Frontend)
+1. /execute 4
