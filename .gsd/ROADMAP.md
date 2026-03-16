@@ -16,7 +16,7 @@
 ## Phases
 
 ### Phase 1: Security & Foundation
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Audit and secure the backend API before adding new complex features, and ensure the foundation is solid.
 **Requirements**: 
 - Implement Access & Refresh Token rotation
