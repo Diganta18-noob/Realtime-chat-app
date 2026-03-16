@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 import { BiLogIn } from "react-icons/bi";
-import { HiOutlineUser, HiOutlineLockClosed } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineLockClosed, HiEye, HiEyeOff } from "react-icons/hi";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { loading, login } = useLogin();
 
@@ -24,7 +25,8 @@ const Login = () => {
             ChatApp
           </h1>
           <p className="text-sm text-base-content/60">
-            Sign in to continue your conversations
+            Sign in to continue your conversations<br/>
+            (Admins: use your standard credentials)
           </p>
         </div>
 
@@ -54,12 +56,19 @@ const Login = () => {
             <div className="relative">
               <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button 
+                type="button" 
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content/80 text-lg transition-colors"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <HiEyeOff /> : <HiEye />}
+              </button>
             </div>
           </div>
 

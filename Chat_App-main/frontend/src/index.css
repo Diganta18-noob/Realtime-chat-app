@@ -18,7 +18,11 @@
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: linear-gradient(135deg, #0F0D1A 0%, #1A172B 50%, #1E1442 100%);
+  background: linear-gradient(135deg, rgba(15, 13, 26, 0.8) 0%, rgba(26, 23, 43, 0.8) 50%, rgba(30, 20, 66, 0.8) 100%), url("/bg.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
   min-height: 100vh;
   color: #E2E8F0;
 }

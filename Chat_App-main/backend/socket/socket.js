@@ -2,8 +2,6 @@ import { Server } from "socket.io";
 import http from "http";
 import express from "express";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app = express();
 
@@ -50,6 +48,6 @@ io.on("connection", (socket) => {
   });
 });
 
-export { app, io, server };
+export { app, io, server, userSocketMap };
 
 

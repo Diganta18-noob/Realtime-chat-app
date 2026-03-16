@@ -1,8 +1,8 @@
 import GenderCheckbox from "./GenderCheckbox";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSignup from "../../hooks/useSignup";
-import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd, HiEye, HiEyeOff } from "react-icons/hi";
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
@@ -12,8 +12,30 @@ const SignUp = () => {
     confirmPassword: "",
     gender: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState(null); // null | 'checking' | 'available' | 'taken'
 
   const { loading, signup } = useSignup();
+
+  // Debounced username availability check
+  useEffect(() => {
+    if (!inputs.username || inputs.username.length < 3) {
+      setUsernameStatus(null);
+      return;
+    }
+    setUsernameStatus("checking");
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/auth/check-username/${inputs.username}`);
+        const data = await res.json();
+        setUsernameStatus(data.available ? "available" : "taken");
+      } catch {
+        setUsernameStatus(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [inputs.username]);
 
   const handleCheckboxChange = (gender) => {
     setInputs({ ...inputs, gender });
@@ -74,6 +96,16 @@ const SignUp = () => {
                 }
               />
             </div>
+            {/* Username availability feedback */}
+            {usernameStatus === "checking" && (
+              <p className="text-xs text-base-content/50 mt-1">Checking availability...</p>
+            )}
+            {usernameStatus === "available" && (
+              <p className="text-xs text-success mt-1">✓ Username is available</p>
+            )}
+            {usernameStatus === "taken" && (
+              <p className="text-xs text-error mt-1">✗ Username is already taken</p>
+            )}
           </div>
 
           {/* Password */}
@@ -84,14 +116,21 @@ const SignUp = () => {
             <div className="relative">
               <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter Password"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
                 value={inputs.password}
                 onChange={(e) =>
                   setInputs({ ...inputs, password: e.target.value })
                 }
               />
+              <button 
+                type="button" 
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content/80 text-lg transition-colors"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <HiEyeOff /> : <HiEye />}
+              </button>
             </div>
           </div>
 
@@ -103,14 +142,21 @@ const SignUp = () => {
             <div className="relative">
               <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
                 value={inputs.confirmPassword}
                 onChange={(e) =>
                   setInputs({ ...inputs, confirmPassword: e.target.value })
                 }
               />
+              <button 
+                type="button" 
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content/80 text-lg transition-colors"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <HiEyeOff /> : <HiEye />}
+              </button>
             </div>
           </div>
 
@@ -123,7 +169,7 @@ const SignUp = () => {
           {/* Submit */}
           <button
             className="btn btn-gradient w-full mt-2 text-base font-semibold"
-            disabled={loading}
+            disabled={loading || usernameStatus === "taken"}
           >
             {loading ? (
               <span className="loading loading-spinner"></span>

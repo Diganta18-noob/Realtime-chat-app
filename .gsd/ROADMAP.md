@@ -57,11 +57,14 @@
 - Create `.env` file with required environment variables (`MONGO_DB_URI`, `PORT`, `JWT_SECRET`, `JWT_REFRESH_SECRET`).
 - Configure backend scripts to use `nodemon` for automatic restarts during development.
 
-### Phase 6: Backend Group Chat Architecture
-**Status**: ⬜ Not Started
-**Objective**: Extend the MongoDB schemas, Express routes, and Socket.io architecture to support group chats.
+### Phase 6: Core Bug Fixes & Real-Time Stabilization
+**Status**: ✅ Complete
+**Objective**: Fix critical UI, API, and Real-Time connection bugs before proceeding with new features.
 **Requirements**:
-- Update `Conversation` model or create `GroupConversation` model to support multiple participants
+- **UI Tweaks**: Fix the "Show Password" toggle on Signup/Login, ensure gender checkboxes are visible, and clarify admin login semantics.
+- **Avatars**: Switch the broken avatar generator API to a reliable one.
+- **Real-Time Engine**: Fix the `socket.js` connection dropping (due to broken env loading) so messages sync perfectly across clients.
+- **Validation**: Implement real-time username duplication checks on the Signup form.
 - Create API endpoints for creating a group and adding/removing members
 
 ### Phase 7: Frontend Group Chat Integration

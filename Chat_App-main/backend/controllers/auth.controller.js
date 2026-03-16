@@ -21,8 +21,8 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-    const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+    const boyProfilePic = `https://ui-avatars.com/api/?name=${username}&background=random`;
+    const girlProfilePic = `https://ui-avatars.com/api/?name=${username}&background=random`;
 
     const newUser = new User({
       fullName,
@@ -59,7 +59,7 @@ export const signup = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in signup controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error", details: error.message, stack: error.stack });
   }
 };
 
@@ -114,7 +114,8 @@ export const logout = async (req, res) => {
     const refreshTokenCookie = req.cookies.refreshToken;
     if (refreshTokenCookie) {
       try {
-        const decoded = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH_SECRET);
+        const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
+        const decoded = jwt.verify(refreshTokenCookie, refreshSecret);
         await AuditLog.create({
           userId: decoded.userID,
           action: "LOGOUT",
@@ -142,7 +143,8 @@ export const refreshToken = async (req, res) => {
       return res.status(401).json({ error: "Unauthorized - No Refresh Token" });
     }
 
-    const decoded = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH_SECRET);
+    const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
+    const decoded = jwt.verify(refreshTokenCookie, refreshSecret);
 
     const accessToken = generateTokens(decoded.userID, res);
 
@@ -150,5 +152,15 @@ export const refreshToken = async (req, res) => {
   } catch (error) {
     console.log("Error in refresh token controller", error.message);
     return res.status(401).json({ error: "Unauthorized - Invalid Refresh Token" });
+  }
+};
+export const checkUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const exists = await User.exists({ username });
+    res.status(200).json({ available: !exists });
+  } catch (error) {
+    console.log("Error in checkUsername controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

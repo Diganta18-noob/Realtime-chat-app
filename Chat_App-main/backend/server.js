@@ -1,6 +1,9 @@
+// server.js
+// IMPORTANT: config.js MUST be imported first to load .env before any other module
+import __dirname from "./config.js";
+
 import path from "path";
 import express from "express";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -9,13 +12,10 @@ import mongoSanitize from "express-mongo-sanitize";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
-
-dotenv.config();
-
-const __dirname = path.resolve();
 
 const PORT = process.env.PORT || 5000;
 
@@ -33,6 +33,7 @@ const authLimiter = rateLimit({
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
@@ -44,5 +45,3 @@ server.listen(PORT, () => {
   connectToMongoDB();
   console.log(`Server Running on port ${PORT}`);
 });
-
-
