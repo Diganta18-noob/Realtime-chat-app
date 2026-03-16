@@ -11,30 +11,30 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const { authUser } = useAuthContext(); // Corrected destructuring syntax
+  const { authUser, accessToken } = useAuthContext();
 
   useEffect(() => {
-    if (authUser) {
-      const socket = io("https://chat-app-78rr.onrender.com", {
-        query: {
-          userId: authUser._id,
+    if (authUser && accessToken) {
+      const newSocket = io("/", {
+        auth: {
+          token: accessToken,
         },
       });
 
-      setSocket(socket);
+      setSocket(newSocket);
 
-      socket.on("getOnlineUsers", (users) => {
+      newSocket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
       });
 
-      return () => socket.close();
+      return () => newSocket.close();
     } else {
       if (socket) {
         socket.close();
         setSocket(null);
       }
     }
-  }, [authUser]); // Added authUser to dependency array
+  }, [authUser, accessToken]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>

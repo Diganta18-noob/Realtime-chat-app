@@ -4,7 +4,7 @@ import { useAuthContext } from "../context/AuthContext";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const { setAuthUser } = useAuthContext();
+  const { setAuthUser, setAccessToken } = useAuthContext();
 
   const login = async (username, password) => {
     const success = handleInputErrors(username, password);
@@ -14,6 +14,7 @@ const useLogin = () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 
@@ -22,8 +23,11 @@ const useLogin = () => {
         throw new Error(data.error);
       }
 
-      localStorage.setItem("chat-user", JSON.stringify(data));
-      setAuthUser(data);
+      // Store user profile (without token) in localStorage
+      const { accessToken, ...userProfile } = data;
+      localStorage.setItem("chat-user", JSON.stringify(userProfile));
+      setAuthUser(userProfile);
+      setAccessToken(accessToken);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -40,6 +44,5 @@ function handleInputErrors(username, password) {
     toast.error("Please fill in all fields");
     return false;
   }
-
   return true;
 }
