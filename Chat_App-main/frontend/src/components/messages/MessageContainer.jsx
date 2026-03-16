@@ -34,7 +34,7 @@ const MessageContainer = () => {
             >
               <HiArrowLeft className="text-lg" />
             </button>
-            <div className="avatar">
+            <div className={`avatar ${isOnline ? "online" : "offline"}`}>
               <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                 <img src={selectedConversation.profilePic} alt="avatar" />
               </div>
