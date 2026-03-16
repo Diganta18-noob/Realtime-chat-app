@@ -25,39 +25,23 @@ const SearchInput = () => {
       setSearch("");
     } else toast.error("No such user found!");
   };
+
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2">
-      <input
-        type="text"
-        placeholder="Search…"
-        className="input input-bordered rounded-full"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <button type="submit" className="btn btn-circle bg-purple-500 text-white">
-        <IoSearchSharp className="w-6 h-6 outline-none" />
+      <div className="relative flex-1">
+        <IoSearchSharp className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" />
+        <input
+          type="text"
+          placeholder="Search users…"
+          className="input input-bordered input-sm w-full pl-9 bg-base-300/50 focus:bg-base-300 border-base-300"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <button type="submit" className="btn btn-sm btn-primary btn-circle">
+        <IoSearchSharp className="w-4 h-4" />
       </button>
     </form>
   );
 };
 export default SearchInput;
-
-//Starter Code
-// import { IoSearch } from "react-icons/io5";
-// const SearchInput = () => {
-//   return (
-//     <form className="flex items-center gap-2">
-//       <input
-//         type="text"
-//         placeholder="Search"
-//         className="input input-bordered rounded-full"
-//       />
-
-//       <button type="submit" className="btn btn-circle bg-purple-600 ">
-//         <IoSearch className="w-6 h-6 outline-none" />
-//       </button>
-//     </form>
-//   );
-// };
-
-// export default SearchInput;

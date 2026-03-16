@@ -1,30 +1,48 @@
+import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
-import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/SignUp";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
+
+const Home = React.lazy(() => import("./pages/home/Home"));
+const Login = React.lazy(() => import("./pages/login/Login"));
+const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
+
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <span className="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+);
 
 function App() {
   const { authUser } = useAuthContext();
   return (
-    <div className="p-4  h-screen flex items-center justify-center">
-      <Routes>
-        <Route
-          path="/"
-          element={authUser ? <Home /> : <Navigate to={"/login"} />}
-        />
-        <Route
-          path="/login"
-          element={authUser ? <Navigate to="/" /> : <Login />}
-        />
-        <Route
-          path="/signup"
-          element={authUser ? <Navigate to="/" /> : <SignUp />}
-        />
-      </Routes>
-      <Toaster />
+    <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route
+            path="/"
+            element={authUser ? <Home /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/login"
+            element={authUser ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={authUser ? <Navigate to="/" /> : <SignUp />}
+          />
+        </Routes>
+      </Suspense>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#1A172B",
+            color: "#E2E8F0",
+            border: "1px solid rgba(109, 40, 217, 0.2)",
+          },
+        }}
+      />
     </div>
   );
 }
