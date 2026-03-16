@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
+import { HiOutlineShieldCheck } from "react-icons/hi";
 import SearchInput from "./SearchInput";
 import LogoutButton from "./LogoutButton";
 import Conversations from "./Conversations";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Sidebar = () => {
+  const { authUser } = useAuthContext();
   return (
     <div className="bg-base-200 flex flex-col h-full">
       {/* Header */}
@@ -17,8 +21,13 @@ const Sidebar = () => {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-base-300">
+      <div className="p-4 border-t border-base-300 flex justify-between items-center bg-base-100/30">
         <LogoutButton />
+        {authUser?.role === "admin" && (
+          <Link to="/admin" className="btn btn-sm btn-ghost text-primary hover:text-primary-focus">
+            <HiOutlineShieldCheck className="text-xl" />
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -2,10 +2,12 @@ import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
+import AdminRoute from "./components/AdminRoute";
 
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Login = React.lazy(() => import("./pages/login/Login"));
 const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
+const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -30,6 +32,14 @@ function App() {
           <Route
             path="/signup"
             element={authUser ? <Navigate to="/" /> : <SignUp />}
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
           />
         </Routes>
       </Suspense>

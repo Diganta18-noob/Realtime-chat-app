@@ -11,7 +11,7 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const { authUser, accessToken } = useAuthContext();
+  const { authUser, accessToken, setAuthUser, setAccessToken } = useAuthContext();
 
   useEffect(() => {
     if (authUser && accessToken) {
@@ -25,6 +25,15 @@ export const SocketContextProvider = ({ children }) => {
 
       newSocket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
+      });
+
+      newSocket.on("banned", (data) => {
+        import("react-hot-toast").then((module) => {
+          module.default.error(data.message || "You have been banned.", { duration: 5000 });
+        });
+        setAuthUser(null);
+        setAccessToken(null);
+        localStorage.removeItem("chat-user");
       });
 
       return () => newSocket.close();

@@ -43,7 +43,7 @@
 - Add middleware to block message creation for banned users (returning a 403 Restricted error)
 
 ### Phase 4: Admin Dashboard & Settings UI (Frontend)
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Create the React frontend views for administrators to manage the application and users.
 **Requirements**:
 - Build a protected Admin Dashboard route
