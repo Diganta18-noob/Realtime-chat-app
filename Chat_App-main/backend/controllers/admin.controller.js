@@ -165,6 +165,7 @@ export const exportAuditLogs = async (req, res) => {
 export const toggleBanUser = async (req, res) => {
   try {
     const { id } = req.params;
+    const { duration = "permanent", reason = "" } = req.body || {};
 
     const user = await User.findById(id);
     if (!user) {
@@ -176,18 +177,41 @@ export const toggleBanUser = async (req, res) => {
       return res.status(400).json({ error: "Cannot ban an admin user" });
     }
 
-    // Toggle ban status
-    user.isBanned = !user.isBanned;
+    // Determine action: if currently banned → unban, else → ban with duration
+    if (user.isBanned && duration === "unban") {
+      // Unbanning
+      user.isBanned = false;
+      user.bannedUntil = null;
+      user.banReason = "";
+    } else if (!user.isBanned || duration !== "unban") {
+      // Banning
+      user.isBanned = true;
+      user.banReason = reason;
+
+      if (duration === "1h") {
+        user.bannedUntil = new Date(Date.now() + 3600000);
+      } else if (duration === "24h") {
+        user.bannedUntil = new Date(Date.now() + 86400000);
+      } else {
+        // permanent
+        user.bannedUntil = null;
+      }
+    }
+
     await user.save();
 
     // Log the action
+    const durationLabel = user.isBanned
+      ? (user.bannedUntil ? `until ${user.bannedUntil.toISOString()}` : "permanently")
+      : "unbanned";
+
     await AuditLog.create({
       userId: req.user._id,
       action: user.isBanned ? "USER_BANNED" : "USER_UNBANNED",
       targetUserId: user._id,
       ipAddress: req.ip,
       userAgent: req.headers["user-agent"],
-      details: `User ${user.username} was ${user.isBanned ? "banned" : "unbanned"}`,
+      details: `User ${user.username} was ${user.isBanned ? "banned" : "unbanned"} ${durationLabel}${reason ? ` — Reason: ${reason}` : ""}`,
     });
 
     // If the user is now banned and online, notify and disconnect them
@@ -197,7 +221,6 @@ export const toggleBanUser = async (req, res) => {
         io.to(socketId).emit("banned", {
           message: "Your account has been restricted by an administrator.",
         });
-        // Disconnect after a short delay so the event is received
         setTimeout(() => {
           const socket = io.sockets.sockets.get(socketId);
           if (socket) socket.disconnect(true);
@@ -210,6 +233,8 @@ export const toggleBanUser = async (req, res) => {
       fullName: user.fullName,
       username: user.username,
       isBanned: user.isBanned,
+      bannedUntil: user.bannedUntil,
+      banReason: user.banReason,
       message: `User ${user.isBanned ? "banned" : "unbanned"} successfully`,
     });
   } catch (error) {

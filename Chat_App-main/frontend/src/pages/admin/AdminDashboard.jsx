@@ -88,16 +88,50 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleToggle = async (user) => {
-    if (user.role === "admin") return;
-    const res = await toggleBan(user._id);
+  // Suspend modal state
+  const [suspendModal, setSuspendModal] = useState({ open: false, user: null });
+  const [suspendDuration, setSuspendDuration] = useState("1h");
+  const [suspendReason, setSuspendReason] = useState("");
+
+  const handleSuspend = async () => {
+    if (!suspendModal.user) return;
+    const res = await toggleBan(suspendModal.user._id, { duration: suspendDuration, reason: suspendReason });
     if (res) {
       setUsers(
         users.map((u) =>
-          u._id === user._id ? { ...u, isBanned: !u.isBanned } : u
+          u._id === suspendModal.user._id
+            ? { ...u, isBanned: res.isBanned, bannedUntil: res.bannedUntil, banReason: res.banReason }
+            : u
         )
       );
     }
+    setSuspendModal({ open: false, user: null });
+    setSuspendDuration("1h");
+    setSuspendReason("");
+  };
+
+  const handleUnban = async (user) => {
+    if (user.role === "admin") return;
+    const res = await toggleBan(user._id, { duration: "unban" });
+    if (res) {
+      setUsers(
+        users.map((u) =>
+          u._id === user._id
+            ? { ...u, isBanned: false, bannedUntil: null, banReason: "" }
+            : u
+        )
+      );
+    }
+  };
+
+  const getTimeRemaining = (bannedUntil) => {
+    if (!bannedUntil) return "Permanent";
+    const diff = new Date(bannedUntil) - new Date();
+    if (diff <= 0) return "Expired";
+    const hours = Math.floor(diff / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    if (hours > 0) return `${hours}h ${mins}m`;
+    return `${mins}m`;
   };
 
   return (
@@ -153,6 +187,7 @@ const AdminDashboard = () => {
                     <th>Username</th>
                     <th>Role</th>
                     <th>Status</th>
+                    <th>Ban Expires</th>
                     <th>Last Login</th>
                     <th>Last Logout</th>
                     <th>Actions</th>
@@ -188,6 +223,15 @@ const AdminDashboard = () => {
                           {user.isOnline ? "Online" : "Offline"}
                         </span>
                       </td>
+                      <td className="text-xs">
+                        {user.isBanned ? (
+                          <span className={`badge badge-sm ${user.bannedUntil ? "badge-warning" : "badge-error"}`}>
+                            {getTimeRemaining(user.bannedUntil)}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">—</span>
+                        )}
+                      </td>
                       <td className="text-xs text-gray-400">
                         {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}
                       </td>
@@ -195,26 +239,33 @@ const AdminDashboard = () => {
                         {user.lastLogout ? new Date(user.lastLogout).toLocaleString() : "Never"}
                       </td>
                       <td>
-                        <div className="form-control w-fit">
-                          <label className="label cursor-pointer gap-2">
-                            <span className="label-text text-xs hidden sm:block">
-                              {user.isBanned ? "Banned" : "Active"}
-                            </span>
-                            <input
-                              type="checkbox"
-                              className="toggle toggle-error toggle-sm"
-                              checked={user.isBanned}
-                              disabled={user.role === "admin"}
-                              onChange={() => handleToggle(user)}
-                            />
-                          </label>
-                        </div>
+                        {user.role === "admin" ? (
+                          <span className="badge badge-ghost badge-sm">Admin</span>
+                        ) : user.isBanned ? (
+                          <button
+                            className="btn btn-success btn-xs"
+                            onClick={() => handleUnban(user)}
+                          >
+                            Unban
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-error btn-xs"
+                            onClick={() => {
+                              setSuspendModal({ open: true, user });
+                              setSuspendDuration("1h");
+                              setSuspendReason("");
+                            }}
+                          >
+                            Suspend
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
                   {users.length === 0 && !loadingUsers && (
                     <tr>
-                      <td colSpan="7" className="text-center py-4 text-gray-500">
+                      <td colSpan="8" className="text-center py-4 text-gray-500">
                         No users found.
                       </td>
                     </tr>
@@ -223,6 +274,59 @@ const AdminDashboard = () => {
               </table>
             </div>
           )
+        )}
+
+        {/* Suspend Modal */}
+        {suspendModal.open && (
+          <dialog className="modal modal-open">
+            <div className="modal-box border border-base-300 bg-base-200">
+              <h3 className="font-bold text-lg text-error">Suspend User</h3>
+              <p className="py-2 text-sm text-gray-400">
+                Suspending <strong className="text-gray-200">@{suspendModal.user?.username}</strong>
+              </p>
+
+              <div className="form-control mb-3">
+                <label className="label"><span className="label-text">Duration</span></label>
+                <div className="flex gap-2">
+                  {["1h", "24h", "permanent"].map((d) => (
+                    <button
+                      key={d}
+                      className={`btn btn-sm ${suspendDuration === d ? "btn-primary" : "btn-ghost border border-base-300"}`}
+                      onClick={() => setSuspendDuration(d)}
+                    >
+                      {d === "1h" ? "1 Hour" : d === "24h" ? "24 Hours" : "Permanent"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-control mb-4">
+                <label className="label"><span className="label-text">Reason (optional)</span></label>
+                <input
+                  type="text"
+                  className="input input-bordered input-sm"
+                  placeholder="e.g. Spamming, harassment..."
+                  value={suspendReason}
+                  onChange={(e) => setSuspendReason(e.target.value)}
+                />
+              </div>
+
+              <div className="modal-action">
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => setSuspendModal({ open: false, user: null })}
+                >
+                  Cancel
+                </button>
+                <button className="btn btn-error btn-sm" onClick={handleSuspend}>
+                  Confirm Suspend
+                </button>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => setSuspendModal({ open: false, user: null })}>close</button>
+            </form>
+          </dialog>
         )}
 
         {activeTab === "logs" && (

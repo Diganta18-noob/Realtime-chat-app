@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    bannedUntil: {
+      type: Date,
+      default: null,
+    },
+    banReason: {
+      type: String,
+      default: "",
+    },
     // createdAt, updatedAt => Member since <createdAt>
   },
   { timestamps: true }

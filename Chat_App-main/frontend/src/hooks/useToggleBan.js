@@ -6,13 +6,20 @@ const useToggleBan = () => {
   const [loading, setLoading] = useState(false);
   const { accessToken, refreshAccessToken } = useAuthContext();
 
-  const toggleBan = async (userId) => {
+  const toggleBan = async (userId, { duration = "permanent", reason = "" } = {}) => {
     setLoading(true);
     try {
       let token = accessToken;
+      const body = JSON.stringify({ duration, reason });
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
       let res = await fetch(`/api/admin/users/${userId}/ban`, {
         method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
+        headers,
+        body,
       });
 
       // If 401, try refreshing the token
@@ -21,7 +28,8 @@ const useToggleBan = () => {
         if (!token) return false;
         res = await fetch(`/api/admin/users/${userId}/ban`, {
           method: "PATCH",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { ...headers, Authorization: `Bearer ${token}` },
+          body,
         });
       }
 
