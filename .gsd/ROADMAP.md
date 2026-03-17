@@ -89,7 +89,7 @@
 - Enhance Admin Dashboard to display each user's latest login and logout timestamps.
 
 ### Phase 10: Admin Dashboard Quick Wins
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Implement the highest-value, lowest-effort improvements to the existing Admin Dashboard.
 **Requirements**:
 - Add a stats bar at the top of the dashboard (total users, online now, messages today)
