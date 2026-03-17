@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useAuthContext } from "./AuthContext";
 import io from "socket.io-client";
 
@@ -12,6 +12,12 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { authUser, accessToken, setAuthUser, setAccessToken } = useAuthContext();
+  const tokenRef = useRef(accessToken);
+
+  // Keep the ref in sync so reconnections use the latest token
+  useEffect(() => {
+    tokenRef.current = accessToken;
+  }, [accessToken]);
 
   useEffect(() => {
     if (authUser && accessToken) {
@@ -19,6 +25,9 @@ export const SocketContextProvider = ({ children }) => {
         auth: {
           token: accessToken,
         },
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000,
       });
 
       setSocket(newSocket);
@@ -43,7 +52,9 @@ export const SocketContextProvider = ({ children }) => {
         setSocket(null);
       }
     }
-  }, [authUser, accessToken]);
+    // Only re-run when authUser changes (login/logout), NOT on every token refresh
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authUser]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>

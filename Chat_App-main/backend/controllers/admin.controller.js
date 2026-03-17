@@ -6,11 +6,35 @@ export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
 
-    // Attach online status
-    const usersWithStatus = users.map((user) => ({
-      ...user.toObject(),
-      isOnline: !!userSocketMap[user._id.toString()],
-    }));
+    // Fetch the most recent LOGIN and LOGOUT timestamps per user
+    const userIds = users.map((u) => u._id);
+
+    const [lastLogins, lastLogouts] = await Promise.all([
+      AuditLog.aggregate([
+        { $match: { userId: { $in: userIds }, action: { $in: ["LOGIN", "ADMIN_LOGIN"] } } },
+        { $sort: { createdAt: -1 } },
+        { $group: { _id: "$userId", lastLogin: { $first: "$createdAt" } } },
+      ]),
+      AuditLog.aggregate([
+        { $match: { userId: { $in: userIds }, action: "LOGOUT" } },
+        { $sort: { createdAt: -1 } },
+        { $group: { _id: "$userId", lastLogout: { $first: "$createdAt" } } },
+      ]),
+    ]);
+
+    const loginMap = Object.fromEntries(lastLogins.map((l) => [l._id.toString(), l.lastLogin]));
+    const logoutMap = Object.fromEntries(lastLogouts.map((l) => [l._id.toString(), l.lastLogout]));
+
+    // Attach online status and timing info
+    const usersWithStatus = users.map((user) => {
+      const uid = user._id.toString();
+      return {
+        ...user.toObject(),
+        isOnline: !!userSocketMap[uid],
+        lastLogin: loginMap[uid] || null,
+        lastLogout: logoutMap[uid] || null,
+      };
+    });
 
     res.status(200).json(usersWithStatus);
   } catch (error) {

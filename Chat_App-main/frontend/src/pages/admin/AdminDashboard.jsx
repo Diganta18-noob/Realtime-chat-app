@@ -68,6 +68,8 @@ const AdminDashboard = () => {
                     <th>Username</th>
                     <th>Role</th>
                     <th>Status</th>
+                    <th>Last Login</th>
+                    <th>Last Logout</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -101,6 +103,12 @@ const AdminDashboard = () => {
                           {user.isOnline ? "Online" : "Offline"}
                         </span>
                       </td>
+                      <td className="text-xs text-gray-400">
+                        {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}
+                      </td>
+                      <td className="text-xs text-gray-400">
+                        {user.lastLogout ? new Date(user.lastLogout).toLocaleString() : "Never"}
+                      </td>
                       <td>
                         <div className="form-control w-fit">
                           <label className="label cursor-pointer gap-2">
@@ -121,7 +129,7 @@ const AdminDashboard = () => {
                   ))}
                   {users.length === 0 && !loadingUsers && (
                     <tr>
-                      <td colSpan="5" className="text-center py-4 text-gray-500">
+                      <td colSpan="7" className="text-center py-4 text-gray-500">
                         No users found.
                       </td>
                     </tr>
