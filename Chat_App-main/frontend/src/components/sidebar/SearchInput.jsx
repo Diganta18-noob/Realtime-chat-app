@@ -32,7 +32,7 @@ const SearchInput = () => {
         <IoSearchSharp className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" />
         <input
           type="text"
-          placeholder="Search users…"
+          placeholder="Search chats…"
           className="input input-bordered input-sm w-full pl-9 bg-base-300/50 focus:bg-base-300 border-base-300"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

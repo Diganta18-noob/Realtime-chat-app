@@ -6,7 +6,9 @@ const Conversation = ({ conversation, lastIdx }) => {
 
   const isSelected = selectedConversation?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
-  const isOnline = onlineUsers.includes(conversation._id);
+  
+  // For groups, we don't show a single online status
+  const isOnline = !conversation.isGroup && onlineUsers.includes(conversation._id);
 
   return (
     <>
@@ -16,9 +18,9 @@ const Conversation = ({ conversation, lastIdx }) => {
         `}
         onClick={() => setSelectedConversation(conversation)}
       >
-        <div className={`avatar ${isOnline ? "online" : "offline"}`}>
-          <div className="w-11 rounded-full">
-            <img src={conversation?.profilePic} alt="user avatar" />
+        <div className={`avatar ${isOnline ? "online" : conversation.isGroup ? "" : "offline"}`}>
+          <div className="w-11 rounded-full bg-base-300 flex items-center justify-center">
+            <img src={conversation?.profilePic} alt="avatar" />
           </div>
         </div>
 
@@ -26,8 +28,10 @@ const Conversation = ({ conversation, lastIdx }) => {
           <p className="font-semibold text-base-content truncate text-sm">
             {conversation.fullName}
           </p>
-          <p className={`text-xs ${isOnline ? "text-success" : "text-base-content/30"}`}>
-            {isOnline ? (
+          <p className={`text-xs ${isOnline ? "text-success" : conversation.isGroup ? "text-primary font-medium" : "text-base-content/30"}`}>
+            {conversation.isGroup ? (
+              "Group"
+            ) : isOnline ? (
               <span className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-success online-pulse inline-block"></span>
                 Online

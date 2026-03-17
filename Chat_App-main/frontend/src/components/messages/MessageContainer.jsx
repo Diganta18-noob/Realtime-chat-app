@@ -12,7 +12,7 @@ const MessageContainer = () => {
   const { onlineUsers } = useSocketContext();
 
   const isOnline = selectedConversation
-    ? onlineUsers.includes(selectedConversation._id)
+    ? !selectedConversation.isGroup && onlineUsers.includes(selectedConversation._id)
     : false;
 
   useEffect(() => {
@@ -34,8 +34,8 @@ const MessageContainer = () => {
             >
               <HiArrowLeft className="text-lg" />
             </button>
-            <div className={`avatar ${isOnline ? "online" : "offline"}`}>
-              <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+            <div className={`avatar ${isOnline ? "online" : selectedConversation.isGroup ? "" : "offline"}`}>
+              <div className="w-10 rounded-full bg-base-300 ring ring-primary ring-offset-base-100 ring-offset-2 flex items-center justify-center">
                 <img src={selectedConversation.profilePic} alt="avatar" />
               </div>
             </div>
@@ -43,8 +43,10 @@ const MessageContainer = () => {
               <p className="font-semibold text-base-content truncate">
                 {selectedConversation.fullName}
               </p>
-              <p className={`text-xs ${isOnline ? "text-success" : "text-base-content/40"}`}>
-                {isOnline ? (
+              <p className={`text-xs ${isOnline ? "text-success" : selectedConversation.isGroup ? "text-primary font-medium" : "text-base-content/40"}`}>
+                {selectedConversation.isGroup ? (
+                   "Group"
+                ) : isOnline ? (
                   <span className="flex items-center gap-1">
                     <span className="w-2 h-2 rounded-full bg-success online-pulse inline-block"></span>
                     Online

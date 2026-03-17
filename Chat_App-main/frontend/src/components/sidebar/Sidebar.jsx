@@ -1,17 +1,30 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { HiOutlineShieldCheck } from "react-icons/hi";
+import { HiOutlineShieldCheck, HiOutlineUserGroup } from "react-icons/hi";
 import SearchInput from "./SearchInput";
 import LogoutButton from "./LogoutButton";
 import Conversations from "./Conversations";
+import CreateGroupModal from "./CreateGroupModal";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Sidebar = () => {
   const { authUser } = useAuthContext();
+  const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+
   return (
-    <div className="bg-base-200 flex flex-col h-full">
+    <div className="bg-base-200 flex flex-col h-full relative">
       {/* Header */}
       <div className="p-4 border-b border-base-300">
-        <h2 className="text-lg font-bold gradient-text mb-3">Chats</h2>
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-lg font-bold gradient-text">Chats</h2>
+          <button 
+            onClick={() => setIsGroupModalOpen(true)}
+            className="btn btn-sm btn-ghost btn-circle text-primary hover:bg-primary/20"
+            title="Create Group"
+          >
+            <HiOutlineUserGroup className="text-xl" />
+          </button>
+        </div>
         <SearchInput />
       </div>
 
@@ -29,6 +42,12 @@ const Sidebar = () => {
           </Link>
         )}
       </div>
+
+      {/* Modals */}
+      <CreateGroupModal 
+        isOpen={isGroupModalOpen} 
+        onClose={() => setIsGroupModalOpen(false)} 
+      />
     </div>
   );
 };
