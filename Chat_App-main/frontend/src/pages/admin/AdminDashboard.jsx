@@ -3,12 +3,32 @@ import { Link } from "react-router-dom";
 import useGetUsers from "../../hooks/useGetUsers";
 import useToggleBan from "../../hooks/useToggleBan";
 import useGetAuditLogs from "../../hooks/useGetAuditLogs";
+import useGetDashboardStats from "../../hooks/useGetDashboardStats";
+
+const StatCard = ({ icon, label, value, loading, color }) => (
+  <div className="bg-base-200/50 rounded-lg border border-base-300 p-4 text-center flex-1 min-w-[120px]">
+    {loading ? (
+      <div className="flex flex-col items-center gap-2">
+        <div className="skeleton w-10 h-10 rounded-full"></div>
+        <div className="skeleton h-6 w-16"></div>
+        <div className="skeleton h-4 w-20"></div>
+      </div>
+    ) : (
+      <>
+        <div className="text-3xl mb-1">{icon}</div>
+        <div className={`text-2xl font-bold ${color || "gradient-text"}`}>{value}</div>
+        <div className="text-xs text-gray-400 mt-1 uppercase tracking-wider">{label}</div>
+      </>
+    )}
+  </div>
+);
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("users");
   const { users, setUsers, loading: loadingUsers } = useGetUsers();
   const { logs, page, totalPages, loading: loadingLogs, setPage } = useGetAuditLogs();
   const { toggleBan } = useToggleBan();
+  const { stats, loading: loadingStats } = useGetDashboardStats();
 
   const handleToggle = async (user) => {
     if (user.role === "admin") return;
@@ -30,6 +50,13 @@ const AdminDashboard = () => {
         <Link to="/" className="btn btn-sm btn-ghost">
           Back to Chat
         </Link>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="px-6 pt-4 flex gap-3 flex-wrap">
+        <StatCard icon="👥" label="Total Users" value={stats.totalUsers} loading={loadingStats} />
+        <StatCard icon="🟢" label="Online Now" value={stats.onlineNow} loading={loadingStats} color="text-green-400" />
+        <StatCard icon="💬" label="Messages Today" value={stats.messagesToday} loading={loadingStats} color="text-sky-400" />
       </div>
 
       {/* Tabs */}

@@ -1,6 +1,26 @@
 import User from "../models/user.model.js";
 import AuditLog from "../models/auditLog.model.js";
+import Message from "../models/message.model.js";
 import { userSocketMap, io, getReceiverSocketId } from "../socket/socket.js";
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const [totalUsers, messagesToday] = await Promise.all([
+      User.countDocuments(),
+      Message.countDocuments({ createdAt: { $gte: startOfToday } }),
+    ]);
+
+    const onlineNow = Object.keys(userSocketMap).length;
+
+    res.status(200).json({ totalUsers, onlineNow, messagesToday });
+  } catch (error) {
+    console.log("Error in getDashboardStats controller:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 export const getAllUsers = async (req, res) => {
   try {
