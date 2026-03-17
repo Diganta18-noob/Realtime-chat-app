@@ -80,3 +80,10 @@
 **Requirements**:
 - Test all WebSocket emissions with multiple clients (including banned users)
 - Run a Lighthouse audit to confirm performance improvements
+
+### Phase 9: Active Status & Admin Timing Fixes
+**Status**: ⬜ Not Started
+**Objective**: Fix the user active status display and show accurate login/logout timings in the admin dashboard.
+**Requirements**:
+- Fix active status presence logic so that user's online/offline status correctly updates real-time.
+- Enhance Admin Dashboard to display each user's latest login and logout timestamps.
