@@ -87,3 +87,46 @@
 **Requirements**:
 - Fix active status presence logic so that user's online/offline status correctly updates real-time.
 - Enhance Admin Dashboard to display each user's latest login and logout timestamps.
+
+### Phase 10: Admin Dashboard Quick Wins
+**Status**: ⬜ Not Started
+**Objective**: Implement the highest-value, lowest-effort improvements to the existing Admin Dashboard.
+**Requirements**:
+- Add a stats bar at the top of the dashboard (total users, online now, messages today)
+- Enhance Audit Log tab with filters (action type, user, date range) and CSV export
+- Add suspend duration options (1h, 24h, permanent) to the existing ban toggle
+
+### Phase 11: Advanced User & Role Management
+**Status**: ⬜ Not Started
+**Objective**: Extend user management capabilities for admins.
+**Requirements**:
+- Force logout — kick a user's active WebSocket session
+- Admin-triggered password reset
+- Role management — promote/demote user ↔ moderator ↔ admin
+- User profile drawer — click a user row to see full details (bio, joined date, message count)
+- Mute user — prevent sending messages without a full ban
+
+### Phase 12: Analytics & Chat Moderation
+**Status**: ⬜ Not Started
+**Objective**: Add an Analytics tab and a Chat Moderation tab to the Admin Dashboard.
+**Requirements**:
+- Active users graph — real-time online count over time (Chart.js / Recharts)
+- Messages per hour heatmap and peak usage times
+- New registrations over time
+- View all chat rooms/channels with message counts
+- Delete messages from any room
+- Flagged/reported messages queue
+- Search messages by user or keyword
+- Pin announcements to rooms
+
+### Phase 13: Real-Time Admin Alerts & System Settings
+**Status**: ⬜ Not Started
+**Objective**: Add WebSocket-powered live admin features and system-wide configuration controls.
+**Requirements**:
+- Live activity feed — shows events as they happen
+- Online users counter in the header
+- Alert system — notify admin on suspicious activity (too many failed logins, rapid message spam)
+- Toggle registration open/closed
+- Maintenance mode — disconnect all users with a message
+- Max message length configuration
+- Profanity filter word list management

@@ -13,6 +13,12 @@ Transform the existing chat application into a modern, collaborative, and secure
 5. Audit and enhance the security of the backend API (rate limiting, helmet, payload sanitization, JWT rotation).
 6. **Admin Dashboard & Controls**: Implement roles so Admins can view user lists, active members, and restrict/ban users.
 7. **Audit Logging**: Track when users and admins log in, and record administrative actions (banning/unbanning).
+8. **Advanced User Management**: Ban/suspend with durations, force logout, mute, role promotion (user → moderator → admin), user profile drawer.
+9. **Analytics Panel**: Real-time active user graphs, messages-per-hour heatmaps, peak usage times, new registrations over time.
+10. **Chat Moderation**: View/delete messages from any room, flagged/reported message queue, message search, pinned announcements.
+11. **Audit Log Enhancements**: Filter by action type / user / date range, CSV export, expanded action types (MESSAGE_DELETED, ROLE_CHANGED, etc.).
+12. **Real-Time Admin Features**: Live activity feed (WebSocket-powered), online users counter, alert system for suspicious activity.
+13. **System Settings**: Toggle registration, maintenance mode, max message length, profanity filter word list management.
 
 ## Non-Goals (Out of Scope)
 - Video/Audio calling capabilities
@@ -37,3 +43,6 @@ Transform the existing chat application into a modern, collaborative, and secure
 - [ ] Admins can log in, view the active user list, and ban/unban users.
 - [ ] Banned users cannot send messages and see a "Restricted by Admin" notice.
 - [ ] Login events and admin actions are recorded in an Audit Log.
+- [ ] Admin Dashboard shows a stats bar (total users, online now, messages today).
+- [ ] Audit Logs can be filtered by action type, user, and date range; and exported as CSV.
+- [ ] Admins can suspend users with a configurable duration (1h, 24h, permanent).
