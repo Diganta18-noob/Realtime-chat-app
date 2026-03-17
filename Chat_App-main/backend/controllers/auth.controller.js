@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      const accessToken = generateTokens(newUser._id, res);
+      const accessToken = generateTokens(newUser._id, "user", res);
       await newUser.save();
 
       // Log signup as login event
@@ -83,7 +83,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const accessToken = generateTokens(user._id, res);
+    const accessToken = generateTokens(user._id, user.role, res);
 
     // Log login event
     await AuditLog.create({
@@ -146,7 +146,7 @@ export const refreshToken = async (req, res) => {
     const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
     const decoded = jwt.verify(refreshTokenCookie, refreshSecret);
 
-    const accessToken = generateTokens(decoded.userID, res);
+    const accessToken = generateTokens(decoded.userID, decoded.role, res);
 
     res.status(200).json({ accessToken });
   } catch (error) {
