@@ -1,24 +1,37 @@
 import Conversation from "./Conversation";
 import useGetConversations from "../../hooks/useGetConversations";
-import { getRandomEmoji } from "../../utils/emojis";
 
-const Conversations = () => {
+const Conversations = ({ searchQuery = "", unreadCounts = {} }) => {
   const { loading, conversations } = useGetConversations();
+
+  const filtered = searchQuery
+    ? conversations?.filter(
+        (c) =>
+          c.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.username?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : conversations;
 
   return (
     <div className="py-2 flex flex-col overflow-auto">
-      {conversations?.map((conversation, idx) => (
+      {filtered?.map((conversation, idx) => (
         <Conversation
           key={conversation._id}
           conversation={conversation}
-          emoji={getRandomEmoji()}
-          lastIdx={idx === conversations.length - 1}
+          lastIdx={idx === filtered.length - 1}
+          unreadCount={unreadCounts[conversation._id] || 0}
         />
       ))}
 
       {loading ? (
         <span className="loading loading-spinner mx-auto"></span>
       ) : null}
+
+      {!loading && filtered?.length === 0 && searchQuery && (
+        <p className="text-center text-base-content/40 text-sm py-4">
+          No results found
+        </p>
+      )}
     </div>
   );
 };

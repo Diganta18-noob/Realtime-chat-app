@@ -1,7 +1,8 @@
 import { useSocketContext } from "../../context/SocketContext";
 import useConversation from "../../zustand/useConversation";
+import Avatar from "../Avatar";
 
-const Conversation = ({ conversation, lastIdx }) => {
+const Conversation = ({ conversation, lastIdx, unreadCount = 0 }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
 
   const isSelected = selectedConversation?._id === conversation._id;
@@ -18,10 +19,26 @@ const Conversation = ({ conversation, lastIdx }) => {
         `}
         onClick={() => setSelectedConversation(conversation)}
       >
-        <div className={`avatar ${isOnline ? "online" : conversation.isGroup ? "" : "offline"}`}>
-          <div className="w-11 rounded-full bg-base-300 flex items-center justify-center">
-            <img src={conversation?.profilePic} alt="avatar" />
-          </div>
+        <div style={{ position: "relative" }}>
+          <Avatar
+            username={conversation.username || conversation.fullName}
+            role={conversation.role}
+            size={44}
+            isOnline={conversation.isGroup ? undefined : isOnline}
+          />
+          {unreadCount > 0 && (
+            <span style={{
+              position: "absolute", top: -4, right: -4,
+              background: "#7c3aed", color: "white",
+              borderRadius: "50%", fontSize: 11,
+              minWidth: 18, height: 18,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontWeight: 700, border: "2px solid #0f0f1a",
+              zIndex: 10,
+            }}>
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+          )}
         </div>
 
         <div className="flex flex-col flex-1 min-w-0">

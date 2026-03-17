@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { HiOutlineShieldCheck, HiOutlineUserGroup } from "react-icons/hi";
 import SearchInput from "./SearchInput";
@@ -7,9 +7,14 @@ import Conversations from "./Conversations";
 import CreateGroupModal from "./CreateGroupModal";
 import { useAuthContext } from "../../context/AuthContext";
 
-const Sidebar = () => {
+const Sidebar = ({ unreadCounts = {} }) => {
   const { authUser } = useAuthContext();
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = useCallback((query) => {
+    setSearchQuery(query);
+  }, []);
 
   return (
     <div className="bg-base-200 flex flex-col h-full relative">
@@ -25,12 +30,12 @@ const Sidebar = () => {
             <HiOutlineUserGroup className="text-xl" />
           </button>
         </div>
-        <SearchInput />
+        <SearchInput onSearch={handleSearch} />
       </div>
 
       {/* Conversations List */}
       <div className="flex-1 overflow-y-auto py-2">
-        <Conversations />
+        <Conversations searchQuery={searchQuery} unreadCounts={unreadCounts} />
       </div>
 
       {/* Footer */}
