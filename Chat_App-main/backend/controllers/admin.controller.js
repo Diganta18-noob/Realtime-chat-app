@@ -65,11 +65,20 @@ export const getAllUsers = async (req, res) => {
 
 export const getAuditLogs = async (req, res) => {
   try {
-    const { userId, action, page = 1, limit = 50 } = req.query;
+    const { userId, action, startDate, endDate, page = 1, limit = 50 } = req.query;
 
     const filter = {};
     if (userId) filter.userId = userId;
     if (action) filter.action = action;
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = end;
+      }
+    }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
@@ -91,6 +100,64 @@ export const getAuditLogs = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in getAuditLogs controller:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const exportAuditLogs = async (req, res) => {
+  try {
+    const { userId, action, startDate, endDate } = req.query;
+
+    const filter = {};
+    if (userId) filter.userId = userId;
+    if (action) filter.action = action;
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = end;
+      }
+    }
+
+    const logs = await AuditLog.find(filter)
+      .populate("userId", "fullName username")
+      .populate("targetUserId", "fullName username")
+      .sort({ createdAt: -1 })
+      .limit(10000);
+
+    // Build CSV
+    const header = "Timestamp,Action,User,Target,IP,Details";
+    const escapeCSV = (val) => {
+      if (!val) return "";
+      const str = String(val);
+      if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const rows = logs.map((log) => {
+      const user = log.userId ? `${log.userId.fullName} (@${log.userId.username})` : "System";
+      const target = log.targetUserId ? `${log.targetUserId.fullName} (@${log.targetUserId.username})` : "";
+      return [
+        new Date(log.createdAt).toISOString(),
+        log.action,
+        escapeCSV(user),
+        escapeCSV(target),
+        escapeCSV(log.ipAddress),
+        escapeCSV(log.details),
+      ].join(",");
+    });
+
+    const csv = [header, ...rows].join("\n");
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=audit_logs.csv");
+    res.status(200).send(csv);
+  } catch (error) {
+    console.log("Error in exportAuditLogs controller:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import useGetUsers from "../../hooks/useGetUsers";
 import useToggleBan from "../../hooks/useToggleBan";
 import useGetAuditLogs from "../../hooks/useGetAuditLogs";
 import useGetDashboardStats from "../../hooks/useGetDashboardStats";
+import { useAuthContext } from "../../context/AuthContext";
 
 const StatCard = ({ icon, label, value, loading, color }) => (
   <div className="bg-base-200/50 rounded-lg border border-base-300 p-4 text-center flex-1 min-w-[120px]">
@@ -23,12 +25,68 @@ const StatCard = ({ icon, label, value, loading, color }) => (
   </div>
 );
 
+const ACTION_TYPES = ["LOGIN", "LOGOUT", "ADMIN_LOGIN", "USER_BANNED", "USER_UNBANNED"];
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("users");
   const { users, setUsers, loading: loadingUsers } = useGetUsers();
-  const { logs, page, totalPages, loading: loadingLogs, setPage } = useGetAuditLogs();
+  const { logs, page, totalPages, loading: loadingLogs, setPage, applyFilters } = useGetAuditLogs();
   const { toggleBan } = useToggleBan();
   const { stats, loading: loadingStats } = useGetDashboardStats();
+  const { accessToken, refreshAccessToken } = useAuthContext();
+
+  // Local filter state for the form
+  const [localFilters, setLocalFilters] = useState({
+    action: "",
+    userId: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const handleApplyFilters = () => {
+    applyFilters(localFilters);
+  };
+
+  const handleClearFilters = () => {
+    const cleared = { action: "", userId: "", startDate: "", endDate: "" };
+    setLocalFilters(cleared);
+    applyFilters(cleared);
+  };
+
+  const handleExportCSV = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (localFilters.action) params.set("action", localFilters.action);
+      if (localFilters.userId) params.set("userId", localFilters.userId);
+      if (localFilters.startDate) params.set("startDate", localFilters.startDate);
+      if (localFilters.endDate) params.set("endDate", localFilters.endDate);
+
+      let token = accessToken;
+      let res = await fetch(`/api/admin/audit-logs/export?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.status === 401) {
+        token = await refreshAccessToken();
+        if (!token) return;
+        res = await fetch(`/api/admin/audit-logs/export?${params.toString()}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "audit_logs.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error("Failed to export CSV");
+    }
+  };
 
   const handleToggle = async (user) => {
     if (user.role === "admin") return;
@@ -168,12 +226,52 @@ const AdminDashboard = () => {
         )}
 
         {activeTab === "logs" && (
-          loadingLogs ? (
-            <div className="flex justify-center items-center h-full">
-              <span className="loading loading-spinner text-secondary loading-lg"></span>
+          <div className="flex flex-col h-full">
+            {/* Filter Bar */}
+            <div className="flex flex-wrap gap-2 items-end mb-4 bg-base-200/30 rounded-lg border border-base-300 p-3">
+              <div className="form-control">
+                <label className="label py-0 pb-1"><span className="label-text text-xs">Action</span></label>
+                <select
+                  className="select select-bordered select-sm w-40"
+                  value={localFilters.action}
+                  onChange={(e) => setLocalFilters({ ...localFilters, action: e.target.value })}
+                >
+                  <option value="">All Actions</option>
+                  {ACTION_TYPES.map((a) => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control">
+                <label className="label py-0 pb-1"><span className="label-text text-xs">From</span></label>
+                <input
+                  type="date"
+                  className="input input-bordered input-sm w-36"
+                  value={localFilters.startDate}
+                  onChange={(e) => setLocalFilters({ ...localFilters, startDate: e.target.value })}
+                />
+              </div>
+              <div className="form-control">
+                <label className="label py-0 pb-1"><span className="label-text text-xs">To</span></label>
+                <input
+                  type="date"
+                  className="input input-bordered input-sm w-36"
+                  value={localFilters.endDate}
+                  onChange={(e) => setLocalFilters({ ...localFilters, endDate: e.target.value })}
+                />
+              </div>
+              <button className="btn btn-sm btn-primary" onClick={handleApplyFilters}>Apply</button>
+              <button className="btn btn-sm btn-ghost" onClick={handleClearFilters}>Clear</button>
+              <div className="flex-1"></div>
+              <button className="btn btn-sm btn-outline" onClick={handleExportCSV}>📥 Export CSV</button>
             </div>
-          ) : (
-            <div className="flex flex-col h-full">
+
+            {loadingLogs ? (
+              <div className="flex justify-center items-center flex-1">
+                <span className="loading loading-spinner text-secondary loading-lg"></span>
+              </div>
+            ) : (
+            <>
               <div className="flex-1 overflow-x-auto bg-base-200/50 rounded-lg border border-base-300 shadow-xl mb-4">
                 <table className="table table-zebra table-sm">
                   <thead>
@@ -258,8 +356,9 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               </div>
-            </div>
-          )
+            </>
+            )}
+          </div>
         )}
       </div>
     </div>
