@@ -64,10 +64,15 @@ export const sendMessage = async (req, res) => {
       });
     }
 
+    // Check if receiver is online to set initial status
+    const receiverOnline = !conversation.isGroup && getReceiverSocketId(receiverOrGroupId);
+
     const newMessage = new Message({
       senderId,
-      receiverId: conversation.isGroup ? null : receiverOrGroupId, // If it's a group, receiverId doesn't make sense as a single user
+      receiverId: conversation.isGroup ? null : receiverOrGroupId,
       message,
+      status: receiverOnline ? "delivered" : "sent",
+      readBy: [senderId], // Sender has read their own message
     });
 
     if (newMessage) {
@@ -125,6 +130,39 @@ export const getMessage = async (req, res) => {
     res.status(200).json(messages);
   } catch (error) {
     console.log("Error on getting message", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUnreadCounts = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Find all messages where current user is NOT in readBy
+    const unreadMessages = await Message.aggregate([
+      {
+        $match: {
+          receiverId: userId,
+          readBy: { $nin: [userId] },
+        },
+      },
+      {
+        $group: {
+          _id: "$senderId",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Convert to { senderId: count } map
+    const counts = {};
+    unreadMessages.forEach((item) => {
+      counts[item._id.toString()] = item.count;
+    });
+
+    res.status(200).json(counts);
+  } catch (error) {
+    console.log("Error in getUnreadCounts:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

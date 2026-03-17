@@ -6,8 +6,9 @@ import { TiMessages } from "react-icons/ti";
 import { HiArrowLeft } from "react-icons/hi";
 import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContext";
+import Avatar from "../Avatar";
 
-const MessageContainer = () => {
+const MessageContainer = ({ resetUnreadCount, incrementUnreadCount }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const { onlineUsers } = useSocketContext();
 
@@ -18,6 +19,13 @@ const MessageContainer = () => {
   useEffect(() => {
     return () => setSelectedConversation(null);
   }, [setSelectedConversation]);
+
+  // Mark messages as read when opening a chat
+  useEffect(() => {
+    if (selectedConversation && resetUnreadCount) {
+      resetUnreadCount(selectedConversation._id);
+    }
+  }, [selectedConversation?._id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col h-full">
@@ -34,11 +42,12 @@ const MessageContainer = () => {
             >
               <HiArrowLeft className="text-lg" />
             </button>
-            <div className={`avatar ${isOnline ? "online" : selectedConversation.isGroup ? "" : "offline"}`}>
-              <div className="w-10 rounded-full bg-base-300 ring ring-primary ring-offset-base-100 ring-offset-2 flex items-center justify-center">
-                <img src={selectedConversation.profilePic} alt="avatar" />
-              </div>
-            </div>
+            <Avatar
+              username={selectedConversation.username || selectedConversation.fullName}
+              role={selectedConversation.role}
+              size={40}
+              isOnline={selectedConversation.isGroup ? undefined : isOnline}
+            />
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-base-content truncate">
                 {selectedConversation.fullName}
@@ -59,7 +68,7 @@ const MessageContainer = () => {
           </div>
 
           {/* Messages */}
-          <Messages />
+          <Messages incrementUnreadCount={incrementUnreadCount} />
 
           {/* Input */}
           <MessageInput />

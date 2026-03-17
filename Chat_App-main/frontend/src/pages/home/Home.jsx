@@ -1,9 +1,11 @@
 import Sidebar from "../../components/sidebar/Sidebar";
 import MessageContainer from "../../components/messages/MessageContainer";
 import useConversation from "../../zustand/useConversation";
+import useUnreadCounts from "../../hooks/useUnreadCounts";
 
 const Home = () => {
   const { selectedConversation } = useConversation();
+  const { unreadCounts, incrementCount, resetCount } = useUnreadCounts();
 
   return (
     <div className="flex w-full h-[100dvh] sm:h-[85vh] sm:max-w-5xl sm:mx-auto overflow-hidden glass-card sm:my-4">
@@ -13,14 +15,17 @@ const Home = () => {
           selectedConversation ? "hidden" : "flex"
         } md:flex w-full md:w-80 flex-shrink-0 flex-col`}
       >
-        <Sidebar />
+        <Sidebar unreadCounts={unreadCounts} />
       </div>
       <div
         className={`${
           selectedConversation ? "flex" : "hidden"
         } md:flex flex-1 flex-col min-w-0`}
       >
-        <MessageContainer />
+        <MessageContainer
+          resetUnreadCount={resetCount}
+          incrementUnreadCount={incrementCount}
+        />
       </div>
     </div>
   );

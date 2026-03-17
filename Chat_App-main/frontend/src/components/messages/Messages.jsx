@@ -4,9 +4,9 @@ import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import useListenMessages from "../../hooks/useListenMessages";
 
-const Messages = () => {
+const Messages = ({ incrementUnreadCount }) => {
   const { messages, loading } = useGetMessages();
-  useListenMessages();
+  useListenMessages(incrementUnreadCount);
   const lastMessageRef = useRef();
 
   useEffect(() => {

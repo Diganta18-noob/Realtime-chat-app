@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useAuthContext } from "./AuthContext";
+import useConversation from "../zustand/useConversation";
 import io from "socket.io-client";
 
 const SocketContext = createContext();
@@ -43,6 +44,28 @@ export const SocketContextProvider = ({ children }) => {
         setAuthUser(null);
         setAccessToken(null);
         localStorage.removeItem("chat-user");
+      });
+
+      // Read receipt: messages delivered to recipient
+      newSocket.on("messages_delivered", ({ messageIds }) => {
+        const { messages, setMessages } = useConversation.getState();
+        const updated = messages.map((m) =>
+          messageIds.includes(m._id) ? { ...m, status: "delivered" } : m
+        );
+        if (updated.some((m, i) => m !== messages[i])) {
+          setMessages(updated);
+        }
+      });
+
+      // Read receipt: messages seen/read by recipient  
+      newSocket.on("messages_seen", ({ messageIds }) => {
+        const { messages, setMessages } = useConversation.getState();
+        const updated = messages.map((m) =>
+          messageIds.includes(m._id) ? { ...m, status: "read" } : m
+        );
+        if (updated.some((m, i) => m !== messages[i])) {
+          setMessages(updated);
+        }
       });
 
       return () => newSocket.close();

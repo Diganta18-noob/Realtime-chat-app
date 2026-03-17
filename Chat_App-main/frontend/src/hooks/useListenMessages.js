@@ -5,19 +5,32 @@ import useConversation from "../zustand/useConversation";
 
 import notificationSound from "../assets/sounds/notification.mp3";
 
-const useListenMessages = () => {
+const useListenMessages = (incrementUnreadCount) => {
   const { socket } = useSocketContext();
-  const { messages, setMessages } = useConversation();
+  const { messages, setMessages, selectedConversation } = useConversation();
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
-      newMessage.shouldShake = true;
+      // Check if this message is for the currently open chat
+      const isActiveChat =
+        selectedConversation &&
+        (newMessage.senderId === selectedConversation._id ||
+          newMessage.conversationId === selectedConversation._id);
+
+      if (isActiveChat) {
+        newMessage.shouldShake = true;
+        setMessages([...messages, newMessage]);
+      } else if (incrementUnreadCount) {
+        // Not the active chat — increment unread badge
+        const senderId = newMessage.senderId;
+        if (senderId) incrementUnreadCount(senderId);
+      }
+
       const sound = new Audio(notificationSound);
       sound.play();
-      setMessages([...messages, newMessage]);
     });
 
     return () => socket?.off("newMessage");
-  }, [socket, setMessages, messages]);
+  }, [socket, setMessages, messages, selectedConversation, incrementUnreadCount]);
 };
 export default useListenMessages;
