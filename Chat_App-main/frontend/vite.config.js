@@ -11,6 +11,10 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:5000",
       },
+      "/socket.io": {
+        target: "http://localhost:5000",
+        ws: true,
+      },
     },
   },
 });
