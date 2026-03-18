@@ -2,6 +2,7 @@ import { BiLogOut } from "react-icons/bi";
 import { useState } from "react";
 import useLogout from "../../hooks/useLogout";
 import { useAuthContext } from "../../context/AuthContext";
+import Avatar from "../Avatar";
 
 const LogoutButton = () => {
   const { loading, logout } = useLogout();
@@ -19,12 +20,13 @@ const LogoutButton = () => {
 
   return (
     <>
-      <div className="flex items-center gap-3">
-        <div className="avatar">
-          <div className="w-9 rounded-full ring ring-primary/30 hover:ring-primary transition-all cursor-pointer">
-            <img src={authUser?.profilePic} alt="avatar" />
-          </div>
-        </div>
+      <div className="flex items-center gap-3 w-full min-w-0">
+        <Avatar
+          username={authUser?.username || authUser?.fullName}
+          role={authUser?.role}
+          profilePic={authUser?.profilePic}
+          size={36}
+        />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-base-content truncate">
             {authUser?.fullName}
@@ -50,11 +52,12 @@ const LogoutButton = () => {
             <h3 className="font-bold text-lg mb-4 text-center">Confirm Logout</h3>
             
             <div className="flex flex-col items-center gap-4 py-4">
-              <div className="avatar">
-                <div className="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-xl">
-                  <img src={authUser?.profilePic} alt="avatar" />
-                </div>
-              </div>
+              <Avatar
+                username={authUser?.username || authUser?.fullName}
+                role={authUser?.role}
+                profilePic={authUser?.profilePic}
+                size={80}
+              />
               
               <p className="text-center text-base-content/80">
                 Are you sure you want to sign out, <br/>

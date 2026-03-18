@@ -45,6 +45,7 @@ const MessageContainer = ({ resetUnreadCount, incrementUnreadCount }) => {
             <Avatar
               username={selectedConversation.username || selectedConversation.fullName}
               role={selectedConversation.role}
+              profilePic={selectedConversation.profilePic}
               size={40}
               isOnline={selectedConversation.isGroup ? undefined : isOnline}
             />

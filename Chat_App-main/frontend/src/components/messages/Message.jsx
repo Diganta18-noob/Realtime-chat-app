@@ -22,11 +22,12 @@ const Message = ({ message }) => {
     ? authUser.username
     : selectedConversation?.username || selectedConversation?.fullName;
   const avatarRole = fromMe ? authUser.role : selectedConversation?.role;
+  const avatarPic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
 
   return (
     <div className={`chat ${chatClassName}`}>
       <div className="chat-image">
-        <Avatar username={avatarUsername} role={avatarRole} size={32} />
+        <Avatar username={avatarUsername} role={avatarRole} profilePic={avatarPic} size={32} />
       </div>
       <div className={`chat-bubble ${bubbleBgColor} ${shakeClass} text-sm`}>
         {message.message}

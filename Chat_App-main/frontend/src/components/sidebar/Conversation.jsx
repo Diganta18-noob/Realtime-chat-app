@@ -23,6 +23,7 @@ const Conversation = ({ conversation, lastIdx, unreadCount = 0 }) => {
           <Avatar
             username={conversation.username || conversation.fullName}
             role={conversation.role}
+            profilePic={conversation.profilePic}
             size={44}
             isOnline={conversation.isGroup ? undefined : isOnline}
           />
