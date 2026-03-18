@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../context/AuthContext";
+import axiosInstance from "../api/axiosInstance";
 
 const useGetAuditLogs = () => {
   const [loading, setLoading] = useState(false);
@@ -15,47 +15,34 @@ const useGetAuditLogs = () => {
     endDate: "",
   });
 
-  const { accessToken, refreshAccessToken } = useAuthContext();
+
 
   const fetchLogs = useCallback(
     async (pageNum = 1, currentFilters = filters) => {
       setLoading(true);
       try {
-        // Build query string
-        const params = new URLSearchParams();
-        params.set("page", pageNum);
-        if (currentFilters.action) params.set("action", currentFilters.action);
-        if (currentFilters.userId) params.set("userId", currentFilters.userId);
-        if (currentFilters.startDate) params.set("startDate", currentFilters.startDate);
-        if (currentFilters.endDate) params.set("endDate", currentFilters.endDate);
-
-        let token = accessToken;
-        let res = await fetch(`/api/admin/audit-logs?${params.toString()}`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await axiosInstance.get("/admin/audit-logs", {
+          params: {
+            page: pageNum,
+            action: currentFilters.action || undefined,
+            userId: currentFilters.userId || undefined,
+            startDate: currentFilters.startDate || undefined,
+            endDate: currentFilters.endDate || undefined,
+          },
         });
 
-        if (res.status === 401) {
-          token = await refreshAccessToken();
-          if (!token) return;
-          res = await fetch(`/api/admin/audit-logs?${params.toString()}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        }
-
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
+        const data = res.data;
         setLogs(data.logs);
         setTotal(data.total);
         setPage(data.page);
         setTotalPages(data.totalPages);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response?.data?.error || error.message);
       } finally {
         setLoading(false);
       }
     },
-    [accessToken, refreshAccessToken, filters]
+    [filters]
   );
 
   const applyFilters = useCallback(

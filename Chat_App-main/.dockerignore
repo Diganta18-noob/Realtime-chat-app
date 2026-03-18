@@ -1,0 +1,10 @@
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.git/
+.env*
+npm-debug.log
+.DS_Store
+Dockerfile.*
+docker-compose.yml

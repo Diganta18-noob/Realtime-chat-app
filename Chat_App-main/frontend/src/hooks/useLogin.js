@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import axiosInstance from "../api/axiosInstance";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -11,25 +12,14 @@ const useLogin = () => {
     if (!success) return;
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      // Store user profile (without token) in localStorage
-      const { accessToken, ...userProfile } = data;
+      const res = await axiosInstance.post("/auth/login", { username, password });
+      
+      const { accessToken, ...userProfile } = res.data;
       localStorage.setItem("chat-user", JSON.stringify(userProfile));
       setAuthUser(userProfile);
       setAccessToken(accessToken);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }

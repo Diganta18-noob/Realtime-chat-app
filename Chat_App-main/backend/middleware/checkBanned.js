@@ -1,16 +1,15 @@
-import User from "../models/user.model.js";
+import { supabase } from "../config/supabase.js";
 
 const checkBanned = async (req, res, next) => {
   try {
     if (req.user && req.user.isBanned) {
-      // Lazy auto-unban: check if bannedUntil has passed
       if (req.user.bannedUntil && new Date(req.user.bannedUntil) < new Date()) {
-        // Suspension expired — auto-unban
-        await User.findByIdAndUpdate(req.user._id, {
-          isBanned: false,
-          bannedUntil: null,
-          banReason: "",
-        });
+        await supabase.from('users').update({
+          is_banned: false,
+          banned_until: null,
+          ban_reason: ""
+        }).eq('id', req.user._id);
+
         // Update req.user so downstream middleware/controllers see the change
         req.user.isBanned = false;
         req.user.bannedUntil = null;

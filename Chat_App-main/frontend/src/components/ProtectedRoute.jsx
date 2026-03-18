@@ -1,12 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 
-const AdminRoute = ({ children }) => {
+const ProtectedRoute = ({ children }) => {
   const { authUser, isLoading } = useAuthContext();
 
-  if (isLoading) return null; // Wait for AuthContext to finish its bootstrap checks
+  if (isLoading) return null;
   if (!authUser) return <Navigate to="/login" replace />;
-  if (authUser.role !== "admin") return <Navigate to="/" replace />;
   return children;
 };
-export default AdminRoute;
+export default ProtectedRoute;

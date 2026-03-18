@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import http from "http";
 import express from "express";
 import jwt from "jsonwebtoken";
-import Message from "../models/message.model.js";
+import { supabase } from "../config/supabase.js";
 
 const app = express();
 
@@ -42,27 +42,24 @@ io.on("connection", (socket) => {
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
-  // On connect: mark all pending messages TO this user as 'delivered'
   (async () => {
     try {
-      const pendingMessages = await Message.find({
-        receiverId: userId,
-        status: "sent",
-      });
+      const { data: pendingMessages } = await supabase.from('messages')
+        .select('id, sender_id')
+        .eq('receiver_id', userId)
+        .eq('status', 'sent');
 
-      if (pendingMessages.length > 0) {
-        const messageIds = pendingMessages.map((m) => m._id);
-        await Message.updateMany(
-          { _id: { $in: messageIds } },
-          { $set: { status: "delivered" } }
-        );
+      if (pendingMessages && pendingMessages.length > 0) {
+        const messageIds = pendingMessages.map((m) => m.id);
+        await supabase.from('messages')
+          .update({ status: 'delivered' })
+          .in('id', messageIds);
 
-        // Group by sender and notify each sender
         const bySender = {};
         pendingMessages.forEach((m) => {
-          const sid = m.senderId.toString();
+          const sid = m.sender_id;
           if (!bySender[sid]) bySender[sid] = [];
-          bySender[sid].push(m._id.toString());
+          bySender[sid].push(m.id);
         });
 
         Object.entries(bySender).forEach(([senderId, ids]) => {
@@ -80,38 +77,27 @@ io.on("connection", (socket) => {
     }
   })();
 
-  // Handle messages_read: user opened a chat with senderId
   socket.on("messages_read", async ({ senderId, receiverId }) => {
     try {
-      // Mark all messages from sender to receiver as read
-      const result = await Message.updateMany(
-        {
-          senderId: senderId,
-          receiverId: receiverId,
-          readBy: { $nin: [receiverId] },
-        },
-        {
-          $addToSet: { readBy: receiverId },
-          $set: { status: "read" },
-        }
-      );
+      const { data: unreadMsgs } = await supabase.from('messages')
+        .select('id')
+        .eq('sender_id', senderId)
+        .eq('receiver_id', receiverId)
+        .neq('status', 'read');
+        
+      if (unreadMsgs && unreadMsgs.length > 0) {
+        const msgIds = unreadMsgs.map(m => m.id);
+        
+        await supabase.from('messages').update({ status: 'read' }).in('id', msgIds);
+        
+        const inserts = msgIds.map(id => ({ message_id: id, user_id: receiverId }));
+        await supabase.from('message_read_by').upsert(inserts, { onConflict: 'message_id, user_id', ignoreDuplicates: true });
 
-      if (result.modifiedCount > 0) {
-        // Get the IDs of messages that were marked read
-        const readMessages = await Message.find({
-          senderId: senderId,
-          receiverId: receiverId,
-          status: "read",
-        }).select("_id");
-
-        const messageIds = readMessages.map((m) => m._id.toString());
-
-        // Notify the sender
         const senderSocketId = getReceiverSocketId(senderId);
         if (senderSocketId) {
           io.to(senderSocketId).emit("messages_seen", {
             by: receiverId,
-            messageIds,
+            messageIds: msgIds,
           });
         }
       }

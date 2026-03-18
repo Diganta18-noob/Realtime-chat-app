@@ -1,32 +1,56 @@
-import User from "../models/user.model.js";
-import Conversation from "../models/conversation.model.js";
+import { supabase } from "../config/supabase.js";
 
 export const getUsersForSidebar = async (req, res) => {
   try {
-    const loggedInUser = req.user._id;
+    const loggedInUser = req.user.id || req.user._id;
 
-    // Fetch all other users
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUser },
-    }).select("-password").lean();
+    const loggedInRole = req.user.role;
 
-    // Fetch all group conversations the user is a part of
-    const userGroups = await Conversation.find({
-      isGroup: true,
-      participants: loggedInUser,
-    }).lean();
+    const { data: users, error: usersError } = await supabase
+      .from('users')
+      .select('id, full_name, username, profile_pic, role')
+      .neq('id', loggedInUser);
 
-    // Format groups to match user object structure for the frontend
-    const formattedGroups = userGroups.map((group) => ({
-      _id: group._id, // This is the conversation ID
-      fullName: group.groupName, // Treat group name as full name for UI
-      username: "group", // Dummy username
-      profilePic: group.groupAvatar,
-      isGroup: true, // Flag for the frontend to know how to route messages
-      groupAdmin: group.groupAdmin,
+    if (usersError) throw usersError;
+
+    let visibleUsers = users;
+    if (loggedInRole !== 'admin') {
+      visibleUsers = visibleUsers.filter(u => u.role !== 'admin' || u.username === 'admin');
+    }
+
+    const filteredUsers = visibleUsers.map(u => ({
+      _id: u.id,
+      fullName: u.full_name,
+      username: u.username,
+      profilePic: u.profile_pic,
     }));
 
-    // Combine both arrays
+    const { data: userGroups, error: groupsError } = await supabase
+      .from('conversation_participants')
+      .select(`
+        conversation_id,
+        conversations:conversation_id (
+          id, is_group, group_name, group_avatar, group_admin
+        )
+      `)
+      .eq('user_id', loggedInUser);
+
+    if (groupsError) throw groupsError;
+
+    const formattedGroups = (userGroups || [])
+      .filter(cp => cp.conversations && cp.conversations.is_group)
+      .map(cp => {
+        const group = cp.conversations;
+        return {
+          _id: group.id,
+          fullName: group.group_name,
+          username: "group",
+          profilePic: group.group_avatar,
+          isGroup: true,
+          groupAdmin: group.group_admin,
+        };
+      });
+
     const combinedList = [...formattedGroups, ...filteredUsers];
 
     res.status(200).json(combinedList);

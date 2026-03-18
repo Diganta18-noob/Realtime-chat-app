@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import AdminRoute from "./components/AdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Login = React.lazy(() => import("./pages/login/Login"));
@@ -16,22 +17,26 @@ const LoadingSpinner = () => (
 );
 
 function App() {
-  const { authUser } = useAuthContext();
+  const { authUser, isLoading } = useAuthContext();
   return (
     <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route
             path="/"
-            element={authUser ? <Home /> : <Navigate to={"/login"} />}
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/login"
-            element={authUser ? <Navigate to="/" /> : <Login />}
+            element={authUser && !isLoading ? <Navigate to="/" /> : <Login />}
           />
           <Route
             path="/signup"
-            element={authUser ? <Navigate to="/" /> : <SignUp />}
+            element={authUser && !isLoading ? <Navigate to="/" /> : <SignUp />}
           />
           <Route
             path="/admin"

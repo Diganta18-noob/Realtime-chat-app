@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import { supabase } from "../config/supabase.js";
 
 const protectRoute = async (req, res, next) => {
   try {
@@ -17,20 +17,21 @@ const protectRoute = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     if (!decoded) {
       return res.status(401).json({ error: "Unauthorized Token Invalid" });
     }
 
-    // Attach fresh user from DB
-    const user = await User.findById(decoded.userID).select("-password");
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, full_name, username, profile_pic, role, is_banned')
+      .eq('id', decoded.userID)
+      .maybeSingle();
 
-    if (!user) {
+    if (error || !user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     req.user = user;
-
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

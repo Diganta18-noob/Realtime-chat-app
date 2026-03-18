@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "docker:up": "docker-compose up -d --build",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
   },
   "type": "module",
   "keywords": [],
@@ -19,16 +22,15 @@
     "tailwindcss": "^3.4.3"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.99.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.3.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.3",
     "socket.io": "^4.7.5"
   }
 }

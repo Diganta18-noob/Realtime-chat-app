@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
+import axiosInstance, { setupInterceptors } from "../api/axiosInstance";
 
 export const AuthContext = createContext();
 
@@ -14,8 +15,12 @@ export const AuthContextProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const accessTokenRef = useRef(accessToken);
+  accessTokenRef.current = accessToken;
+
   const refreshAccessToken = useCallback(async () => {
     try {
+      // Use raw fetch or standard axios without interceptors so it doesn't loop
       const res = await fetch("/api/auth/refresh", {
         method: "POST",
         credentials: "include",
@@ -38,21 +43,43 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, []);
 
+  const clearAuth = useCallback(() => {
+    setAuthUser(null);
+    setAccessToken(null);
+    localStorage.removeItem("chat-user");
+  }, []);
+
+  useEffect(() => {
+    setupInterceptors(
+      () => accessTokenRef.current,
+      refreshAccessToken,
+      clearAuth
+    );
+  }, [refreshAccessToken, clearAuth]);
+
   useEffect(() => {
     let isMounted = true;
-    const bootstrapToken = async () => {
-      // If we have a user in localStorage, we must get a token before rendering
-      if (authUser && !accessToken) {
-        await refreshAccessToken();
+    const verifyToken = async () => {
+      try {
+        const res = await axiosInstance.get("/auth/me");
+        if (isMounted) {
+          setAuthUser(res.data);
+          localStorage.setItem("chat-user", JSON.stringify(res.data));
+        }
+      } catch (err) {
+        if (isMounted) {
+          setAuthUser(null);
+          setAccessToken(null);
+          localStorage.removeItem("chat-user");
+        }
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-      if (isMounted) setIsLoading(false);
     };
     
-    bootstrapToken();
-    
+    verifyToken();
     return () => { isMounted = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [clearAuth]);
 
   return (
     <AuthContext.Provider
@@ -62,6 +89,7 @@ export const AuthContextProvider = ({ children }) => {
         accessToken,
         setAccessToken,
         refreshAccessToken,
+        isLoading,
       }}
     >
       {isLoading ? (

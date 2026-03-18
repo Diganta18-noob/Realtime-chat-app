@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import axiosInstance from "../api/axiosInstance";
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
@@ -24,30 +25,20 @@ const useSignup = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          fullName,
-          username,
-          password,
-          confirmPassword,
-          gender,
-        }),
+      const res = await axiosInstance.post("/auth/signup", {
+        fullName,
+        username,
+        password,
+        confirmPassword,
+        gender,
       });
 
-      const data = await res.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      const { accessToken, ...userProfile } = data;
+      const { accessToken, ...userProfile } = res.data;
       localStorage.setItem("chat-user", JSON.stringify(userProfile));
       setAuthUser(userProfile);
       setAccessToken(accessToken);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }

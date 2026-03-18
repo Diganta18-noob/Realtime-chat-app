@@ -1,0 +1,15 @@
+FROM node:18-alpine
+WORKDIR /app
+
+# Install root dependencies
+COPY package*.json ./
+RUN npm ci --omit=dev || npm install --omit=dev
+
+# Copy backend source
+COPY backend/ ./backend/
+
+# Expose API port
+EXPOSE 5000
+
+# Start server
+CMD ["npm", "start"]

@@ -1,0 +1,33 @@
+# Stage 1: Build the frontend with Vite
+FROM node:18-alpine AS builder
+WORKDIR /app
+
+# Copy root manifest (if workspaces/monorepo dependencies are needed)
+COPY package*.json ./
+
+# Copy frontend manifest and install
+COPY frontend/package*.json ./frontend/
+RUN cd frontend && (npm ci || npm install)
+
+# Copy the rest of the application
+COPY . .
+
+# Build the frontend assets
+RUN npm run build --prefix frontend
+
+# Stage 2: Serve the frontend with Nginx
+FROM nginx:alpine
+
+# Remove default Nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy custom robust Nginx SPA config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy compiled assets from Stage 1
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
+
+# Expose Web Port
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

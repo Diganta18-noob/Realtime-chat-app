@@ -1,11 +1,10 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../context/AuthContext";
+import axiosInstance from "../api/axiosInstance";
 import useConversation from "../zustand/useConversation";
 
 const useCreateGroup = () => {
   const [loading, setLoading] = useState(false);
-  const { accessToken, refreshAccessToken } = useAuthContext();
   const { setSelectedConversation } = useConversation();
 
   const createGroup = async (groupName, participants) => {
@@ -20,34 +19,11 @@ const useCreateGroup = () => {
 
     setLoading(true);
     try {
-      let token = accessToken;
-      let res = await fetch("/api/messages/group", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ groupName, participants }),
-      });
-
-      if (res.status === 401) {
-        token = await refreshAccessToken();
-        if (!token) return false;
-        res = await fetch("/api/messages/group", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ groupName, participants }),
-        });
-      }
-
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
+      const res = await axiosInstance.post("/messages/group", { groupName, participants });
+      const data = res.data;
 
       toast.success("Group created successfully!");
-      // Optionally format it slightly if backend didn't do it before selecting
+      
       const formattedGroup = {
         ...data,
         fullName: data.groupName,
@@ -56,7 +32,7 @@ const useCreateGroup = () => {
       setSelectedConversation(formattedGroup);
       return true;
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
       return false;
     } finally {
       setLoading(false);
