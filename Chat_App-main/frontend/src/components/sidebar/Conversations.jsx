@@ -1,5 +1,6 @@
 import Conversation from "./Conversation";
 import useGetConversations from "../../hooks/useGetConversations";
+import ConversationSkeleton from "../skeletons/ConversationSkeleton";
 
 const Conversations = ({ searchQuery = "", unreadCounts = {} }) => {
   const { loading, conversations } = useGetConversations();
@@ -24,7 +25,7 @@ const Conversations = ({ searchQuery = "", unreadCounts = {} }) => {
       ))}
 
       {loading ? (
-        <span className="loading loading-spinner mx-auto"></span>
+        [...Array(6)].map((_, idx) => <ConversationSkeleton key={idx} />)
       ) : null}
 
       {!loading && filtered?.length === 0 && searchQuery && (

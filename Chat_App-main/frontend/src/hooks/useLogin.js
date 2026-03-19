@@ -15,7 +15,6 @@ const useLogin = () => {
       const res = await axiosInstance.post("/auth/login", { username, password });
       
       const { accessToken, ...userProfile } = res.data;
-      localStorage.setItem("chat-user", JSON.stringify(userProfile));
       setAuthUser(userProfile);
       setAccessToken(accessToken);
     } catch (error) {

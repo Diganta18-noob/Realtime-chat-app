@@ -1,8 +1,32 @@
 import GenderCheckbox from "./GenderCheckbox";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
-import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd, HiEye, HiEyeOff } from "react-icons/hi";
+import useAvailabilityCheck from "../../hooks/useAvailabilityCheck";
+import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd, HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from "react-icons/hi";
+
+const StatusIndicator = ({ status }) => {
+  if (status === "idle") return null;
+  if (status === "checking") {
+    return (
+      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+        <span className="loading loading-spinner loading-xs text-base-content/50"></span>
+      </div>
+    );
+  }
+  if (status === "available") {
+    return (
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-success animate-fade-in-up">
+        <HiCheckCircle className="text-lg" />
+      </div>
+    );
+  }
+  return (
+    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-error animate-pulse">
+      <HiXCircle className="text-lg" />
+    </div>
+  );
+};
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
@@ -14,28 +38,11 @@ const SignUp = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [usernameStatus, setUsernameStatus] = useState(null); // null | 'checking' | 'available' | 'taken'
 
   const { loading, signup } = useSignup();
 
-  // Debounced username availability check
-  useEffect(() => {
-    if (!inputs.username || inputs.username.length < 3) {
-      setUsernameStatus(null);
-      return;
-    }
-    setUsernameStatus("checking");
-    const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/auth/check-username/${inputs.username}`);
-        const data = await res.json();
-        setUsernameStatus(data.available ? "available" : "taken");
-      } catch {
-        setUsernameStatus(null);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [inputs.username]);
+  // Real-time duplicate check for username
+  const { status: usernameStatus, message: usernameMessage } = useAvailabilityCheck(inputs.username, "/auth/check-username");
 
   const handleCheckboxChange = (gender) => {
     setInputs({ ...inputs, gender });
@@ -46,8 +53,13 @@ const SignUp = () => {
     await signup(inputs);
   };
 
+  // Block submission if check is pending or failed
+  const isSubmitDisabled = 
+    loading || 
+    usernameStatus === "checking" || usernameStatus === "taken" || usernameStatus === "error";
+
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto animate-fade-in-up">
+    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto animate-fade-in-up my-4">
       <div className="w-full p-6 sm:p-8 glass-card">
         {/* Brand */}
         <div className="text-center mb-6">
@@ -59,10 +71,10 @@ const SignUp = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Full Name */}
           <div className="form-control">
-            <label className="label">
+            <label className="label py-1">
               <span className="label-text text-base-content/80 font-medium">Full Name</span>
             </label>
             <div className="relative">
@@ -70,7 +82,7 @@ const SignUp = () => {
               <input
                 type="text"
                 placeholder="Enter Full Name"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-sm h-10 input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
                 value={inputs.fullName}
                 onChange={(e) =>
                   setInputs({ ...inputs, fullName: e.target.value })
@@ -81,36 +93,35 @@ const SignUp = () => {
 
           {/* Username */}
           <div className="form-control">
-            <label className="label">
+            <label className="label py-1">
               <span className="label-text text-base-content/80 font-medium">Username</span>
             </label>
-            <div className="relative">
+            <div className={`relative ${usernameStatus === "taken" ? "animate-[shake_0.5s_ease-in-out]" : ""}`}>
               <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
               <input
                 type="text"
                 placeholder="Enter username"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className={`input input-sm h-10 input-bordered w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200 transition-colors ${
+                  usernameStatus === "taken" ? "input-error" : usernameStatus === "available" ? "input-success" : "input-primary"
+                }`}
                 value={inputs.username}
                 onChange={(e) =>
                   setInputs({ ...inputs, username: e.target.value })
                 }
               />
+              <StatusIndicator status={usernameStatus} />
             </div>
             {/* Username availability feedback */}
-            {usernameStatus === "checking" && (
-              <p className="text-xs text-base-content/50 mt-1">Checking availability...</p>
-            )}
-            {usernameStatus === "available" && (
-              <p className="text-xs text-success mt-1">✓ Username is available</p>
-            )}
-            {usernameStatus === "taken" && (
-              <p className="text-xs text-error mt-1">✗ Username is already taken</p>
+            {usernameStatus !== "idle" && (
+              <p className={`text-[11px] mt-1 transition-colors ${usernameStatus === "available" ? "text-success/80" : usernameStatus === "checking" ? "text-base-content/50" : "text-error/80"}`}>
+                {usernameMessage}
+              </p>
             )}
           </div>
 
           {/* Password */}
           <div className="form-control">
-            <label className="label">
+            <label className="label py-1">
               <span className="label-text text-base-content/80 font-medium">Password</span>
             </label>
             <div className="relative">
@@ -118,7 +129,7 @@ const SignUp = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Password"
-                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-sm h-10 input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
                 value={inputs.password}
                 onChange={(e) =>
                   setInputs({ ...inputs, password: e.target.value })
@@ -136,7 +147,7 @@ const SignUp = () => {
 
           {/* Confirm Password */}
           <div className="form-control">
-            <label className="label">
+            <label className="label py-1">
               <span className="label-text text-base-content/80 font-medium">Confirm Password</span>
             </label>
             <div className="relative">
@@ -144,7 +155,7 @@ const SignUp = () => {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
-                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-sm h-10 input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
                 value={inputs.confirmPassword}
                 onChange={(e) =>
                   setInputs({ ...inputs, confirmPassword: e.target.value })
@@ -161,15 +172,17 @@ const SignUp = () => {
           </div>
 
           {/* Gender */}
-          <GenderCheckbox
-            onCheckboxChange={handleCheckboxChange}
-            selectedGender={inputs.gender}
-          />
+          <div className="pt-2">
+            <GenderCheckbox
+              onCheckboxChange={handleCheckboxChange}
+              selectedGender={inputs.gender}
+            />
+          </div>
 
           {/* Submit */}
           <button
-            className="btn btn-gradient w-full mt-2 text-base font-semibold"
-            disabled={loading || usernameStatus === "taken"}
+            className="btn btn-gradient w-full mt-4 text-base font-semibold"
+            disabled={isSubmitDisabled}
           >
             {loading ? (
               <span className="loading loading-spinner"></span>
@@ -179,7 +192,7 @@ const SignUp = () => {
           </button>
         </form>
 
-        <div className="text-center mt-6">
+        <div className="text-center mt-4">
           <Link
             to="/login"
             className="text-sm text-secondary hover:text-accent transition-colors"

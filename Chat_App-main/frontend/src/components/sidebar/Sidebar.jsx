@@ -42,7 +42,7 @@ const Sidebar = ({ unreadCounts = {} }) => {
       <div className="p-4 border-t border-base-300 flex justify-between items-center bg-base-100/30">
         <LogoutButton />
         {authUser?.role === "admin" && (
-          <Link to="/admin" className="btn btn-sm btn-ghost text-primary hover:text-primary-focus">
+          <Link to="/admin" className="btn btn-sm btn-ghost text-primary hover:text-primary-focus" title="Admin Dashboard">
             <HiOutlineShieldCheck className="text-xl" />
           </Link>
         )}

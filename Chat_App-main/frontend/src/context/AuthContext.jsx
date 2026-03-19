@@ -9,9 +9,7 @@ export const useAuthContext = () => {
 };
 
 export const AuthContextProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState(
-    JSON.parse(localStorage.getItem("chat-user")) || null
-  );
+  const [authUser, setAuthUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,12 +31,10 @@ export const AuthContextProvider = ({ children }) => {
       // Refresh failed — log user out
       setAuthUser(null);
       setAccessToken(null);
-      localStorage.removeItem("chat-user");
       return null;
     } catch {
       setAuthUser(null);
       setAccessToken(null);
-      localStorage.removeItem("chat-user");
       return null;
     }
   }, []);
@@ -46,7 +42,6 @@ export const AuthContextProvider = ({ children }) => {
   const clearAuth = useCallback(() => {
     setAuthUser(null);
     setAccessToken(null);
-    localStorage.removeItem("chat-user");
   }, []);
 
   useEffect(() => {
@@ -64,13 +59,11 @@ export const AuthContextProvider = ({ children }) => {
         const res = await axiosInstance.get("/auth/me");
         if (isMounted) {
           setAuthUser(res.data);
-          localStorage.setItem("chat-user", JSON.stringify(res.data));
         }
       } catch (err) {
         if (isMounted) {
           setAuthUser(null);
           setAccessToken(null);
-          localStorage.removeItem("chat-user");
         }
       } finally {
         if (isMounted) setIsLoading(false);

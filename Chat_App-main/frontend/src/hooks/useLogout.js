@@ -11,7 +11,6 @@ const useLogout = () => {
     setLoading(true);
     try {
       await axiosInstance.post("/auth/logout");
-      localStorage.removeItem("chat-user");
       setAuthUser(null);
       setAccessToken(null);
     } catch (error) {

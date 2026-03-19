@@ -44,7 +44,6 @@ export const SocketContextProvider = ({ children }) => {
         });
         setAuthUser(null);
         setAccessToken(null);
-        localStorage.removeItem("chat-user");
       });
 
       // Read receipt: messages delivered to recipient

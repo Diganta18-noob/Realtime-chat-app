@@ -10,9 +10,11 @@ const Login = React.lazy(() => import("./pages/login/Login"));
 const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <span className="loading loading-spinner loading-lg text-primary"></span>
+import AppSkeleton from "./components/skeletons/AppSkeleton";
+
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
+    <AppSkeleton />
   </div>
 );
 
@@ -20,7 +22,7 @@ function App() {
   const { authUser, isLoading } = useAuthContext();
   return (
     <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route
             path="/"

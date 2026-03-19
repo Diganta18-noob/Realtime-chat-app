@@ -34,7 +34,6 @@ const useSignup = () => {
       });
 
       const { accessToken, ...userProfile } = res.data;
-      localStorage.setItem("chat-user", JSON.stringify(userProfile));
       setAuthUser(userProfile);
       setAccessToken(accessToken);
     } catch (error) {

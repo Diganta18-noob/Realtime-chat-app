@@ -39,9 +39,17 @@ export const signup = async (req, res) => {
       .select()
       .single();
 
-    if (insertError || !newUser) {
+    if (insertError) {
+      // Postgres Unique Violation (23505)
+      if (insertError.code === '23505') {
+        return res.status(400).json({ error: "Username already taken" });
+      }
       console.log(insertError);
       return res.status(400).json({ error: "Invalid user data" });
+    }
+
+    if (!newUser) {
+      return res.status(400).json({ error: "Could not create user" });
     }
 
     const accessToken = generateTokens(newUser.id, "user", res);
