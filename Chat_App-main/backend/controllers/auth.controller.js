@@ -99,6 +99,12 @@ export const login = async (req, res) => {
       });
     }
 
+    if (user.is_deleted) {
+      return res.status(403).json({
+        error: "This account has been deleted.",
+      });
+    }
+
     const accessToken = generateTokens(user.id, user.role, res);
 
     await supabase.from('audit_logs').insert([{

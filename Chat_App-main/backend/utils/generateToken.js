@@ -7,11 +7,12 @@ const generateTokens = (userID, role, res) => {
   
   const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
   const refreshToken = jwt.sign({ userID, role }, refreshSecret, {
-    expiresIn: "7d",
+    // 24 hours absolute max, but typically expires on browser close
+    expiresIn: "24h",
   });
 
   res.cookie("refreshToken", refreshToken, {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    // No maxAge creates a Session Cookie (expires when browser window is closed)
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV !== "development",

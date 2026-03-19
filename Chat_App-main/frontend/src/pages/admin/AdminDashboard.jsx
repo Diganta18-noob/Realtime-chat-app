@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import useGetUsers from "../../hooks/useGetUsers";
 import useToggleBan from "../../hooks/useToggleBan";
+import useDeleteUser from "../../hooks/useDeleteUser";
 import useGetAuditLogs from "../../hooks/useGetAuditLogs";
 import useGetDashboardStats from "../../hooks/useGetDashboardStats";
 import { useAuthContext } from "../../context/AuthContext";
@@ -32,6 +33,7 @@ const AdminDashboard = () => {
   const { users, setUsers, loading: loadingUsers } = useGetUsers();
   const { logs, page, totalPages, loading: loadingLogs, setPage, applyFilters } = useGetAuditLogs();
   const { toggleBan } = useToggleBan();
+  const { deleteUser, loading: deletingUser } = useDeleteUser();
   const { stats, loading: loadingStats } = useGetDashboardStats();
   const { accessToken, refreshAccessToken } = useAuthContext();
 
@@ -108,6 +110,17 @@ const AdminDashboard = () => {
     setSuspendModal({ open: false, user: null });
     setSuspendDuration("1h");
     setSuspendReason("");
+  };
+
+  const [deleteModal, setDeleteModal] = useState({ open: false, user: null });
+
+  const handleDelete = async () => {
+    if (!deleteModal.user) return;
+    const success = await deleteUser(deleteModal.user._id);
+    if (success) {
+      setUsers(users.filter(u => u._id !== deleteModal.user._id));
+    }
+    setDeleteModal({ open: false, user: null });
   };
 
   const handleUnban = async (user) => {
@@ -241,24 +254,35 @@ const AdminDashboard = () => {
                       <td>
                         {user.role === "admin" ? (
                           <span className="badge badge-ghost badge-sm">Admin</span>
-                        ) : user.isBanned ? (
-                          <button
-                            className="btn btn-success btn-xs"
-                            onClick={() => handleUnban(user)}
-                          >
-                            Unban
-                          </button>
                         ) : (
-                          <button
-                            className="btn btn-error btn-xs"
-                            onClick={() => {
-                              setSuspendModal({ open: true, user });
-                              setSuspendDuration("1h");
-                              setSuspendReason("");
-                            }}
-                          >
-                            Suspend
-                          </button>
+                          <div className="flex gap-1">
+                            {user.isBanned ? (
+                              <button
+                                className="btn btn-success btn-xs"
+                                onClick={() => handleUnban(user)}
+                              >
+                                Unban
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-warning btn-xs flex-1"
+                                onClick={() => {
+                                  setSuspendModal({ open: true, user });
+                                  setSuspendDuration("1h");
+                                  setSuspendReason("");
+                                }}
+                              >
+                                Suspend
+                              </button>
+                            )}
+                            <button
+                              className="btn btn-error btn-xs flex-1"
+                              onClick={() => setDeleteModal({ open: true, user })}
+                              disabled={deletingUser}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         )}
                       </td>
                     </tr>
@@ -325,6 +349,42 @@ const AdminDashboard = () => {
             </div>
             <form method="dialog" className="modal-backdrop">
               <button onClick={() => setSuspendModal({ open: false, user: null })}>close</button>
+            </form>
+          </dialog>
+        )}
+
+        {/* Delete Modal */}
+        {deleteModal.open && (
+          <dialog className="modal modal-open">
+            <div className="modal-box border border-base-300 bg-base-200">
+              <h3 className="font-bold text-lg text-error flex items-center gap-2">
+                <span className="text-2xl">⚠️</span> Delete User
+              </h3>
+              <p className="py-4 text-gray-300">
+                Are you absolutely sure you want to delete <strong className="text-white">@{deleteModal.user?.username}</strong>?
+                This action is permanent and cannot be undone directly from the dashboard.
+              </p>
+
+              <div className="modal-action">
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => setDeleteModal({ open: false, user: null })}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="btn btn-error btn-sm" 
+                  onClick={handleDelete}
+                  disabled={deletingUser}
+                >
+                  {deletingUser ? (
+                    <span className="loading loading-spinner loading-xs text-white"></span>
+                  ) : "Yes, Delete User"}
+                </button>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => setDeleteModal({ open: false, user: null })}>close</button>
             </form>
           </dialog>
         )}

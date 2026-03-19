@@ -9,7 +9,8 @@ export const getUsersForSidebar = async (req, res) => {
     const { data: users, error: usersError } = await supabase
       .from('users')
       .select('id, full_name, username, profile_pic, role')
-      .neq('id', loggedInUser);
+      .neq('id', loggedInUser)
+      .or('is_deleted.eq.false,is_deleted.is.null');
 
     if (usersError) throw usersError;
 

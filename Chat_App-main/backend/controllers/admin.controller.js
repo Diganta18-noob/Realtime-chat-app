@@ -25,6 +25,7 @@ export const getAllUsers = async (req, res) => {
     const { data: users, error } = await supabase
       .from('users')
       .select('id, full_name, username, profile_pic, role, is_banned, banned_until, ban_reason, created_at')
+      .or('is_deleted.eq.false,is_deleted.is.null')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -189,3 +190,45 @@ export const toggleBanUser = async (req, res) => {
 };
 
 export const exportAuditLogs = async (req,res) => { res.status(500).json({error: "Temporarily disabled during Supabase Rewrite."}); };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data: user, error } = await supabase.from('users').select('*').eq('id', id).single();
+    if (error || !user) return res.status(404).json({ error: "User not found" });
+
+    if (user.role === "admin") return res.status(400).json({ error: "Cannot delete an admin user" });
+
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('users')
+      .update({ is_deleted: true })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+
+    await supabase.from('audit_logs').insert([{
+      user_id: req.user.id || req.user._id,
+      action: "USER_BANNED", // Reusing existing action types or just logging it
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+      details: `User ${user.username} was soft deleted - Target ID: ${id}`,
+    }]);
+
+    const socketId = getReceiverSocketId(id);
+    if (socketId) {
+      io.to(socketId).emit("banned", { message: "Your account has been deleted by an administrator." });
+      setTimeout(() => {
+        const socket = io.sockets.sockets.get(socketId);
+        if (socket) socket.disconnect(true);
+      }, 500);
+    }
+
+    res.status(200).json({ message: "User deleted successfully", id });
+  } catch (error) {
+    console.log("Error in deleteUser:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
