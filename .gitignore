@@ -1,0 +1,12 @@
+# AI/Agent configuration and metadata
+.agent/
+.claude/
+.gemini/
+.gsd/
+
+# Additional agent/system folders and files
+adapters/
+docs/
+scripts/
+GSD-STYLE.md
+model_capabilities.yaml
