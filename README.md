@@ -1,4 +1,4 @@
-<![CDATA[<div align="center">
+<div align="center">
 
 ```
  ██████╗ ██████╗ ██████╗ ██████╗ ██╗████████╗     ██████╗██╗  ██╗ █████╗ ████████╗
@@ -686,4 +686,3 @@ Distributed under the **ISC License**. See `LICENSE` for more information.
 Made by [Diganta18-noob](https://github.com/Diganta18-noob)
 
 </div>
-]]>
