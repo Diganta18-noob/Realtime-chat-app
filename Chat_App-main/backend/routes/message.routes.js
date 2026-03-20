@@ -36,7 +36,7 @@ router.post(
   protectRoute, 
   checkBanned, 
   [
-    body("name").trim().notEmpty().withMessage("Group name is required").escape(),
+    body("groupName").trim().notEmpty().withMessage("Group name is required").escape(),
     body("participants").isArray({ min: 1 }).withMessage("Participants must be an array of UUIDs"),
     body("participants.*").isUUID().withMessage("Each participant must be a valid UUID"),
     validateRequest
