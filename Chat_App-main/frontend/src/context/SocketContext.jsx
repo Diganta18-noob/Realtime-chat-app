@@ -23,7 +23,11 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser && accessToken) {
-      const socketUrl = import.meta.env.VITE_BACKEND_URL || "/";
+      // WebSockets MUST connect directly to the backend — Vercel does NOT proxy WebSockets.
+      // In production (non-localhost), always connect to the Render backend URL.
+      const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      const socketUrl = import.meta.env.VITE_BACKEND_URL
+        || (isLocalhost ? "/" : "https://orbit-chat.onrender.com");
       const newSocket = io(socketUrl, {
         auth: {
           token: accessToken,
