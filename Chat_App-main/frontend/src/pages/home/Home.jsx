@@ -2,10 +2,14 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import MessageContainer from "../../components/messages/MessageContainer";
 import useConversation from "../../zustand/useConversation";
 import useUnreadCounts from "../../hooks/useUnreadCounts";
+import useListenMessages from "../../hooks/useListenMessages";
 
 const Home = () => {
   const { selectedConversation } = useConversation();
   const { unreadCounts, incrementCount, resetCount } = useUnreadCounts();
+
+  // Always listen for incoming messages — even when no chat is selected
+  useListenMessages(incrementCount);
 
   return (
     <div className="flex w-full h-[100dvh] sm:h-[85vh] sm:max-w-5xl sm:mx-auto overflow-hidden glass-card sm:my-4">
@@ -24,7 +28,6 @@ const Home = () => {
       >
         <MessageContainer
           resetUnreadCount={resetCount}
-          incrementUnreadCount={incrementCount}
         />
       </div>
     </div>

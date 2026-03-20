@@ -8,7 +8,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContext";
 import Avatar from "../Avatar";
 
-const MessageContainer = ({ resetUnreadCount, incrementUnreadCount }) => {
+const MessageContainer = ({ resetUnreadCount }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const { onlineUsers } = useSocketContext();
 
@@ -69,7 +69,7 @@ const MessageContainer = ({ resetUnreadCount, incrementUnreadCount }) => {
           </div>
 
           {/* Messages */}
-          <Messages incrementUnreadCount={incrementUnreadCount} />
+          <Messages />
 
           {/* Input */}
           <MessageInput />
