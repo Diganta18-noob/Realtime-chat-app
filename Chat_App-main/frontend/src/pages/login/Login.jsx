@@ -70,6 +70,14 @@ const Login = () => {
                 {showPassword ? <HiEyeOff /> : <HiEye />}
               </button>
             </div>
+            <div className="text-right mt-1">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-secondary/70 hover:text-accent transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
 
           {/* Submit */}

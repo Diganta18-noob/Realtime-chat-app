@@ -8,6 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Login = React.lazy(() => import("./pages/login/Login"));
 const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
+const ForgotPassword = React.lazy(() => import("./pages/forgot-password/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./pages/reset-password/ResetPassword"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 
 import AppSkeleton from "./components/skeletons/AppSkeleton";
@@ -39,6 +41,14 @@ function App() {
           <Route
             path="/signup"
             element={authUser && !isLoading ? <Navigate to="/" /> : <SignUp />}
+          />
+          <Route
+            path="/forgot-password"
+            element={authUser && !isLoading ? <Navigate to="/" /> : <ForgotPassword />}
+          />
+          <Route
+            path="/reset-password"
+            element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPassword />}
           />
           <Route
             path="/admin"

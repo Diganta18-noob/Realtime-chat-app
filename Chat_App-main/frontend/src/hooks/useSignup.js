@@ -10,6 +10,7 @@ const useSignup = () => {
   const signup = async ({
     fullName,
     username,
+    email,
     password,
     confirmPassword,
     gender,
@@ -28,6 +29,7 @@ const useSignup = () => {
       const res = await axiosInstance.post("/auth/signup", {
         fullName,
         username,
+        email: email || undefined,
         password,
         confirmPassword,
         gender,

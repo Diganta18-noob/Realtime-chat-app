@@ -1,10 +1,12 @@
+import logger from "../utils/logger.js";
+
 const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   
-  // Log the actual error internally
-  console.error("[Error Handler] Exception caught:", err.message);
+  // Log the actual error via winston structured logging
+  logger.error(`${statusCode} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
   if (process.env.NODE_ENV === "development") {
-    console.error(err.stack);
+    logger.error(err.stack);
   }
 
   res.status(statusCode).json({

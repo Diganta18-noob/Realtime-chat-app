@@ -1,11 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { supabase } from "../config/supabase.js";
 import generateTokens from "../utils/generateToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, username, password, confirmPassword, gender } = req.body;
+    const { fullName, username, email, password, confirmPassword, gender } = req.body;
 
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords don't match" });
@@ -27,14 +29,20 @@ export const signup = async (req, res) => {
     const avatarStyle = gender === "female" ? "adventurer" : "adventurer-neutral";
     const profilePic = `https://api.dicebear.com/9.x/${avatarStyle}/svg?seed=${encodeURIComponent(username)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
     const { data: newUser, error: insertError } = await supabase
       .from('users')
       .insert([{
         full_name: fullName,
         username,
+        email: email || null,
         password: hashedPassword,
         gender,
-        profile_pic: profilePic
+        profile_pic: profilePic,
+        email_verification_token: verificationToken,
+        email_verification_expires: verificationExpires
       }])
       .select()
       .single();
@@ -62,6 +70,15 @@ export const signup = async (req, res) => {
       details: "Account created",
     }]);
 
+    if (email) {
+      const verifyUrl = `${process.env.CLIENT_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+      await sendEmail({
+        email,
+        subject: "Verify Your Email",
+        message: `<p>Please click the following link to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
+      });
+    }
+
     res.status(201).json({
       _id: newUser.id,
       fullName: newUser.full_name,
@@ -69,6 +86,7 @@ export const signup = async (req, res) => {
       profilePic: newUser.profile_pic,
       role: newUser.role,
       isBanned: newUser.is_banned,
+      isEmailVerified: newUser.is_email_verified,
       accessToken,
     });
   } catch (error) {
@@ -203,6 +221,111 @@ export const getMe = async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.log("Error in getMe controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.body;
+    
+    const { data: user } = await supabase
+      .from('users')
+      .select('id, email_verification_expires')
+      .eq('email_verification_token', token)
+      .maybeSingle();
+
+    if (!user || new Date(user.email_verification_expires) < new Date()) {
+      return res.status(400).json({ error: "Invalid or expired verification token." });
+    }
+
+    await supabase
+      .from('users')
+      .update({
+        is_email_verified: true,
+        email_verification_token: null,
+        email_verification_expires: null,
+      })
+      .eq('id', user.id);
+
+    res.status(200).json({ message: "Email verified successfully." });
+  } catch (error) {
+    console.log("Error in verifyEmail controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) return res.status(400).json({ error: "Email is required." });
+
+    const { data: user } = await supabase
+      .from('users')
+      .select('id, email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (!user) {
+      // Return 200 even if user not found to prevent email enumeration
+      return res.status(200).json({ message: "If an account with that email exists, we sent a password reset link." });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+    await supabase
+      .from('users')
+      .update({
+        reset_password_token: resetToken,
+        reset_password_expires: resetExpires,
+      })
+      .eq('id', user.id);
+
+    const resetUrl = `${process.env.CLIENT_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+    await sendEmail({
+      email: user.email,
+      subject: "Password Reset Request",
+      message: `<p>You requested a password reset. Click the link below to set a new password:</p><a href="${resetUrl}">${resetUrl}</a><p>This link is valid for 1 hour.</p>`,
+    });
+
+    res.status(200).json({ message: "If an account with that email exists, we sent a password reset link." });
+  } catch (error) {
+    console.log("Error in forgotPassword controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const { data: user } = await supabase
+      .from('users')
+      .select('id, reset_password_expires')
+      .eq('reset_password_token', token)
+      .maybeSingle();
+
+    if (!user || new Date(user.reset_password_expires) < new Date()) {
+      return res.status(400).json({ error: "Invalid or expired reset token." });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await supabase
+      .from('users')
+      .update({
+        password: hashedPassword,
+        reset_password_token: null,
+        reset_password_expires: null,
+      })
+      .eq('id', user.id);
+
+    res.status(200).json({ message: "Password reset correctly. You can now log in." });
+  } catch (error) {
+    console.log("Error in resetPassword controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

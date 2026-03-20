@@ -77,6 +77,11 @@ export const sendMessage = async (req, res) => {
       isGroup = true;
       const { data: p } = await supabase.from('conversation_participants').select('user_id').eq('conversation_id', conversation.id);
       participants = p.map(x => x.user_id);
+      
+      // IDOR Mitigation: Check if the sender is actually a participant in the group
+      if (!participants.includes(senderId)) {
+        return res.status(403).json({ error: "Unauthorized: You are not a participant of this group." });
+      }
     } else {
       // It's a DM, look for intersection
       const { data: p1 } = await supabase.from('conversation_participants').select('conversation_id').eq('user_id', senderId);
@@ -166,6 +171,18 @@ export const getMessage = async (req, res) => {
     const { data: groupMatches } = await supabase.from('conversations').select('id, is_group').eq('id', userOrGroupId).maybeSingle();
     
     if (groupMatches && groupMatches.is_group) {
+      // IDOR Mitigation: Verify the requesting user is a participant of this group
+      const { data: membership } = await supabase
+        .from('conversation_participants')
+        .select('user_id')
+        .eq('conversation_id', groupMatches.id)
+        .eq('user_id', senderId)
+        .maybeSingle();
+
+      if (!membership) {
+        return res.status(403).json({ error: "Unauthorized: You do not have access to this group's messages." });
+      }
+      
       conversationId = groupMatches.id;
     } else {
       // Find DM

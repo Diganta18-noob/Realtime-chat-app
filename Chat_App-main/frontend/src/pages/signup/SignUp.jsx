@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
 import useAvailabilityCheck from "../../hooks/useAvailabilityCheck";
-import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd, HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineLockClosed, HiOutlineUserAdd, HiOutlineMail, HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from "react-icons/hi";
 
 const StatusIndicator = ({ status }) => {
   if (status === "idle") return null;
@@ -32,6 +32,7 @@ const SignUp = () => {
   const [inputs, setInputs] = useState({
     fullName: "",
     username: "",
+    email: "",
     password: "",
     confirmPassword: "",
     gender: "",
@@ -86,6 +87,25 @@ const SignUp = () => {
                 value={inputs.fullName}
                 onChange={(e) =>
                   setInputs({ ...inputs, fullName: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          {/* Email (Optional) */}
+          <div className="form-control">
+            <label className="label py-1">
+              <span className="label-text text-base-content/80 font-medium">Email <span className="text-base-content/40 font-normal">(optional, for password recovery)</span></span>
+            </label>
+            <div className="relative">
+              <HiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="input input-sm h-10 input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                value={inputs.email}
+                onChange={(e) =>
+                  setInputs({ ...inputs, email: e.target.value })
                 }
               />
             </div>
