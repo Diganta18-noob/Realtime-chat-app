@@ -75,6 +75,26 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 4px 20px rgba(109, 40, 217, 0.4);
   }
+
+  .avatar-img {
+    border-radius: 50%;
+    border: 2px solid rgba(139, 92, 246, 0.4);
+    object-fit: cover;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+  }
+
+  .message-tick {
+    font-size: 12px;
+  }
+  .message-tick-read {
+    color: #60a5fa;
+  }
+  .message-tick-delivered {
+    color: #9ca3af;
+  }
+  .message-tick-sent {
+    color: #6b7280;
+  }
 }
 
 /* Animations */

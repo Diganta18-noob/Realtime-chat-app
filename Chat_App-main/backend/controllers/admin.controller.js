@@ -1,5 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import { userSocketMap, io, getReceiverSocketId } from "../socket/socket.js";
+import logger from "../utils/logger.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
@@ -15,39 +16,31 @@ export const getDashboardStats = async (req, res) => {
 
     res.status(200).json({ totalUsers: totalUsers || 0, onlineNow, messagesToday: messagesToday || 0 });
   } catch (error) {
-    console.log("Error in getDashboardStats:", error.message);
+    logger.error("Error in getDashboardStats:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 export const getAllUsers = async (req, res) => {
   try {
-    const { data: users, error } = await supabase
-      .from('users')
-      .select('id, full_name, username, profile_pic, role, is_banned, banned_until, ban_reason, created_at')
-      .or('is_deleted.eq.false,is_deleted.is.null')
-      .order('created_at', { ascending: false });
+    const [
+      { data: users, error: usersError },
+      { data: latestLogins },
+      { data: latestLogouts }
+    ] = await Promise.all([
+      supabase.from('users').select('id, full_name, username, profile_pic, role, is_banned, banned_until, ban_reason, created_at').or('is_deleted.eq.false,is_deleted.is.null').order('created_at', { ascending: false }),
+      supabase.from('audit_logs').select('user_id, created_at').in('action', ['LOGIN', 'ADMIN_LOGIN']).order('created_at', { ascending: false }),
+      supabase.from('audit_logs').select('user_id, created_at').eq('action', 'LOGOUT').order('created_at', { ascending: false })
+    ]);
 
-    if (error) throw error;
+    if (usersError) throw usersError;
 
-    const { data: latestLogins } = await supabase
-      .from('audit_logs')
-      .select('user_id, created_at')
-      .in('action', ['LOGIN', 'ADMIN_LOGIN'])
-      .order('created_at', { ascending: false });
-    
     const loginMap = {};
     if(latestLogins) {
       latestLogins.forEach(l => {
         if(!loginMap[l.user_id]) loginMap[l.user_id] = l.created_at;
       });
     }
-
-    const { data: latestLogouts } = await supabase
-      .from('audit_logs')
-      .select('user_id, created_at')
-      .eq('action', 'LOGOUT')
-      .order('created_at', { ascending: false });
 
     const logoutMap = {};
     if(latestLogouts) {
@@ -76,7 +69,7 @@ export const getAllUsers = async (req, res) => {
 
     res.status(200).json(usersWithStatus);
   } catch(error) {
-     console.log("Error in getAllUsers:", error.message);
+     logger.error("Error in getAllUsers:", { error: error.message });
      res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -114,7 +107,7 @@ export const getAuditLogs = async (req, res) => {
       totalPages: Math.ceil((count || 0) / parseInt(limit)),
     });
   } catch (error) {
-    console.log("Error in getAuditLogs:", error.message);
+    logger.error("Error in getAuditLogs:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -184,7 +177,7 @@ export const toggleBanUser = async (req, res) => {
       message: `User ${is_banned ? "banned" : "unbanned"} successfully`,
     });
   } catch (error) {
-    console.log("Error in toggleBanUser:", error.message);
+    logger.error("Error in toggleBanUser:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -228,7 +221,7 @@ export const deleteUser = async (req, res) => {
 
     res.status(200).json({ message: "User deleted successfully", id });
   } catch (error) {
-    console.log("Error in deleteUser:", error.message);
+    logger.error("Error in deleteUser:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

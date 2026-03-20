@@ -3,6 +3,7 @@ import http from "http";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { supabase } from "../config/supabase.js";
+import logger from "../utils/logger.js";
 
 const app = express();
 
@@ -35,7 +36,7 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
+  logger.info("A user connected", { socketId: socket.id });
 
   const userId = socket.userId;
   if (userId) userSocketMap[userId] = socket.id;
@@ -73,7 +74,7 @@ io.on("connection", (socket) => {
         });
       }
     } catch (error) {
-      console.log("Error marking messages delivered on connect:", error.message);
+      logger.error("Error marking messages delivered on connect:", { error: error.message });
     }
   })();
 
@@ -102,12 +103,12 @@ io.on("connection", (socket) => {
         }
       }
     } catch (error) {
-      console.log("Error handling messages_read:", error.message);
+      logger.error("Error handling messages_read:", { error: error.message });
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected", socket.id);
+    logger.info("User disconnected", { socketId: socket.id });
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });

@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { supabase } from "../config/supabase.js";
 import generateTokens from "../utils/generateToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import logger from "../utils/logger.js";
 
 export const signup = async (req, res) => {
   try {
@@ -90,8 +91,8 @@ export const signup = async (req, res) => {
       accessToken,
     });
   } catch (error) {
-    console.log("Error in signup controller", error.message);
-    res.status(500).json({ error: "Internal Server Error", details: error.message, stack: error.stack });
+    logger.error("Error in signup controller", { error: error.message });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -142,7 +143,7 @@ export const login = async (req, res) => {
       accessToken,
     });
   } catch (error) {
-    console.log("Error in login controller", error.message);
+    logger.error("Error in login controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -168,7 +169,7 @@ export const logout = async (req, res) => {
     res.cookie("refreshToken", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.log("Error in logout controller", error.message);
+    logger.error("Error in logout controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -187,7 +188,7 @@ export const refreshToken = async (req, res) => {
     const accessToken = generateTokens(decoded.userID, decoded.role, res);
     res.status(200).json({ accessToken });
   } catch (error) {
-    console.log("Error in refresh token controller", error.message);
+    logger.error("Error in refresh token controller", { error: error.message });
     return res.status(401).json({ error: "Unauthorized - Invalid Refresh Token" });
   }
 };
@@ -203,7 +204,7 @@ export const checkUsername = async (req, res) => {
       
     res.status(200).json({ available: !data });
   } catch (error) {
-    console.log("Error in checkUsername controller", error.message);
+    logger.error("Error in checkUsername controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -220,7 +221,7 @@ export const getMe = async (req, res) => {
     };
     res.status(200).json(user);
   } catch (error) {
-    console.log("Error in getMe controller", error.message);
+    logger.error("Error in getMe controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -250,7 +251,7 @@ export const verifyEmail = async (req, res) => {
 
     res.status(200).json({ message: "Email verified successfully." });
   } catch (error) {
-    console.log("Error in verifyEmail controller", error.message);
+    logger.error("Error in verifyEmail controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -292,7 +293,7 @@ export const forgotPassword = async (req, res) => {
 
     res.status(200).json({ message: "If an account with that email exists, we sent a password reset link." });
   } catch (error) {
-    console.log("Error in forgotPassword controller", error.message);
+    logger.error("Error in forgotPassword controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -325,7 +326,7 @@ export const resetPassword = async (req, res) => {
 
     res.status(200).json({ message: "Password reset correctly. You can now log in." });
   } catch (error) {
-    console.log("Error in resetPassword controller", error.message);
+    logger.error("Error in resetPassword controller", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

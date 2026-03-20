@@ -1,5 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import { io, getReceiverSocketId } from "../socket/socket.js";
+import logger from "../utils/logger.js";
 
 export const createGroup = async (req, res) => {
   try {
@@ -53,7 +54,7 @@ export const createGroup = async (req, res) => {
 
     res.status(201).json(formattedGroup);
   } catch (error) {
-    console.log("Error in createGroup:", error.message);
+    logger.error("Error in createGroup", { error: error.message });
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -155,7 +156,7 @@ export const sendMessage = async (req, res) => {
 
     res.status(201).json(mappedMessage);
   } catch (error) {
-    console.log("Error in sendMessage:", error.message);
+    logger.error("Error in sendMessage:", { error: error.message });
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -220,7 +221,7 @@ export const getMessage = async (req, res) => {
 
     res.status(200).json(formattedMessages);
   } catch (error) {
-    console.log("Error on getting message", error.message);
+    logger.error("Error on getting message:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -259,7 +260,7 @@ export const getUnreadCounts = async (req, res) => {
 
     res.status(200).json(counts);
   } catch (error) {
-    console.log("Error in getUnreadCounts:", error.message);
+    logger.error("Error in getUnreadCounts:", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

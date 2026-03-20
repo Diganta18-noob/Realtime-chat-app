@@ -12,12 +12,7 @@ const Avatar = ({ username, role, size = 40, isOnline, profilePic }) => {
           alt={username}
           width={size}
           height={size}
-          style={{
-            borderRadius: "50%",
-            border: "2px solid rgba(139,92,246,0.4)",
-            objectFit: "cover",
-            background: "linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1))",
-          }}
+          className="avatar-img"
         />
       </div>
     </div>

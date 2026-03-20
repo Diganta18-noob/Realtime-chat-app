@@ -1,15 +1,16 @@
+import { memo } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import { extractTime } from "../../utils/extractTime";
 import useConversation from "../../zustand/useConversation";
 import Avatar from "../Avatar";
 
 const MessageTick = ({ status }) => {
-  if (status === "read") return <span style={{ color: "#60a5fa", fontSize: 12 }}>✓✓</span>;
-  if (status === "delivered") return <span style={{ color: "#9ca3af", fontSize: 12 }}>✓✓</span>;
-  return <span style={{ color: "#6b7280", fontSize: 12 }}>✓</span>;
+  if (status === "read") return <span className="message-tick message-tick-read">✓✓</span>;
+  if (status === "delivered") return <span className="message-tick message-tick-delivered">✓✓</span>;
+  return <span className="message-tick message-tick-sent">✓</span>;
 };
 
-const Message = ({ message }) => {
+const Message = memo(({ message }) => {
   const { authUser } = useAuthContext();
   const { selectedConversation } = useConversation();
   const fromMe = message.senderId === authUser._id;
@@ -38,5 +39,8 @@ const Message = ({ message }) => {
       </div>
     </div>
   );
-};
+});
+
+Message.displayName = "Message";
+
 export default Message;

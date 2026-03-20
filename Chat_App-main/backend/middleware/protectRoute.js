@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { supabase } from "../config/supabase.js";
+import logger from "../utils/logger.js";
 
 const protectRoute = async (req, res, next) => {
   try {
@@ -40,7 +41,7 @@ const protectRoute = async (req, res, next) => {
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Invalid token" });
     }
-    console.log("Error on protectRoute", error.message);
+    logger.error("Error on protectRoute", { error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

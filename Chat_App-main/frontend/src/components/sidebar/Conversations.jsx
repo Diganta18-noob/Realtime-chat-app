@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Conversation from "./Conversation";
 import useGetConversations from "../../hooks/useGetConversations";
 import ConversationSkeleton from "../skeletons/ConversationSkeleton";
@@ -5,13 +6,15 @@ import ConversationSkeleton from "../skeletons/ConversationSkeleton";
 const Conversations = ({ searchQuery = "", unreadCounts = {} }) => {
   const { loading, conversations } = useGetConversations();
 
-  const filtered = searchQuery
-    ? conversations?.filter(
-        (c) =>
-          c.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          c.username?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : conversations;
+  const filtered = useMemo(() => {
+    return searchQuery
+      ? conversations?.filter(
+          (c) =>
+            c.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            c.username?.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : conversations;
+  }, [conversations, searchQuery]);
 
   return (
     <div className="py-2 flex flex-col overflow-auto">

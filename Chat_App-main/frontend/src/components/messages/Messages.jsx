@@ -19,8 +19,8 @@ const Messages = ({ incrementUnreadCount }) => {
     <div className="px-4 py-2 flex-1 overflow-y-auto">
       {!loading &&
         messages.length > 0 &&
-        messages.map((message) => (
-          <div key={message._id} ref={lastMessageRef}>
+        messages.map((message, idx) => (
+          <div key={message._id} ref={idx === messages.length - 1 ? lastMessageRef : null}>
             <Message message={message} />
           </div>
         ))}
