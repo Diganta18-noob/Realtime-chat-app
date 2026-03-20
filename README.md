@@ -9,7 +9,11 @@
  ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝
 ```
 
-> **Real-time messaging, forged in the dark.**
+<div align="center">
+  <a href="https://github.com/Diganta18-noob/Realtime-chat-app">
+    <img src="https://readme-typing-svg.demolab.com?font=Space+Mono&weight=700&size=22&duration=2500&pause=1000&color=8B5CF6&center=true&vCenter=true&width=800&height=50&lines=Orbit+Chat+%E2%80%94+Real-time+messaging,+forged+in+the+dark.;Socket.IO+%E2%80%A2+React+18+%E2%80%A2+Express+%E2%80%A2+Supabase;Dual-Token+JWT+Auth+with+Silent+Renewal;Cinematic+Glassmorphism+Aesthetic" alt="Typing SVG" />
+  </a>
+</div>
 
 [![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![Express](https://img.shields.io/badge/Express-4.19-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
@@ -28,13 +32,13 @@
 
 ---
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🌌 What Is This?
 
 Orbit Chat is a **production-grade real-time messaging platform** built on a dark, cinematic glassmorphism aesthetic — think deep purples (`#6D28D9`), midnight blacks (`#0F0D1A`), and soft violet glows. Under the hood, it pairs a **React 18 + Zustand** frontend with an **Express + Socket.IO** backend, all backed by **Supabase (PostgreSQL)** for persistence. Every message travels over persistent WebSocket connections with full **sent → delivered → read** receipt tracking, while a custom **dual-token JWT system** (15-minute access + 24-hour httpOnly refresh cookie) keeps sessions airtight without ever touching localStorage. It ships with a complete **admin dashboard**, group chat support, and a Docker Compose stack that puts Nginx in front of everything — ready to deploy.
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## ✨ Feature Showcase
 
@@ -82,7 +86,7 @@ Orbit Chat is a **production-grade real-time messaging platform** built on a dar
 | 📜 | **Paginated Audit Logs** | Every login, logout, ban, and admin action logged with IP + User-Agent |
 | 📤 | **Audit Log Export** | Export endpoint scaffolded at `GET /api/admin/audit-logs/export` |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🏗️ Tech Stack
 
@@ -114,7 +118,7 @@ Orbit Chat is a **production-grade real-time messaging platform** built on a dar
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🔀 Architecture Overview
 
@@ -159,7 +163,7 @@ Auth Flow:
        No ──▶ Clear auth state ──▶ Redirect to /login
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 📂 Project Structure
 
@@ -266,7 +270,7 @@ Chat_App-main/
 └── PROJECT_RULES.md                    # GSD methodology coding standards
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🚀 Getting Started
 
@@ -432,7 +436,7 @@ npm run docker:down
 | `chatapp-frontend` | `:80` | Nginx serving React SPA + reverse proxy |
 | `chatapp-backend` | `:5000` | Express API + Socket.IO server |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🔐 Authentication Flow
 
@@ -488,7 +492,7 @@ npm run docker:down
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 📡 Socket.IO Event Reference
 
@@ -511,7 +515,7 @@ npm run docker:down
 | `newGroupCreated` | `{ _id, isGroup, groupName, groupAdmin, participants[] }` | New group conversation pushed to all participants |
 | `banned` | `{ message: string }` | Admin ban notification — triggers force-disconnect |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🛡️ Admin Dashboard
 
@@ -545,7 +549,7 @@ The admin panel (`/admin`) is protected by both `protectRoute` and `isAdmin` mid
 
 Paginated (50 per page) with total count and page navigation.
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🔒 Security Checklist
 
@@ -573,7 +577,7 @@ Paginated (50 per page) with total count and page navigation.
 - [x] **Morgan integration** — HTTP request logs streamed into Winston for unified logging
 - [x] **Trust proxy** — `app.set("trust proxy", 1)` for correct IP detection behind Nginx
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🐳 Docker Architecture
 
@@ -621,7 +625,7 @@ Port Mapping:
   Host :5000 ──▶  Backend container :5000 (Express)
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🗺️ Roadmap
 
@@ -636,7 +640,7 @@ Port Mapping:
 | 👤 | **User Profiles** | Editable profile pages with bio, status message, and avatar upload |
 | 🌐 | **i18n / Localization** | Multi-language support for the entire interface |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 🤝 Contributing
 
@@ -671,13 +675,13 @@ git push origin feat/your-feature-name
 | `test` | Adding or updating tests |
 | `chore` | Maintenance, dependencies |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 ## 📄 License
 
 Distributed under the **ISC License**. See `LICENSE` for more information.
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
 <div align="center">
 
