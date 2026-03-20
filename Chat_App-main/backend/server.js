@@ -61,11 +61,21 @@ app.use("/api/admin", adminRoutes);
 // Global Error Handler
 app.use(errorHandler);
 
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
+import fs from "fs";
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-});
+const frontendPath = path.join(__dirname, "frontend", "dist");
+
+if (fs.existsSync(frontendPath)) {
+  app.use(express.static(frontendPath));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
+} else {
+  // Graceful fallback for backend-only deployments (like Render split)
+  app.get("/", (req, res) => {
+    res.status(200).json({ message: "ChatApp Backend API is running." });
+  });
+}
 
 server.listen(PORT, () => {
   console.log(`Server Running centrally on port ${PORT}`);

@@ -23,7 +23,8 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser && accessToken) {
-      const newSocket = io("/", {
+      const socketUrl = import.meta.env.VITE_BACKEND_URL || "/";
+      const newSocket = io(socketUrl, {
         auth: {
           token: accessToken,
         },

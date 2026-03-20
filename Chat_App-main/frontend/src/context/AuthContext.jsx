@@ -18,8 +18,8 @@ export const AuthContextProvider = ({ children }) => {
 
   const refreshAccessToken = useCallback(async () => {
     try {
-      // Use raw fetch or standard axios without interceptors so it doesn't loop
-      const res = await fetch("/api/auth/refresh", {
+      const apiUrl = import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api/auth/refresh` : "/api/auth/refresh";
+      const res = await fetch(apiUrl, {
         method: "POST",
         credentials: "include",
       });
