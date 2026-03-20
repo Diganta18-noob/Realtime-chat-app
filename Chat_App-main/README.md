@@ -1,688 +1,437 @@
+<!-- ANIMATED WAVE HEADER -->
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=220&section=header&text=ChatApp&fontSize=90&fontColor=a78bfa&animation=fadeIn&fontAlignY=40&desc=Where+conversations+happen+at+the+speed+of+thought&descAlignY=62&descAlign=50&descColor=c4b5fd&descSize=20" width="100%"/>
+</p>
+
+<!-- TYPING ANIMATION -->
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=2800&pause=900&color=A78BFA&center=true&vCenter=true&multiline=true&repeat=true&width=750&height=110&lines=⚡+Real-time+messaging+powered+by+Socket.IO;🔐+Supabase+Auth+with+secure+httpOnly+cookies;🛡️+Admin+Dashboard+with+full+Audit+Logs;🐳+Fully+Dockerized+%7C+Production+Ready" alt="Typing SVG" />
+</p>
+
+<br/>
+
+<!-- BADGES ROW 1 — STACK -->
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white"/>
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
+</p>
+
+<!-- REPO STATS -->
+<p align="center">
+  <img src="https://img.shields.io/github/stars/Diganta18-noob/Realtime-chat-app?style=flat-square&color=7c3aed&label=⭐%20Stars"/>
+  <img src="https://img.shields.io/github/forks/Diganta18-noob/Realtime-chat-app?style=flat-square&color=7c3aed&label=🍴%20Forks"/>
+  <img src="https://img.shields.io/github/issues/Diganta18-noob/Realtime-chat-app?style=flat-square&color=7c3aed&label=🐛%20Issues"/>
+  <img src="https://img.shields.io/github/last-commit/Diganta18-noob/Realtime-chat-app?style=flat-square&color=7c3aed&label=📅%20Last%20Commit"/>
+  <img src="https://img.shields.io/github/languages/top/Diganta18-noob/Realtime-chat-app?style=flat-square&color=7c3aed"/>
+</p>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 What Is ChatApp?
+
+<img align="right" src="https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif" width="260" alt="coding"/>
+
+> A **cinematic, production-grade real-time messaging platform** built for modern communication. Engineered with a dark glassmorphism aesthetic — deep navy, cosmic purple, and night-sky depth — this is a complete full-stack architecture study with security that would fit a professional product.
+
+Not just another chat app. This ships with:
+
+- 🔐 **Supabase Auth** — `httpOnly` cookies, zero `localStorage` exposure
+- ⚡ **Socket.IO** — sub-100ms real-time message delivery
+- 👁️ **WhatsApp-style** read receipts, unread badges, online presence
+- 🛡️ **Admin Dashboard** — user management + paginated audit logs
+- 🎨 **DiceBear Avatars** — unique per username, no uploads needed
+- 🔍 **Live Duplicate Check** — 500ms debounced Supabase query on signup
+- 🐳 **Docker + Nginx** — reverse proxy, healthchecks, SPA routing
+
+<br clear="right"/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Features
+
 <div align="center">
 
-```
- ██████╗ ██████╗ ██████╗ ██████╗ ██╗████████╗     ██████╗██╗  ██╗ █████╗ ████████╗
-██╔═══██╗██╔══██╗██╔══██╗██╔══██╗██║╚══██╔══╝    ██╔════╝██║  ██║██╔══██╗╚══██╔══╝
-██║   ██║██████╔╝██████╔╝██║  ██║██║   ██║       ██║     ███████║███████║   ██║
-██║   ██║██╔══██╗██╔══██╗██║  ██║██║   ██║       ██║     ██╔══██║██╔══██║   ██║
-╚██████╔╝██║  ██║██████╔╝██████╔╝██║   ██║       ╚██████╗██║  ██║██║  ██║   ██║
- ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝
-```
-
-> **Real-time messaging, forged in the dark.**
-
-[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
-[![Express](https://img.shields.io/badge/Express-4.19-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-4.7-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![Vite](https://img.shields.io/badge/Vite-5.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](LICENSE)
-
-[![Stars](https://img.shields.io/github/stars/Diganta18-noob/Realtime-chat-app?style=social)](https://github.com/Diganta18-noob/Realtime-chat-app/stargazers)
-[![Forks](https://img.shields.io/github/forks/Diganta18-noob/Realtime-chat-app?style=social)](https://github.com/Diganta18-noob/Realtime-chat-app/network/members)
-[![Issues](https://img.shields.io/github/issues/Diganta18-noob/Realtime-chat-app?style=social)](https://github.com/Diganta18-noob/Realtime-chat-app/issues)
-
-</div>
-
----
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 🌌 What Is This?
-
-Orbit Chat is a **production-grade real-time messaging platform** built on a dark, cinematic glassmorphism aesthetic — think deep purples (`#6D28D9`), midnight blacks (`#0F0D1A`), and soft violet glows. Under the hood, it pairs a **React 18 + Zustand** frontend with an **Express + Socket.IO** backend, all backed by **Supabase (PostgreSQL)** for persistence. Every message travels over persistent WebSocket connections with full **sent → delivered → read** receipt tracking, while a custom **dual-token JWT system** (15-minute access + 24-hour httpOnly refresh cookie) keeps sessions airtight without ever touching localStorage. It ships with a complete **admin dashboard**, group chat support, and a Docker Compose stack that puts Nginx in front of everything — ready to deploy.
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## ✨ Feature Showcase
-
-### 💬 Messaging
+### 💬 Core Messaging
 
 | | Feature | Description |
 |---|---|---|
-| 💬 | **Real-Time DMs** | Instant 1-on-1 messages over Socket.IO with auto-created conversations |
-| 👥 | **Group Chat** | Create named groups with multiple participants and a dedicated group avatar |
-| ✅ | **Triple-State Receipts** | Messages track `sent` → `delivered` → `read` status in real time |
-| 🔔 | **Unread Counts** | Per-sender unread badge counts via `message_read_by` join table |
-| 🟢 | **Online Presence** | Live online/offline user indicators broadcast to all connected clients |
-| 📨 | **Offline Delivery Queue** | Pending messages auto-promoted to `delivered` when recipient connects |
+| ⚡ | **Real-Time DMs** | Instant private messaging via Socket.IO WebSockets |
+| ✓✓ | **Read Receipts** | Single ✓ sent · double ✓✓ delivered · blue ✓✓ read |
+| 🔴 | **Unread Badges** | Live count badge — auto-increments, resets on open |
+| 🟢 | **Online Presence** | Real-time online/offline per user via socket presence |
+| 🔍 | **Live Search** | Debounced sidebar filtering — instant results as you type |
+| 🎨 | **DiceBear Avatars** | Auto-generated unique avatar per username |
 
-### 🔐 Authentication
-
-| | Feature | Description |
-|---|---|---|
-| 🔑 | **Dual-Token JWT** | 15-min access token (Bearer) + 24-hr refresh token (httpOnly cookie) |
-| 🔄 | **Silent Token Renewal** | Axios interceptor auto-refreshes expired tokens without user disruption |
-| 🚪 | **Persistent Sessions** | `GET /api/auth/me` verifies identity on every mount with loading state |
-| 📝 | **Input Validation** | `express-validator` sanitizes + validates every field on signup & login |
-| 🚫 | **Ban Enforcement** | Banned users rejected at login with clear administrator message |
-| ☠️ | **Soft Delete Check** | Deleted accounts blocked from authentication entirely |
-
-### 📮 Signup & Account
+### 🔐 Auth & Security
 
 | | Feature | Description |
 |---|---|---|
-| 🔍 | **Live Username Check** | Real-time `GET /api/auth/check-username/:username` availability probe |
-| 🧑‍🎨 | **Gendered Avatars** | DiceBear `adventurer` / `adventurer-neutral` styles auto-assigned by gender |
-| 📧 | **Email Verification** | Crypto token emailed on signup, verified via `POST /api/auth/verify-email` |
-| 🔐 | **Forgot Password** | Secure reset flow with 1-hour expiring token sent via SMTP / Nodemailer |
-| 🔁 | **Password Reset** | Token-validated `POST /api/auth/reset-password` with bcrypt re-hashing |
-| 🛡️ | **Anti-Enumeration** | Forgot-password always returns 200 regardless of email existence |
+| 🍪 | **Secure Cookies** | Token in `httpOnly` cookie — never readable by JS |
+| 🔄 | **Silent Refresh** | Supabase auto-refreshes tokens transparently |
+| 🚫 | **Mount Validation** | Session verified with Supabase on every app start |
+| 🛡️ | **Protected Routes** | Loading gate — zero flash of unauthenticated content |
+| 👤 | **Role-Based Access** | `user` / `admin` with separate route guards |
+| 🔏 | **RLS Policies** | Supabase Row Level Security on all tables |
 
 ### 🛠️ Admin Dashboard
 
 | | Feature | Description |
 |---|---|---|
-| 📊 | **Live Stats** | Total users, online now (from socket map), messages today — all real-time |
-| 👤 | **User Management** | Full user list with role, ban status, last login/logout, online indicator |
-| 🔨 | **Ban/Unban Toggle** | Timed (1h, 24h) or permanent bans with reason — instant socket disconnect |
-| 🗑️ | **Soft Delete Users** | Marks `is_deleted = true`, force-disconnects via socket, blocks future login |
-| 📜 | **Paginated Audit Logs** | Every login, logout, ban, and admin action logged with IP + User-Agent |
-| 📤 | **Audit Log Export** | Export endpoint scaffolded at `GET /api/admin/audit-logs/export` |
+| 👥 | **User Management** | All users, roles, online status, last login/logout |
+| 📋 | **Audit Logs** | Paginated: LOGIN · LOGOUT · ADMIN_LOGIN events |
+| ⏱️ | **Timestamps** | Precise per-event time + IP address tracking |
+| 🔘 | **Status Toggles** | Activate / deactivate users instantly |
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+</div>
 
-## 🏗️ Tech Stack
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Tech Stack
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,nodejs,express,postgres,docker,nginx,git,js&perline=5&theme=dark"/>
+</p>
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        F R O N T E N D                          │
-│                                                                 │
-│  React 18.2 ─── Vite 5.2 ─── React Router 6.23                │
-│  Zustand 4.5 ── Socket.IO Client 4.7 ── Axios 1.13            │
-│  TailwindCSS 3.4 ── DaisyUI 4.10 ── React Hot Toast 2.4       │
-│  React Icons 5.2 ── Inter Font (Google Fonts)                  │
-│                                                                 │
+│                          FRONTEND                               │
+│   React 18  ·  Vite  ·  Tailwind CSS  ·  Socket.IO Client      │
+│   Supabase JS  ·  React Router v6  ·  DiceBear Avatars          │
 ├─────────────────────────────────────────────────────────────────┤
-│                        B A C K E N D                            │
-│                                                                 │
-│  Node.js 18 ─── Express 4.19 ─── Socket.IO 4.7                │
-│  @supabase/supabase-js 2.99 ── JSON Web Token 9.0              │
-│  bcryptjs 2.4 ── express-validator 7.3 ── Helmet 8.1           │
-│  express-rate-limit 8.3 ── Morgan 1.10 ── Winston 3.19         │
-│  Nodemailer 8.0 ── cookie-parser 1.4                           │
-│                                                                 │
+│                          BACKEND                                │
+│   Node.js  ·  Express  ·  Socket.IO  ·  Supabase Auth           │
+│   PostgreSQL (Supabase)  ·  Row Level Security  ·  Helmet        │
 ├─────────────────────────────────────────────────────────────────┤
-│                  I N F R A S T R U C T U R E                    │
-│                                                                 │
-│  Docker Compose 3.8 ─── Nginx (Alpine) ─── Node 18 Alpine     │
-│  Supabase (Hosted PostgreSQL) ── uuid-ossp Extension           │
-│  Multi-stage Dockerfile ── Bridge Network                      │
-│                                                                 │
+│                       INFRASTRUCTURE                            │
+│   Docker  ·  Docker Compose  ·  Nginx  ·  Supabase Cloud        │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<br/>
 
-## 🔀 Architecture Overview
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-```
-┌──────────────┐         ┌─────────────────┐        ┌──────────────────┐
-│              │  :80    │                 │  :5000  │                  │
-│   Browser    │────────▶│   Nginx         │────────▶│  Express Server  │
-│   (React)    │◀────────│   (Reverse      │◀────────│                  │
-│              │         │    Proxy)        │        │  ┌──────────────┐│
-│  ┌────────┐  │         │                 │        │  │ Socket.IO    ││
-│  │Zustand │  │         │  location /     │        │  │ Server       ││
-│  │ Store  │  │         │  → static SPA   │        │  └──────┬───────┘│
-│  └────────┘  │         │                 │        │         │        │
-│  ┌────────┐  │   WS    │  location /api/ │        │  ┌──────▼───────┐│
-│  │Socket  │──┼────────▶│  → proxy :5000  │        │  │ Controllers  ││
-│  │Context │◀─┼────────▶│                 │        │  │ auth│msg│adm ││
-│  └────────┘  │         │  location       │        │  └──────┬───────┘│
-│  ┌────────┐  │         │  /socket.io/    │        │         │        │
-│  │ Auth   │  │         │  → WS proxy     │        │  ┌──────▼───────┐│
-│  │Context │  │         │                 │        │  │  Supabase    ││
-│  └────────┘  │         └─────────────────┘        │  │  (Postgres)  ││
-│  ┌────────┐  │                                    │  └──────────────┘│
-│  │ Axios  │──┼── Bearer Token (Authorization) ───▶│  ┌──────────────┐│
-│  │Instance│  │                                    │  │  Middleware   ││
-│  └────────┘  │◀── httpOnly Cookie (refreshToken)──│  │  protect│ban ││
-│              │                                    │  │  admin│rate  ││
-└──────────────┘                                    │  └──────────────┘│
-                                                    └──────────────────┘
+<br/>
 
-Auth Flow:
-  Login/Signup ──▶ Server issues accessToken (body) + refreshToken (cookie)
-       │
-       ▼
-  Axios attaches Bearer token to every request
-       │
-       ▼
-  401 received? ──▶ Interceptor calls POST /api/auth/refresh
-       │                    │
-       ▼                    ▼
-  New token? ──Yes──▶ Retry original request
-       │
-       No ──▶ Clear auth state ──▶ Redirect to /login
-```
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 📂 Project Structure
+## 〔 ✦ 〕 Architecture
 
 ```
-Chat_App-main/
-├── backend/
-│   ├── config/
-│   │   └── supabase.js              # Supabase client initialization
-│   ├── controllers/
-│   │   ├── auth.controller.js        # Signup, login, logout, refresh, verify, reset
-│   │   ├── message.controller.js     # Send, get messages, create group, unread counts
-│   │   ├── user.controller.js        # Sidebar user list (excludes self)
-│   │   └── admin.controller.js       # Stats, user mgmt, audit logs, ban/delete
-│   ├── middleware/
-│   │   ├── protectRoute.js           # JWT verification (Bearer + cookie fallback)
-│   │   ├── isAdmin.js                # Role-based admin gate
-│   │   ├── checkBanned.js            # Ban check with auto-expiry for timed bans
-│   │   ├── rateLimiters.js           # 4 rate limiters: API, login, signup, AI
-│   │   ├── validate.js               # express-validator result handler
-│   │   └── errorHandler.js           # Global error handler with Winston logging
-│   ├── routes/
-│   │   ├── auth.routes.js            # 9 auth endpoints with per-route validation
-│   │   ├── message.routes.js         # Message CRUD + group creation
-│   │   ├── user.routes.js            # GET /api/users (sidebar)
-│   │   └── admin.routes.js           # 6 admin endpoints (all require protectRoute + isAdmin)
-│   ├── socket/
-│   │   └── socket.js                 # Socket.IO server, JWT auth, presence, receipts
-│   ├── utils/
-│   │   ├── generateToken.js          # Dual JWT generator (access + refresh cookie)
-│   │   ├── logger.js                 # Winston logger (file + console transports)
-│   │   └── sendEmail.js              # Nodemailer transport with mock fallback
-│   ├── config.js                     # dotenv loader + __dirname polyfill
-│   └── server.js                     # Express app bootstrap, HTTPS enforcement
+┌──────────────────────────────────────────────────────────────────┐
+│                    CLIENT  (React + Vite)                        │
+│                                                                  │
+│  AuthContext ──► supabase.auth.onAuthStateChange()               │
+│       │              loading: true until session resolves        │
+│  SocketContext ──► io() connects ONLY after user confirmed       │
+│  ProtectedRoute ──► loading gate ──► user ──► role check         │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │  HTTPS + WSS
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   NGINX  (Docker :3000→:80)                      │
+│   /api        ──►  proxy → Express :5000                         │
+│   /socket.io  ──►  proxy → Express :5000  (WS upgrade)           │
+│   /*          ──►  React SPA  (try_files index.html)             │
+└──────────────┬───────────────────────────────────────────────────┘
+               │
+   ┌───────────┴───────────────────────────────────┐
+   ▼                                               ▼
+┌───────────────────────┐        ┌─────────────────────────────────┐
+│   EXPRESS  :5000      │        │        SUPABASE CLOUD           │
+│                       │        │                                 │
+│  authMiddleware       │◄─JWT───│  Auth  (httpOnly cookie)        │
+│  socket handlers      │        │  PostgreSQL + RLS               │
+│  audit logger         │◄─RT────│  Realtime row subscriptions     │
+│  rate limiter         │        │  Storage                        │
+│  helmet + CORS        │        │                                 │
+└───────────────────────┘        └─────────────────────────────────┘
+```
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Project Structure
+
+```
+Realtime-chat-app/
 │
-├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── axiosInstance.js       # Axios with auto-refresh interceptors
-│   │   ├── context/
-│   │   │   ├── AuthContext.jsx        # Auth state, token refresh, /me verification
-│   │   │   └── SocketContext.jsx      # Socket.IO connection lifecycle + events
-│   │   ├── zustand/
-│   │   │   └── useConversation.js     # Selected conversation + messages store
-│   │   ├── hooks/
-│   │   │   ├── useLogin.js            # Login API call
-│   │   │   ├── useSignup.js           # Signup with validation
-│   │   │   ├── useLogout.js           # Logout + clear state
-│   │   │   ├── useSendMessage.js      # POST message to conversation
-│   │   │   ├── useGetMessages.js      # Fetch message history
-│   │   │   ├── useListenMessages.js   # Listen for newMessage socket events
-│   │   │   ├── useGetConversations.js # Load sidebar conversations
-│   │   │   ├── useCreateGroup.js      # Group creation API
-│   │   │   ├── useUnreadCounts.js     # Fetch + poll unread message counts
-│   │   │   ├── useAvailabilityCheck.js# Real-time username availability
-│   │   │   ├── useGetUsers.js         # Admin: fetch all users
-│   │   │   ├── useGetAuditLogs.js     # Admin: paginated audit logs
-│   │   │   ├── useGetDashboardStats.js# Admin: dashboard statistics
-│   │   │   ├── useToggleBan.js        # Admin: ban/unban user
-│   │   │   └── useDeleteUser.js       # Admin: soft-delete user
-│   │   ├── components/
-│   │   │   ├── messages/
-│   │   │   │   ├── MessageContainer.jsx # Chat panel with header + messages + input
-│   │   │   │   ├── Messages.jsx        # Scrollable message list with auto-scroll
-│   │   │   │   ├── Message.jsx          # Individual message bubble with status
-│   │   │   │   └── MessageInput.jsx     # Text input with send action
-│   │   │   ├── sidebar/
-│   │   │   │   ├── Sidebar.jsx          # Sidebar container with search + list
-│   │   │   │   ├── Conversations.jsx    # Conversation list renderer
-│   │   │   │   ├── Conversation.jsx     # Single conversation item with avatar
-│   │   │   │   ├── SearchInput.jsx      # User search filter
-│   │   │   │   ├── CreateGroupModal.jsx # Multi-select group creation modal
-│   │   │   │   └── LogoutButton.jsx     # Logout action button
-│   │   │   ├── skeletons/
-│   │   │   │   ├── AppSkeleton.jsx      # Full-app loading skeleton
-│   │   │   │   ├── ConversationSkeleton.jsx
-│   │   │   │   └── MessageSkeleton.jsx
-│   │   │   ├── Avatar.jsx              # Smart avatar component with fallback
-│   │   │   ├── ProtectedRoute.jsx      # Auth guard redirect
-│   │   │   └── AdminRoute.jsx          # Auth + admin role guard
-│   │   ├── pages/
-│   │   │   ├── home/Home.jsx           # Main chat interface (sidebar + messages)
-│   │   │   ├── login/Login.jsx         # Login form
-│   │   │   ├── signup/SignUp.jsx        # Signup form with live username check
-│   │   │   ├── signup/GenderCheckbox.jsx# Gender selection component
-│   │   │   ├── admin/AdminDashboard.jsx # Admin panel (users + audit logs tabs)
-│   │   │   ├── forgot-password/ForgotPassword.jsx
-│   │   │   └── reset-password/ResetPassword.jsx
-│   │   ├── utils/
-│   │   │   ├── extractTime.js          # Timestamp formatter for message bubbles
-│   │   │   └── emojis.js              # Emoji utility set
-│   │   ├── App.jsx                     # Route definitions + lazy loading
-│   │   ├── main.jsx                    # React DOM entry point
-│   │   └── index.css                   # Global styles + glassmorphism base
-│   ├── tailwind.config.js              # Custom "chatdark" DaisyUI theme
-│   ├── vite.config.js                  # Vite dev server + proxy config
-│   └── index.html                      # SPA entry with Inter font + meta tags
+├── 📁 Chat_App-main/
+│   ├── 📁 frontend/                    # React + Vite
+│   │   └── src/
+│   │       ├── context/
+│   │       │   ├── AuthContext.jsx         # Supabase session + loading gate
+│   │       │   └── SocketContext.jsx       # Socket.IO lifecycle
+│   │       ├── components/
+│   │       │   ├── ProtectedRoute.jsx      # Role-aware route guard
+│   │       │   ├── Avatar.jsx              # DiceBear auto-avatar
+│   │       │   └── MessageTick.jsx         # ✓ ✓✓ read receipt ticks
+│   │       ├── hooks/
+│   │       │   └── useAvailabilityCheck.js # 500ms debounced checker
+│   │       └── pages/
+│   │           ├── Login.jsx
+│   │           ├── Register.jsx            # Real-time duplicate check
+│   │           ├── ForgotPassword.jsx      # Password reset flow
+│   │           ├── ResetPassword.jsx       # Token-based reset
+│   │           ├── ChatPage.jsx            # Main messaging UI
+│   │           └── AdminDashboard.jsx      # Users + Audit Logs
+│   │
+│   ├── 📁 backend/                     # Node.js + Express
+│   │   ├── middleware/
+│   │   │   └── authMiddleware.js           # Supabase JWT verification
+│   │   ├── routes/
+│   │   │   ├── auth.js                     # login · register · /me
+│   │   │   ├── messages.js                 # CRUD + unread counts
+│   │   │   └── admin.js                    # Admin-only routes
+│   │   └── server.js                       # Express + helmet + CORS
+│   │
+│   ├── 🐳 Dockerfile.frontend
+│   ├── 🐳 Dockerfile.backend
+│   ├── 🐳 docker-compose.yml
+│   ├── ⚙️  nginx.conf
+│   └── 🔒 .env / .env.example
 │
-├── docker-compose.yml                  # Multi-container orchestration
-├── Dockerfile.backend                  # Node 18 Alpine production build
-├── Dockerfile.frontend                 # Multi-stage: Vite build → Nginx serve
-├── nginx.conf                          # Reverse proxy + WebSocket upgrade + gzip
-├── supabase_schema.sql                 # Complete database schema (6 tables)
-├── .env.example                        # Root environment variables template
-└── PROJECT_RULES.md                    # GSD methodology coding standards
+├── 📋 PROJECT_RULES.md
+└── 📖 README.md
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<br/>
 
-## 🚀 Getting Started
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Getting Started
 
 ### Prerequisites
 
-- **Node.js** ≥ 18
-- **npm** ≥ 9
-- **Docker** & **Docker Compose** (for containerised deployment)
-- A **Supabase** project (free tier works)
+```bash
+node    >= 18.0.0
+npm     >= 9.0.0
+docker  >= 24.0.0
+```
 
-### 1️⃣ Clone the Repository
+### 1 · Clone
 
 ```bash
 git clone https://github.com/Diganta18-noob/Realtime-chat-app.git
 cd Realtime-chat-app/Chat_App-main
 ```
 
-### 2️⃣ Set Up Environment Variables
-
-**Backend** — copy and fill `backend/.env.example`:
-
-```bash
-cp backend/.env.example backend/.env
-```
-
-```env
-PORT=5000
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-JWT_SECRET=your_super_secret_jwt_string
-JWT_REFRESH_SECRET=your_super_secret_refresh_string
-CLIENT_URL=http://localhost:3000
-SMTP_HOST=your_smtp_host           # Optional — falls back to console logging
-SMTP_USER=your_smtp_user
-SMTP_PASS=your_smtp_password
-```
-
-**Frontend** — copy and fill `frontend/.env.example`:
-
-```bash
-cp frontend/.env.example frontend/.env
-```
-
-```env
-VITE_BACKEND_URL=http://localhost:5000/api
-```
-
-**Root** — copy and fill `.env.example` (used by Docker):
+### 2 · Environment Variables
 
 ```bash
 cp .env.example .env
 ```
 
-### 3️⃣ Set Up Supabase Database
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_API_URL=http://localhost:5000
 
-Run the full schema in your Supabase SQL Editor:
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key   # backend only — NEVER frontend
+JWT_SECRET=your_supabase_jwt_secret
+CLIENT_URL=http://localhost:3000
+NODE_ENV=development
+```
+
+> ⚠️ `SUPABASE_SERVICE_ROLE_KEY` bypasses all RLS. Never expose it client-side.
+
+### 3 · Supabase SQL Setup
 
 ```sql
--- Enable UUID generation
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- Users table with auth, banning, email verification, and password reset
-CREATE TABLE IF NOT EXISTS users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  full_name TEXT NOT NULL,
-  username TEXT UNIQUE NOT NULL,
-  email TEXT DEFAULT NULL,
-  password TEXT NOT NULL,
-  gender TEXT NOT NULL CHECK (gender IN ('male', 'female')),
-  profile_pic TEXT DEFAULT '',
-  role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin')),
-  is_banned BOOLEAN DEFAULT false,
-  is_deleted BOOLEAN DEFAULT false,
-  is_email_verified BOOLEAN DEFAULT false,
-  email_verification_token TEXT DEFAULT NULL,
-  email_verification_expires TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-  reset_password_token TEXT DEFAULT NULL,
-  reset_password_expires TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-  banned_until TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-  ban_reason TEXT DEFAULT '',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+create table public.profiles (
+  id uuid references auth.users on delete cascade primary key,
+  username varchar(24) not null unique,
+  role text default 'user' check (role in ('user','admin')),
+  created_at timestamptz default now()
 );
 
--- Conversations (DMs + Groups)
-CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  is_group BOOLEAN DEFAULT false,
-  group_name TEXT,
-  group_admin UUID REFERENCES users(id) ON DELETE SET NULL,
-  group_avatar TEXT DEFAULT '',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+create table public.messages (
+  id uuid default uuid_generate_v4() primary key,
+  sender uuid references public.profiles(id) on delete cascade not null,
+  receiver uuid references public.profiles(id) on delete cascade not null,
+  content text not null,
+  status text default 'sent' check (status in ('sent','delivered','read')),
+  created_at timestamptz default now()
 );
 
--- Many-to-many bridge for conversation participants
-CREATE TABLE IF NOT EXISTS conversation_participants (
-  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  PRIMARY KEY (conversation_id, user_id)
+create table public.audit_logs (
+  id uuid default uuid_generate_v4() primary key,
+  action text not null,
+  performed_by uuid references public.profiles(id),
+  ip_address text,
+  created_at timestamptz default now()
 );
 
--- Messages with delivery status tracking
-CREATE TABLE IF NOT EXISTS messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  sender_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  receiver_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
-  message TEXT NOT NULL,
-  status TEXT DEFAULT 'sent' CHECK (status IN ('sent', 'delivered', 'read')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-
--- Read receipt tracking
-CREATE TABLE IF NOT EXISTS message_read_by (
-  message_id UUID REFERENCES messages(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  PRIMARY KEY (message_id, user_id)
-);
-
--- Comprehensive audit logging
-CREATE TABLE IF NOT EXISTS audit_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
-  action TEXT NOT NULL,
-  ip_address TEXT,
-  user_agent TEXT,
-  details TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
+alter table public.profiles enable row level security;
+alter table public.messages enable row level security;
+alter table public.audit_logs enable row level security;
+alter publication supabase_realtime add table public.messages;
 ```
 
-### 4️⃣ Run Locally (Development)
+### 4 · Run with Docker 🐳
 
 ```bash
-# Install all dependencies (root + frontend)
-npm run build
+docker-compose up --build
+# Frontend → http://localhost:3000
+# Backend  → http://localhost:5000
 
-# Start the dev server (backend on :5000, frontend on :3000)
-npm run dev
+docker-compose down        # stop
+docker-compose down -v     # stop + wipe volumes
 ```
 
-> The frontend Vite dev server proxies `/api` and `/socket.io` to the backend automatically.
-
-### 5️⃣ Run with Docker (Production)
+### 5 · Run Locally
 
 ```bash
-# Build and start all containers
-npm run docker:up
-# or
-docker-compose up -d --build
+# Terminal 1
+cd backend && npm install && npm run dev
 
-# View logs
-npm run docker:logs
-
-# Tear down
-npm run docker:down
+# Terminal 2
+cd frontend && npm install && npm run dev
 ```
 
-| Container | Port | Purpose |
-|---|---|---|
-| `chatapp-frontend` | `:80` | Nginx serving React SPA + reverse proxy |
-| `chatapp-backend` | `:5000` | Express API + Socket.IO server |
+<br/>
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-## 🔐 Authentication Flow
+<br/>
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                         APP MOUNT                                    │
-│                           │                                          │
-│                   AuthContext initializes                             │
-│                   isLoading = true                                    │
-│                           │                                          │
-│              ┌────────────▼────────────┐                             │
-│              │  GET /api/auth/me       │                             │
-│              │  (via axiosInstance)     │                             │
-│              └────────────┬────────────┘                             │
-│                           │                                          │
-│               ┌───────────┴───────────┐                              │
-│               ▼                       ▼                              │
-│         ┌──────────┐          ┌──────────────┐                       │
-│         │ 200 OK   │          │ 401 Expired  │                       │
-│         └────┬─────┘          └──────┬───────┘                       │
-│              │                       │                               │
-│              │               ┌───────▼────────┐                      │
-│              │               │ Interceptor:   │                      │
-│              │               │ POST /refresh  │                      │
-│              │               │ (httpOnly      │                      │
-│              │               │  cookie sent)  │                      │
-│              │               └───────┬────────┘                      │
-│              │                       │                               │
-│              │            ┌──────────┴──────────┐                    │
-│              │            ▼                     ▼                    │
-│              │     ┌────────────┐       ┌──────────────┐             │
-│              │     │ New token  │       │ Refresh      │             │
-│              │     │ received   │       │ failed       │             │
-│              │     └─────┬──────┘       └──────┬───────┘             │
-│              │           │                     │                     │
-│              │    Retry /auth/me         ┌─────▼──────┐              │
-│              │     with new token        │ Clear auth │              │
-│              │           │               │ Redirect   │              │
-│              ▼           ▼               │ to /login  │              │
-│     ┌────────────────────────┐           └────────────┘              │
-│     │ setAuthUser(userData)  │                                       │
-│     │ isLoading = false      │                                       │
-│     │ Render app routes      │                                       │
-│     └────────────────────────┘                                       │
-│                                                                      │
-│  Token Storage:                                                      │
-│  ├─ accessToken  → React state (memory only, never localStorage)    │
-│  └─ refreshToken → httpOnly, Secure, SameSite=Strict cookie         │
-│                                                                      │
-│  Socket Auth:                                                        │
-│  └─ accessToken passed via socket.handshake.auth.token              │
-│     → Verified server-side with jwt.verify() in io.use() middleware │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 📡 Socket.IO Event Reference
-
-### Client → Server
-
-| Event | Payload | Description |
-|---|---|---|
-| `connection` | `{ auth: { token } }` | Handshake with JWT access token for authentication |
-| `messages_read` | `{ senderId, receiverId }` | Mark all messages from sender as `read` |
-| `disconnect` | — | Client disconnects; user removed from online map |
-
-### Server → Client
-
-| Event | Payload | Description |
-|---|---|---|
-| `getOnlineUsers` | `string[]` (user IDs) | Broadcast updated online user list on connect/disconnect |
-| `newMessage` | `{ _id, senderId, receiverId, conversationId, message, status, createdAt }` | New message pushed to recipient(s) in real time |
-| `messages_delivered` | `{ by: userId, messageIds: string[] }` | Notifies sender that their messages were delivered |
-| `messages_seen` | `{ by: userId, messageIds: string[] }` | Notifies sender that their messages were read |
-| `newGroupCreated` | `{ _id, isGroup, groupName, groupAdmin, participants[] }` | New group conversation pushed to all participants |
-| `banned` | `{ message: string }` | Admin ban notification — triggers force-disconnect |
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 🛡️ Admin Dashboard
-
-The admin panel (`/admin`) is protected by both `protectRoute` and `isAdmin` middleware and features two main tabs:
-
-### 👥 Users Tab
-
-| Column | Source |
-|---|---|
-| Avatar + Full Name | `profile_pic`, `full_name` |
-| Username | `username` |
-| Role | `role` (`user` / `admin`) |
-| Status | Live from `userSocketMap` (online/offline) |
-| Ban Status | `is_banned`, `banned_until`, `ban_reason` |
-| Last Login | Latest `LOGIN` / `ADMIN_LOGIN` from `audit_logs` |
-| Last Logout | Latest `LOGOUT` from `audit_logs` |
-| Created At | `created_at` |
-
-**Actions:** Ban (1h / 24h / permanent with reason), Unban, Soft Delete — all with instant socket force-disconnect.
-
-### 📜 Audit Logs Tab
-
-| Column | Source |
-|---|---|
-| User | Joined from `users` table (avatar + name) |
-| Action | `LOGIN`, `ADMIN_LOGIN`, `LOGOUT`, `USER_BANNED`, `USER_UNBANNED` |
-| IP Address | `ip_address` from request |
-| User Agent | `user_agent` from request headers |
-| Details | Action context string |
-| Timestamp | `created_at` |
-
-Paginated (50 per page) with total count and page navigation.
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 🔒 Security Checklist
-
-- [x] **Helmet.js** — Sets security HTTP headers (CSP, HSTS, X-Frame-Options, etc.)
-- [x] **CORS whitelist** — Restricted to `CLIENT_URL` origin only
-- [x] **httpOnly cookies** — Refresh tokens never accessible to JavaScript
-- [x] **SameSite=Strict** — CSRF protection on refresh token cookie
-- [x] **Secure flag** — Cookie sent over HTTPS only in production
-- [x] **bcrypt hashing** — Passwords hashed with 10 salt rounds, never stored in plain text
-- [x] **express-validator** — Input sanitization + validation on every endpoint
-- [x] **XSS prevention** — `.escape()` applied to all user-supplied text fields
-- [x] **Rate limiting** — 4 tiers: API (100/15min), Login (5/15min), Signup (3/1hr), AI (10/day)
-- [x] **Request size limit** — `express.json({ limit: "10kb" })` prevents payload bombs
-- [x] **JWT expiration** — Access tokens expire in 15 minutes, refresh in 24 hours
-- [x] **IDOR mitigation** — Group message endpoints verify sender is a participant
-- [x] **Admin protection** — All admin routes gated behind `isAdmin` middleware
-- [x] **Ban enforcement** — Checked at login and before sending messages
-- [x] **Timed ban auto-expiry** — `checkBanned` middleware auto-lifts expired temp bans
-- [x] **Soft delete** — Users marked deleted, not purged, preserving referential integrity
-- [x] **Anti-enumeration** — Forgot-password returns identical response for valid/invalid emails
-- [x] **HTTPS enforcement** — Production server redirects HTTP → HTTPS via `X-Forwarded-Proto`
-- [x] **Socket authentication** — JWT verified in `io.use()` middleware before connection
-- [x] **Nginx gzip** — Response compression for all text-based content types
-- [x] **Structured logging** — Winston logs errors with timestamp, IP, and stack traces  
-- [x] **Morgan integration** — HTTP request logs streamed into Winston for unified logging
-- [x] **Trust proxy** — `app.set("trust proxy", 1)` for correct IP detection behind Nginx
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 🐳 Docker Architecture
+## 〔 ✦ 〕 Auth Flow
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   Host Machine                          │
-│                                                         │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │           chatapp-network (bridge)               │    │
-│  │                                                  │    │
-│  │  ┌──────────────────┐   ┌───────────────────┐   │    │
-│  │  │  chatapp-frontend │   │  chatapp-backend  │   │    │
-│  │  │                  │   │                   │   │    │
-│  │  │  Nginx (Alpine)  │   │  Node.js 18       │   │    │
-│  │  │                  │   │  (Alpine)         │   │    │
-│  │  │  Stage 1: Vite   │   │                   │   │    │
-│  │  │  build (builder) │   │  Express +        │   │    │
-│  │  │                  │   │  Socket.IO        │   │    │
-│  │  │  Stage 2: Nginx  │   │                   │   │    │
-│  │  │  serves /dist    │──▶│  :5000            │   │    │
-│  │  │                  │   │                   │   │    │
-│  │  │  :80 ◀── public  │   │  env_file: .env   │   │    │
-│  │  │                  │   │  NODE_ENV=prod    │   │    │
-│  │  │  Proxy rules:    │   │                   │   │    │
-│  │  │  /api/ → :5000   │   │  restart:         │   │    │
-│  │  │  /socket.io/     │   │  unless-stopped   │   │    │
-│  │  │  → :5000 (WS)    │   │                   │   │    │
-│  │  │                  │   └───────────────────┘   │    │
-│  │  │  depends_on:     │                           │    │
-│  │  │   - backend      │                           │    │
-│  │  │                  │                           │    │
-│  │  │  restart:        │                           │    │
-│  │  │  unless-stopped  │                           │    │
-│  │  └──────────────────┘                           │    │
-│  │                                                  │    │
-│  └─────────────────────────────────────────────────┘    │
-│                                                         │
-│  External:                                              │
-│  └── Supabase (Hosted PostgreSQL) ◀── SUPABASE_URL     │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
+App mounts → AuthContext → loading: true
+        │
+        ▼
+supabase.auth.getSession() ◄── reads httpOnly cookie
+        │
+   ┌────┴──────────────────────┐
+   │                           │
+Valid session             No session / expired
+   │                           │
+   ▼                           ▼
+setUser(data)           setUser(null)
+setLoading(false)       setLoading(false)
+   │                           │
+   ▼                           ▼
+Stay on app             Redirect → /login
 
-Port Mapping:
-  Host :80   ──▶  Frontend container :80  (Nginx)
-  Host :5000 ──▶  Backend container :5000 (Express)
+onAuthStateChange() always listening:
+SIGNED_IN · SIGNED_OUT · TOKEN_REFRESHED · USER_UPDATED
 ```
 
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+<br/>
 
-## 🗺️ Roadmap
-
-| | Feature | Description |
-|---|---|---|
-| 📎 | **File & Image Sharing** | Upload and send images, documents, and media in conversations |
-| ✏️ | **Message Edit & Delete** | Edit sent messages within a time window, or delete for everyone |
-| ⌨️ | **Typing Indicators** | Real-time "user is typing…" status via Socket.IO events |
-| 🔔 | **Push Notifications** | Browser push notifications for messages received while tab is inactive |
-| 🎨 | **Theme Customization** | User-selectable color themes beyond the default dark mode |
-| 🔍 | **Message Search** | Full-text search across conversation history with highlighted results |
-| 👤 | **User Profiles** | Editable profile pages with bio, status message, and avatar upload |
-| 🌐 | **i18n / Localization** | Multi-language support for the entire interface |
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 🤝 Contributing
-
-Contributions are welcome! This project follows the **GSD (Get Shit Done)** methodology — see [`PROJECT_RULES.md`](PROJECT_RULES.md) for full coding standards.
-
-### Workflow
-
-```bash
-# 1. Fork and clone
-git clone https://github.com/YOUR_USERNAME/Realtime-chat-app.git
-
-# 2. Create a feature branch
-git checkout -b feat/your-feature-name
-
-# 3. Make changes and verify (empirical proof required — see PROJECT_RULES.md)
-
-# 4. Commit with conventional format
-git commit -m "feat(scope): add your feature description"
-
-# 5. Push and open a Pull Request
-git push origin feat/your-feature-name
-```
-
-### Commit Types
-
-| Type | Usage |
-|---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `refactor` | Code restructure (no behavior change) |
-| `test` | Adding or updating tests |
-| `chore` | Maintenance, dependencies |
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-## 📄 License
-
-Distributed under the **ISC License**. See `LICENSE` for more information.
-
-![rainbow](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
+## 〔 ✦ 〕 Socket.IO Event Reference
 
 <div align="center">
 
-**Built with 💜 and too much caffeine.**
+| Event | Direction | Payload | Description |
+|---|---|---|---|
+| `user_connected` | Client → Server | `userId` | Register user on connect |
+| `join_room` | Client → Server | `roomId` | Join a private chat room |
+| `send_message` | Client → Server | `{ receiverId, content }` | Send a message |
+| `receive_message` | Server → Client | message object | Incoming message |
+| `messages_read` | Client → Server | `{ senderId, receiverId }` | Chat opened |
+| `messages_seen` | Server → Client | `{ by, messageIds }` | Notify sender of read |
+| `online_users` | Server → Client | `userId[]` | Broadcast presence list |
 
-Made by [Diganta18-noob](https://github.com/Diganta18-noob)
+</div>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Security Checklist
+
+<div align="center">
+
+| ✅ | Implemented |
+|:---:|---|
+| ✅ | Tokens in `httpOnly` cookies — never `localStorage` |
+| ✅ | Supabase JWT verified server-side on every protected request |
+| ✅ | Service role key in backend `.env` only — never client-side |
+| ✅ | Row Level Security on all Supabase tables |
+| ✅ | Rate limiting on `/api/auth` routes |
+| ✅ | `helmet` HTTP security headers on Express |
+| ✅ | CORS locked to specific origin only |
+| ✅ | Unique DB constraint on `username` — race-condition safe |
+| ✅ | Socket.IO auth middleware verifies JWT before connection |
+| ✅ | `trust proxy` set for Docker/Nginx environments |
+
+</div>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Roadmap
+
+- [ ] 🖼️ Image and file sharing in chat
+- [ ] 👥 Group chat rooms
+- [ ] 🔔 Push notifications (PWA)
+- [ ] 🔍 Global message search
+- [ ] 😄 Emoji reactions on messages
+- [ ] 🗑️ Admin: delete messages + timed user bans
+- [ ] 📊 Analytics — active users graph, messages per hour heatmap
+- [ ] 🌐 Deploy: Vercel (frontend) + Railway (backend)
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<br/>
+
+## 〔 ✦ 〕 Contributing
+
+```bash
+git checkout -b feature/your-feature-name
+git commit -m "feat: add your feature"
+git push origin feature/your-feature-name
+# then open a Pull Request
+```
+
+Read `PROJECT_RULES.md` before contributing.
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
+
+<!-- ANIMATED FOOTER -->
+<div align="center">
+
+<br/>
+
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=15&duration=4000&pause=2000&color=7C3AED&center=true&vCenter=true&width=500&lines=Built+with+obsession+by+Diganta;LTIMindtree+·+Hyderabad+·+2026;⭐+Star+this+repo+if+it+helped+you" alt="Footer" />
+
+<br/><br/>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:24243e,50:302b63,100:0f0c29&height=130&section=footer&animation=fadeIn" width="100%"/>
 
 </div>
