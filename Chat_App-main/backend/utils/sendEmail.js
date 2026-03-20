@@ -1,31 +1,28 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+import logger from "./logger.js";
 
 export const sendEmail = async (options) => {
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
-    console.log("=========================================");
-    console.log("Mock Email Sending (No SMTP Configured)");
-    console.log(`To: ${options.email}`);
-    console.log(`Subject: ${options.subject}`);
-    console.log(`Content: ${options.message}`);
-    console.log("=========================================");
+  if (!process.env.RESEND_API_KEY) {
+    logger.info("========================================");
+    logger.info("Mock Email Sending (No RESEND_API_KEY)");
+    logger.info(`To: ${options.email}`);
+    logger.info(`Subject: ${options.subject}`);
+    logger.info(`Content: ${options.message}`);
+    logger.info("========================================");
     return;
   }
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT || 587,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const mailOptions = {
-    from: `Chat App <${process.env.SMTP_USER}>`,
+  const { error } = await resend.emails.send({
+    from: "OrbitChat <onboarding@resend.dev>",
     to: options.email,
     subject: options.subject,
     html: options.message,
-  };
+  });
 
-  await transporter.sendMail(mailOptions);
+  if (error) {
+    logger.error("Resend email failed", { error: error.message });
+    throw new Error(error.message);
+  }
 };
