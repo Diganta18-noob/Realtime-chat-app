@@ -18,8 +18,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const refreshAccessToken = useCallback(async () => {
     try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api/auth/refresh` : "/api/auth/refresh";
-      const res = await fetch(apiUrl, {
+      const res = await fetch("/api/auth/refresh", {
         method: "POST",
         credentials: "include",
       });
