@@ -7,10 +7,13 @@ import { HiArrowLeft } from "react-icons/hi";
 import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContext";
 import Avatar from "../Avatar";
+import toast from "react-hot-toast";
+import axiosInstance from "../../api/axiosInstance";
 
 const MessageContainer = ({ resetUnreadCount }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const { onlineUsers } = useSocketContext();
+  const { authUser } = useAuthContext();
 
   const isOnline = selectedConversation
     ? !selectedConversation.isGroup && onlineUsers.includes(selectedConversation._id)
@@ -26,6 +29,28 @@ const MessageContainer = ({ resetUnreadCount }) => {
       resetUnreadCount(selectedConversation._id);
     }
   }, [selectedConversation?._id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleLeaveGroup = async () => {
+    if (!window.confirm("Are you sure you want to leave this group?")) return;
+    try {
+      await axiosInstance.delete(`/messages/group/${selectedConversation._id}/leave`);
+      toast.success("Left group successfully");
+      setSelectedConversation(null);
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to leave group");
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!window.confirm("Are you sure you want to delete this group?")) return;
+    try {
+      await axiosInstance.delete(`/messages/group/${selectedConversation._id}`);
+      toast.success("Group deleted successfully");
+      setSelectedConversation(null);
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to delete group");
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -66,6 +91,20 @@ const MessageContainer = ({ resetUnreadCount }) => {
                 )}
               </p>
             </div>
+            
+            {selectedConversation.isGroup && (
+              <div className="flex-none">
+                {authUser?._id === selectedConversation.groupAdmin ? (
+                  <button onClick={handleDeleteGroup} className="btn btn-error btn-sm rounded-full bg-error/10 text-error border-none hover:bg-error hover:text-white transition-colors uppercase text-xs font-bold tracking-wide">
+                    Delete Group
+                  </button>
+                ) : (
+                  <button onClick={handleLeaveGroup} className="btn btn-warning btn-sm rounded-full bg-warning/10 text-warning border-none hover:bg-warning hover:text-white transition-colors uppercase text-xs font-bold tracking-wide">
+                    Leave Group
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Messages */}

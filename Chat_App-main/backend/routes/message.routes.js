@@ -1,5 +1,5 @@
 import express from "express";
-import { getMessage, sendMessage, createGroup, getUnreadCounts } from "../controllers/message.controller.js";
+import { getMessage, sendMessage, createGroup, getUnreadCounts, leaveGroup, deleteGroup } from "../controllers/message.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 import checkBanned from "../middleware/checkBanned.js";
 
@@ -42,6 +42,28 @@ router.post(
     validateRequest
   ], 
   createGroup
+);
+
+router.delete(
+  "/group/:id/leave",
+  protectRoute,
+  checkBanned,
+  [
+    param("id").isUUID().withMessage("Invalid group ID format"),
+    validateRequest
+  ],
+  leaveGroup
+);
+
+router.delete(
+  "/group/:id",
+  protectRoute,
+  checkBanned,
+  [
+    param("id").isUUID().withMessage("Invalid group ID format"),
+    validateRequest
+  ],
+  deleteGroup
 );
 
 export default router;

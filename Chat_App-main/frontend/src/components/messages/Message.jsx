@@ -19,17 +19,40 @@ const Message = memo(({ message }) => {
   const bubbleBgColor = fromMe ? "bg-primary text-primary-content" : "bg-base-300 text-base-content";
   const shakeClass = message.shouldShake ? "shake" : "";
 
-  const avatarUsername = fromMe
-    ? authUser.username
-    : selectedConversation?.username || selectedConversation?.fullName;
-  const avatarRole = fromMe ? authUser.role : selectedConversation?.role;
-  const avatarPic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
+  let avatarUsername = "";
+  let avatarRole = "";
+  let avatarPic = "";
+
+  if (fromMe) {
+    avatarUsername = authUser.username;
+    avatarRole = authUser.role;
+    avatarPic = authUser.profilePic;
+  } else if (selectedConversation?.isGroup) {
+    const sender = selectedConversation.participants?.find(p => p._id === message.senderId);
+    avatarUsername = sender?.username || sender?.fullName || "Group Member";
+    avatarRole = sender?.role || "user";
+    avatarPic = sender?.profilePic || "";
+  } else {
+    avatarUsername = selectedConversation?.username || selectedConversation?.fullName;
+    avatarRole = selectedConversation?.role;
+    avatarPic = selectedConversation?.profilePic;
+  }
 
   return (
     <div className={`chat ${chatClassName}`}>
       <div className="chat-image">
         <Avatar username={avatarUsername} role={avatarRole} profilePic={avatarPic} size={32} />
       </div>
+      {selectedConversation?.isGroup && !fromMe && (
+        <div className="chat-header text-xs opacity-50 mb-1 ml-1 flex gap-1 items-center">
+          {avatarRole === 'admin' && (
+            <span className="text-[9px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
+              Admin
+            </span>
+          )}
+          {avatarUsername}
+        </div>
+      )}
       <div className={`chat-bubble ${bubbleBgColor} ${shakeClass} text-sm`}>
         {message.message}
       </div>

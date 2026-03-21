@@ -264,3 +264,63 @@ export const getUnreadCounts = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const leaveGroup = async (req, res) => {
+  try {
+    const { id: groupId } = req.params;
+    const userId = req.user.id || req.user._id;
+
+    const { data: group } = await supabase.from('conversations').select('*').eq('id', groupId).single();
+    if (!group || !group.is_group) return res.status(404).json({ error: "Group not found" });
+
+    if (group.group_admin === userId) {
+      return res.status(400).json({ error: "Admin cannot leave the group. Please delete the group instead." });
+    }
+
+    const { error: leaveError } = await supabase
+      .from('conversation_participants')
+      .delete()
+      .eq('conversation_id', groupId)
+      .eq('user_id', userId);
+
+    if (leaveError) throw leaveError;
+
+    res.status(200).json({ message: "Left group successfully" });
+  } catch (error) {
+    logger.error("Error in leaveGroup:", { error: error.message });
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const deleteGroup = async (req, res) => {
+  try {
+    const { id: groupId } = req.params;
+    const userId = req.user.id || req.user._id;
+
+    const { data: group } = await supabase.from('conversations').select('*').eq('id', groupId).single();
+    if (!group || !group.is_group) return res.status(404).json({ error: "Group not found" });
+
+    if (group.group_admin !== userId) {
+      return res.status(403).json({ error: "Only the admin can delete the group." });
+    }
+
+    const { data: participantsData } = await supabase.from('conversation_participants').select('user_id').eq('conversation_id', groupId);
+    const participants = participantsData ? participantsData.map(p => p.user_id) : [];
+
+    await supabase.from('messages').delete().eq('conversation_id', groupId);
+    await supabase.from('conversation_participants').delete().eq('conversation_id', groupId);
+    const { error: delError } = await supabase.from('conversations').delete().eq('id', groupId);
+
+    if (delError) throw delError;
+
+    participants.forEach((pid) => {
+       const socketId = getReceiverSocketId(pid);
+       if (socketId) io.to(socketId).emit("groupDeleted", groupId);
+    });
+
+    res.status(200).json({ message: "Group deleted successfully" });
+  } catch (error) {
+    logger.error("Error in deleteGroup:", { error: error.message });
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

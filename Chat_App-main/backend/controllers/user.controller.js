@@ -49,8 +49,33 @@ export const getUsersForSidebar = async (req, res) => {
           profilePic: group.group_avatar,
           isGroup: true,
           groupAdmin: group.group_admin,
+          participants: []
         };
       });
+
+    const groupIds = formattedGroups.map(g => g._id);
+    if (groupIds.length > 0) {
+      const { data: groupParticipants, error: gpError } = await supabase
+        .from('conversation_participants')
+        .select(`
+          conversation_id,
+          users:user_id ( id, full_name, username, profile_pic, role )
+        `)
+        .in('conversation_id', groupIds);
+
+      if (!gpError && groupParticipants) {
+         formattedGroups.forEach(group => {
+           const parts = groupParticipants.filter(gp => gp.conversation_id === group._id && gp.users);
+           group.participants = parts.map(p => ({
+             _id: p.users.id,
+             fullName: p.users.full_name,
+             username: p.users.username,
+             profilePic: p.users.profile_pic,
+             role: p.users.role
+           }));
+         });
+      }
+    }
 
     const combinedList = [...formattedGroups, ...filteredUsers];
 
