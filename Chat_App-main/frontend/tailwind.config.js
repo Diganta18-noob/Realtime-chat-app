@@ -17,15 +17,15 @@ export default {
     themes: [
       {
         chatdark: {
-          primary: "#6D28D9",
-          secondary: "#A78BFA",
-          accent: "#2DD4BF",
-          neutral: "#1E1B2E",
-          "base-100": "#0F0D1A",
-          "base-200": "#1A172B",
-          "base-300": "#262040",
+          primary: "#2563EB",
+          secondary: "#3B82F6",
+          accent: "#06B6D4",
+          neutral: "#18181B",
+          "base-100": "#09090B",
+          "base-200": "#18181B",
+          "base-300": "#27272A",
           info: "#3B82F6",
-          success: "#22C55E",
+          success: "#10B981",
           warning: "#F59E0B",
           error: "#EF4444",
         },

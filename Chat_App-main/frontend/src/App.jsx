@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import AdminRoute from "./components/AdminRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { AnimatePresence } from "framer-motion";
 
 const Home = React.lazy(() => import("./pages/home/Home"));
 const Login = React.lazy(() => import("./pages/login/Login"));
@@ -22,51 +23,55 @@ const LoadingFallback = () => (
 
 function App() {
   const { authUser, isLoading } = useAuthContext();
+  const location = useLocation();
+  
   return (
     <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
       <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/login"
-            element={authUser && !isLoading ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={authUser && !isLoading ? <Navigate to="/" /> : <SignUp />}
-          />
-          <Route
-            path="/forgot-password"
-            element={authUser && !isLoading ? <Navigate to="/" /> : <ForgotPassword />}
-          />
-          <Route
-            path="/reset-password"
-            element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPassword />}
-          />
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={authUser && !isLoading ? <Navigate to="/" /> : <Login />}
+            />
+            <Route
+              path="/signup"
+              element={authUser && !isLoading ? <Navigate to="/" /> : <SignUp />}
+            />
+            <Route
+              path="/forgot-password"
+              element={authUser && !isLoading ? <Navigate to="/" /> : <ForgotPassword />}
+            />
+            <Route
+              path="/reset-password"
+              element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPassword />}
+            />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+          </Routes>
+        </AnimatePresence>
       </Suspense>
       <Toaster
         position="top-center"
         toastOptions={{
           style: {
-            background: "#1A172B",
+            background: "#09090B",
             color: "#E2E8F0",
-            border: "1px solid rgba(109, 40, 217, 0.2)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
           },
         }}
       />

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
-import { BiLogIn } from "react-icons/bi";
-import { HiOutlineUser, HiOutlineLockClosed, HiEye, HiEyeOff } from "react-icons/hi";
+import { LogIn, User, Lock, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -17,94 +17,108 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto animate-fade-in-up">
-      <div className="w-full p-6 sm:p-8 glass-card">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col items-center justify-center w-full max-w-md mx-auto"
+    >
+      <div className="w-full p-8 sm:p-10 glass-card">
         {/* Brand */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-            ChatApp
-          </h1>
-          <p className="text-sm text-base-content/60">
-            Sign in to continue your conversations<br/>
-            (Admins: use your standard credentials)
-          </p>
+        <div className="text-center mb-10">
+          <motion.h1 
+            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="text-4xl sm:text-5xl font-extrabold gradient-text mb-3 tracking-tight"
+          >
+            Command
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+            className="text-sm text-base-content/60 font-medium"
+          >
+            Professional communication, simplified.<br/>
+            Sign in to access your workspace.
+          </motion.p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username */}
-          <div className="form-control">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="form-control">
             <label className="label">
-              <span className="label-text text-base-content/80 font-medium">Username</span>
+              <span className="label-text text-base-content/80 font-semibold tracking-wide text-xs uppercase">Username</span>
             </label>
             <div className="relative">
-              <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Enter username"
-                className="input input-bordered input-primary w-full pl-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-bordered input-primary w-full pl-10 bg-base-300/40 focus:bg-base-300/80 border-none ring-1 ring-white/5 focus:ring-primary/50 transition-all text-base-content"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Password */}
-          <div className="form-control">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="form-control">
             <label className="label">
-              <span className="label-text text-base-content/80 font-medium">Password</span>
+              <span className="label-text text-base-content/80 font-semibold tracking-wide text-xs uppercase">Password</span>
             </label>
             <div className="relative">
-              <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
-                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-200/50 focus:bg-base-200"
+                className="input input-bordered input-primary w-full pl-10 pr-10 bg-base-300/40 focus:bg-base-300/80 border-none ring-1 ring-white/5 focus:ring-primary/50 transition-all text-base-content"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button 
                 type="button" 
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content/80 text-lg transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content/80 transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <HiEyeOff /> : <HiEye />}
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <div className="text-right mt-1">
+            <div className="text-right mt-3">
               <Link
                 to="/forgot-password"
-                className="text-xs text-secondary/70 hover:text-accent transition-colors"
+                className="text-xs text-primary hover:text-primary-focus transition-colors font-medium"
               >
                 Forgot Password?
               </Link>
             </div>
-          </div>
+          </motion.div>
 
           {/* Submit */}
-          <button
-            className="btn btn-gradient w-full mt-2 text-base font-semibold"
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              <>
-                <BiLogIn className="text-xl" /> Login
-              </>
-            )}
-          </button>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+            <button
+              className="btn btn-gradient w-full mt-4 text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/40 border-0"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                <>
+                  <LogIn className="w-5 h-5 mr-2" /> Sign In securely
+                </>
+              )}
+            </button>
+          </motion.div>
         </form>
 
-        <div className="text-center mt-6">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="text-center mt-8 pt-6 border-t border-white/10">
           <Link
             to="/signup"
-            className="text-sm text-secondary hover:text-accent transition-colors"
+            className="text-sm text-base-content/60 hover:text-base-content transition-colors font-medium"
           >
-            Don&apos;t have an account? <span className="font-semibold underline">Sign up</span>
+            Don&apos;t have an account? <span className="text-primary hover:underline decoration-primary/50 underline-offset-4 ml-1">Create workspace</span>
           </Link>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
