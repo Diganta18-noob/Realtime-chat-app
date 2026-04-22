@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useConversation from "../../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
@@ -9,23 +9,11 @@ import { useSocketContext } from "../../context/SocketContext";
 import Avatar from "../Avatar";
 import toast from "react-hot-toast";
 import axiosInstance from "../../api/axiosInstance";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
 
 const MessageContainer = ({ resetUnreadCount }) => {
   const { selectedConversation, setSelectedConversation, setConversations } = useConversation();
   const { onlineUsers } = useSocketContext();
   const { authUser } = useAuthContext();
-
-  const [confirmDialog, setConfirmDialog] = useState({ open: false, type: null });
-  const [actionLoading, setActionLoading] = useState(false);
 
   const isOnline = selectedConversation
     ? !selectedConversation.isGroup && onlineUsers.includes(selectedConversation._id)
@@ -44,43 +32,71 @@ const MessageContainer = ({ resetUnreadCount }) => {
     }
   }, [selectedConversation?._id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleConfirmAction = async () => {
-    setActionLoading(true);
-    try {
-      if (confirmDialog.type === "leave") {
-        await axiosInstance.delete(`/messages/group/${selectedConversation._id}/leave`);
-        setConversations((prev) => prev.filter((c) => c._id !== selectedConversation._id));
-        toast.success("Left group successfully");
-      } else if (confirmDialog.type === "delete") {
-        await axiosInstance.delete(`/messages/group/${selectedConversation._id}`);
-        setConversations((prev) => prev.filter((c) => c._id !== selectedConversation._id));
-        toast.success("Group deleted successfully");
-      }
-      setSelectedConversation(null);
-    } catch (error) {
-      toast.error(error.response?.data?.error || `Failed to ${confirmDialog.type} group`);
-    } finally {
-      setActionLoading(false);
-      setConfirmDialog({ open: false, type: null });
-    }
+  const handleLeaveGroup = () => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Leave "{selectedConversation?.fullName}"?</p>
+        <p className="text-xs opacity-70">You won't see group messages anymore.</p>
+        <div className="flex gap-2 justify-end mt-1">
+          <button
+            className="btn btn-xs btn-ghost"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-xs btn-warning"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await axiosInstance.delete(`/messages/group/${selectedConversation._id}/leave`);
+                setConversations((prev) => prev.filter((c) => c._id !== selectedConversation._id));
+                toast.success("Left group successfully");
+                setSelectedConversation(null);
+              } catch (error) {
+                toast.error(error.response?.data?.error || "Failed to leave group");
+              }
+            }}
+          >
+            Leave
+          </button>
+        </div>
+      </div>
+    ), { duration: 10000 });
   };
 
-  const dialogConfig = {
-    leave: {
-      title: "Leave Group",
-      description: `Are you sure you want to leave "${selectedConversation?.fullName}"? You won't be able to see group messages anymore.`,
-      confirmText: "Leave Group",
-      confirmClass: "bg-warning hover:bg-warning/90 text-warning-content",
-    },
-    delete: {
-      title: "Delete Group",
-      description: `Are you sure you want to permanently delete "${selectedConversation?.fullName}"? This will remove all messages and members. This action cannot be undone.`,
-      confirmText: "Delete Group",
-      confirmClass: "bg-error hover:bg-error/90 text-white",
-    },
+  const handleDeleteGroup = () => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Delete "{selectedConversation?.fullName}"?</p>
+        <p className="text-xs opacity-70">All messages and members will be removed permanently.</p>
+        <div className="flex gap-2 justify-end mt-1">
+          <button
+            className="btn btn-xs btn-ghost"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-xs btn-error"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await axiosInstance.delete(`/messages/group/${selectedConversation._id}`);
+                setConversations((prev) => prev.filter((c) => c._id !== selectedConversation._id));
+                toast.success("Group deleted successfully");
+                setSelectedConversation(null);
+              } catch (error) {
+                toast.error(error.response?.data?.error || "Failed to delete group");
+              }
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ), { duration: 10000 });
   };
-
-  const currentDialog = dialogConfig[confirmDialog.type] || {};
 
   return (
     <div className="flex flex-col h-full">
@@ -126,14 +142,14 @@ const MessageContainer = ({ resetUnreadCount }) => {
               <div className="flex-none">
                 {isAdmin ? (
                   <button
-                    onClick={() => setConfirmDialog({ open: true, type: "delete" })}
+                    onClick={handleDeleteGroup}
                     className="btn btn-error btn-sm rounded-full bg-error/10 text-error border-none hover:bg-error hover:text-white transition-colors uppercase text-xs font-bold tracking-wide"
                   >
                     Delete Group
                   </button>
                 ) : (
                   <button
-                    onClick={() => setConfirmDialog({ open: true, type: "leave" })}
+                    onClick={handleLeaveGroup}
                     className="btn btn-warning btn-sm rounded-full bg-warning/10 text-warning border-none hover:bg-warning hover:text-white transition-colors uppercase text-xs font-bold tracking-wide"
                   >
                     Leave Group
@@ -148,36 +164,6 @@ const MessageContainer = ({ resetUnreadCount }) => {
 
           {/* Input */}
           <MessageInput />
-
-          {/* Confirmation Dialog */}
-          <Dialog open={confirmDialog.open} onOpenChange={(open) => !actionLoading && setConfirmDialog({ open, type: open ? confirmDialog.type : null })}>
-            <DialogContent showCloseButton={!actionLoading}>
-              <DialogHeader>
-                <DialogTitle>{currentDialog.title}</DialogTitle>
-                <DialogDescription>{currentDialog.description}</DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setConfirmDialog({ open: false, type: null })}
-                  disabled={actionLoading}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className={currentDialog.confirmClass}
-                  onClick={handleConfirmAction}
-                  disabled={actionLoading}
-                >
-                  {actionLoading ? (
-                    <span className="loading loading-spinner loading-xs"></span>
-                  ) : (
-                    currentDialog.confirmText
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </>
       )}
     </div>
