@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import { loginLimiter, signupLimiter } from "../middleware/rateLimiters.js";
-import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword, resetPasswordByUsername } from "../controllers/auth.controller.js";
+import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword, resetPasswordByUsername, googleAuth } from "../controllers/auth.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 import { body, param } from "express-validator";
 import { validateRequest } from "../middleware/validate.js";
@@ -94,6 +94,15 @@ router.post(
     validateRequest
   ],
   resetPasswordByUsername
+);
+
+router.post(
+  "/google",
+  [
+    body("token").trim().notEmpty().withMessage("Google token is required"),
+    validateRequest
+  ],
+  googleAuth
 );
 
 export default router;

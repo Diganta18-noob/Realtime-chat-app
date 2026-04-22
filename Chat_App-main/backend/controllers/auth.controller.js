@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 import { supabase } from "../config/supabase.js";
 import generateTokens from "../utils/generateToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
@@ -293,7 +294,10 @@ export const forgotPassword = async (req, res) => {
     await sendEmail({
       email: user.email,
       subject: "Password Reset Request",
-      message: `<p>You requested a password reset. Click the link below to set a new password:</p><a href="${resetUrl}">${resetUrl}</a><p>This link is valid for 1 hour.</p>`,
+      message: `<p>You requested a password reset. Click the link below to set a new password:</p>
+                <a href="${resetUrl}">${resetUrl}</a>
+                <p>If the link doesn't work, copy and paste this URL into your browser: <br/>${resetUrl}</p>
+                <p>This link is valid for 1 hour.</p>`,
     });
 
     res.status(200).json({ message: "If an account with that email exists, we sent a password reset link." });
@@ -365,6 +369,122 @@ export const resetPasswordByUsername = async (req, res) => {
     res.status(200).json({ message: "Password force reset successfully. You can now log in." });
   } catch (error) {
     logger.error("Error in resetPasswordByUsername controller", { error: error.message });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const googleAuth = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ error: "Google token is required" });
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      logger.error("GOOGLE_CLIENT_ID not set in environment variables");
+      return res.status(500).json({ error: "Google authentication is not configured" });
+    }
+
+    const client = new OAuth2Client(clientId);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: clientId,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture, sub: googleId } = payload;
+
+    if (!email) {
+      return res.status(400).json({ error: "Google account must have an email" });
+    }
+
+    // Check if user already exists with this email
+    let { data: existingUser } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
+
+    let user;
+
+    if (existingUser) {
+      // Existing user — log them in
+      user = existingUser;
+    } else {
+      // New user — auto-register
+      const usernameBase = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
+      let username = usernameBase;
+      let suffix = 1;
+
+      // Ensure unique username
+      while (true) {
+        const { data: taken } = await supabase
+          .from('users')
+          .select('id')
+          .ilike('username', username)
+          .maybeSingle();
+        if (!taken) break;
+        username = `${usernameBase}${suffix}`;
+        suffix++;
+      }
+
+      // Generate a random password (user won't need it — they'll use Google)
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert([{
+          full_name: name || username,
+          username,
+          email,
+          password: hashedPassword,
+          gender: "male",
+          profile_pic: picture || `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${encodeURIComponent(username)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
+          is_email_verified: true,
+          google_id: googleId,
+        }])
+        .select()
+        .single();
+
+      if (insertError) {
+        logger.error("Error creating Google OAuth user", { error: insertError.message });
+        return res.status(500).json({ error: "Failed to create account" });
+      }
+
+      user = newUser;
+    }
+
+    // Generate tokens
+    const accessToken = generateTokens(user.id, user.role || "user", res);
+
+    // Audit log
+    await supabase.from('audit_logs').insert([{
+      user_id: user.id,
+      action: "LOGIN",
+      ip_address: req.ip,
+      user_agent: req.headers["user-agent"],
+      details: "Google OAuth login",
+    }]);
+
+    res.status(200).json({
+      _id: user.id,
+      fullName: user.full_name,
+      username: user.username,
+      email: user.email,
+      profilePic: user.profile_pic,
+      role: user.role || "user",
+      isBanned: user.is_banned || false,
+      isEmailVerified: user.is_email_verified || true,
+      accessToken,
+    });
+  } catch (error) {
+    logger.error("Error in googleAuth controller", { error: error.message });
+    if (error.message?.includes("Token used too late") || error.message?.includes("Invalid token")) {
+      return res.status(401).json({ error: "Invalid or expired Google token" });
+    }
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

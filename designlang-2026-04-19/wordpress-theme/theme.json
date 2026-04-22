@@ -1,0 +1,216 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "action-primary",
+          "color": "#101214",
+          "name": "Action Primary"
+        },
+        {
+          "slug": "action-secondary",
+          "color": "#e6dfe4",
+          "name": "Action Secondary"
+        },
+        {
+          "slug": "surface-default",
+          "color": "#101214",
+          "name": "Surface Default"
+        },
+        {
+          "slug": "text-body",
+          "color": "#ffffff",
+          "name": "Text Body"
+        }
+      ]
+    },
+    "typography": {
+      "fontSizes": [
+        {
+          "slug": "h1",
+          "size": "225.28px",
+          "name": "h1"
+        },
+        {
+          "slug": "span",
+          "size": "112.205px",
+          "name": "span"
+        },
+        {
+          "slug": "h2",
+          "size": "84.1745px",
+          "name": "h2"
+        },
+        {
+          "slug": "div",
+          "size": "63.1467px",
+          "name": "div"
+        },
+        {
+          "slug": "span",
+          "size": "47.3719px",
+          "name": "span"
+        },
+        {
+          "slug": "span",
+          "size": "35.5378px",
+          "name": "span"
+        },
+        {
+          "slug": "div",
+          "size": "26.66px",
+          "name": "div"
+        },
+        {
+          "slug": "html",
+          "size": "20px",
+          "name": "html"
+        },
+        {
+          "slug": "div",
+          "size": "17.92px",
+          "name": "div"
+        },
+        {
+          "slug": "span",
+          "size": "15.0038px",
+          "name": "span"
+        },
+        {
+          "slug": "div",
+          "size": "14px",
+          "name": "div"
+        },
+        {
+          "slug": "div",
+          "size": "11.2556px",
+          "name": "div"
+        }
+      ],
+      "fontFamilies": [
+        {
+          "slug": "khteka",
+          "fontFamily": "KHTeka, sans-serif",
+          "name": "KHTeka"
+        },
+        {
+          "slug": "khtekamono",
+          "fontFamily": "KHTekaMono, sans-serif",
+          "name": "KHTekaMono"
+        },
+        {
+          "slug": "manrope",
+          "fontFamily": "Manrope, sans-serif",
+          "name": "Manrope"
+        }
+      ]
+    },
+    "spacing": {
+      "spacingSizes": [
+        {
+          "slug": "s0",
+          "size": "0px",
+          "name": "S0"
+        },
+        {
+          "slug": "s1",
+          "size": "7px",
+          "name": "S1"
+        },
+        {
+          "slug": "s2",
+          "size": "20px",
+          "name": "S2"
+        },
+        {
+          "slug": "s3",
+          "size": "27px",
+          "name": "S3"
+        },
+        {
+          "slug": "s4",
+          "size": "32px",
+          "name": "S4"
+        },
+        {
+          "slug": "s5",
+          "size": "36px",
+          "name": "S5"
+        },
+        {
+          "slug": "s6",
+          "size": "42px",
+          "name": "S6"
+        },
+        {
+          "slug": "s7",
+          "size": "45px",
+          "name": "S7"
+        },
+        {
+          "slug": "s8",
+          "size": "52px",
+          "name": "S8"
+        },
+        {
+          "slug": "s9",
+          "size": "61px",
+          "name": "S9"
+        },
+        {
+          "slug": "s10",
+          "size": "85px",
+          "name": "S10"
+        },
+        {
+          "slug": "s11",
+          "size": "99px",
+          "name": "S11"
+        },
+        {
+          "slug": "s12",
+          "size": "112px",
+          "name": "S12"
+        },
+        {
+          "slug": "s13",
+          "size": "120px",
+          "name": "S13"
+        },
+        {
+          "slug": "s14",
+          "size": "150px",
+          "name": "S14"
+        },
+        {
+          "slug": "s15",
+          "size": "154px",
+          "name": "S15"
+        },
+        {
+          "slug": "s16",
+          "size": "195px",
+          "name": "S16"
+        },
+        {
+          "slug": "s17",
+          "size": "225px",
+          "name": "S17"
+        },
+        {
+          "slug": "s18",
+          "size": "256px",
+          "name": "S18"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--wp--preset--color--surface-default, #101214)",
+      "text": "var(--wp--preset--color--text-body, #ffffff)"
+    }
+  }
+}

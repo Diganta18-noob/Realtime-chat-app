@@ -1,0 +1,35 @@
+/*
+Theme Name: designlang extracted theme
+Theme URI: https://github.com/Manavarya09/design-extract
+Description: Block theme generated from https://string-tune.fiddle.digital/ by designlang v7.0.0
+Version: 1.0.0
+Author: designlang
+License: MIT
+Text Domain: designlang-theme
+*/
+
+:root {
+  --action-primary: #101214;
+  --action-secondary: #e6dfe4;
+  --surface-default: #101214;
+  --text-body: #ffffff;
+  --spacing-s0: 0px;
+  --spacing-s1: 7px;
+  --spacing-s2: 20px;
+  --spacing-s3: 27px;
+  --spacing-s4: 32px;
+  --spacing-s5: 36px;
+  --spacing-s6: 42px;
+  --spacing-s7: 45px;
+  --spacing-s8: 52px;
+  --spacing-s9: 61px;
+  --spacing-s10: 85px;
+  --spacing-s11: 99px;
+  --spacing-s12: 112px;
+  --spacing-s13: 120px;
+  --spacing-s14: 150px;
+  --spacing-s15: 154px;
+  --spacing-s16: 195px;
+  --spacing-s17: 225px;
+  --spacing-s18: 256px;
+}

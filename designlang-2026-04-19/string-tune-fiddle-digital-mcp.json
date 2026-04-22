@@ -1,0 +1,810 @@
+{
+  "colors": {
+    "all": [
+      {
+        "hex": "#101214",
+        "rgb": {
+          "r": 16,
+          "g": 18,
+          "b": 20,
+          "a": 1
+        },
+        "hsl": {
+          "h": 210,
+          "s": 11,
+          "l": 7
+        },
+        "count": 856,
+        "contexts": [
+          "background",
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#ffffff",
+        "rgb": {
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 1
+        },
+        "hsl": {
+          "h": 0,
+          "s": 0,
+          "l": 100
+        },
+        "count": 529,
+        "contexts": [
+          "text",
+          "border",
+          "background"
+        ]
+      },
+      {
+        "hex": "#544d56",
+        "rgb": {
+          "r": 84,
+          "g": 77,
+          "b": 86,
+          "a": 1
+        },
+        "hsl": {
+          "h": 287,
+          "s": 6,
+          "l": 32
+        },
+        "count": 121,
+        "contexts": [
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#e6dfe4",
+        "rgb": {
+          "r": 230,
+          "g": 223,
+          "b": 228,
+          "a": 1
+        },
+        "hsl": {
+          "h": 317,
+          "s": 12,
+          "l": 89
+        },
+        "count": 43,
+        "contexts": [
+          "text",
+          "border",
+          "background"
+        ]
+      },
+      {
+        "hex": "#a399a8",
+        "rgb": {
+          "r": 163,
+          "g": 153,
+          "b": 168,
+          "a": 1
+        },
+        "hsl": {
+          "h": 280,
+          "s": 8,
+          "l": 63
+        },
+        "count": 30,
+        "contexts": [
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#a7a7b4",
+        "rgb": {
+          "r": 167,
+          "g": 167,
+          "b": 180,
+          "a": 0.082
+        },
+        "hsl": {
+          "h": 240,
+          "s": 8,
+          "l": 68
+        },
+        "count": 14,
+        "contexts": [
+          "background"
+        ]
+      },
+      {
+        "hex": "#787878",
+        "rgb": {
+          "r": 120,
+          "g": 120,
+          "b": 120,
+          "a": 0.25
+        },
+        "hsl": {
+          "h": 0,
+          "s": 0,
+          "l": 47
+        },
+        "count": 14,
+        "contexts": [
+          "background"
+        ]
+      },
+      {
+        "hex": "#ff4f36",
+        "rgb": {
+          "r": 255,
+          "g": 79,
+          "b": 54,
+          "a": 1
+        },
+        "hsl": {
+          "h": 7,
+          "s": 100,
+          "l": 61
+        },
+        "count": 10,
+        "contexts": [
+          "background",
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#c8c2cf",
+        "rgb": {
+          "r": 200,
+          "g": 194,
+          "b": 207,
+          "a": 1
+        },
+        "hsl": {
+          "h": 268,
+          "s": 12,
+          "l": 79
+        },
+        "count": 8,
+        "contexts": [
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#596375",
+        "rgb": {
+          "r": 89,
+          "g": 99,
+          "b": 117,
+          "a": 1
+        },
+        "hsl": {
+          "h": 219,
+          "s": 14,
+          "l": 40
+        },
+        "count": 6,
+        "contexts": [
+          "text",
+          "border"
+        ]
+      },
+      {
+        "hex": "#dad3dc",
+        "rgb": {
+          "r": 218,
+          "g": 211,
+          "b": 220,
+          "a": 1
+        },
+        "hsl": {
+          "h": 287,
+          "s": 11,
+          "l": 85
+        },
+        "count": 2,
+        "contexts": [
+          "background"
+        ]
+      }
+    ]
+  },
+  "regions": [
+    {
+      "role": "content",
+      "tag": "main",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 36061.625
+      },
+      "heading": "Master\nYour\nSkills\nBuilt by\nFiddle.Digital",
+      "buttonCount": 6,
+      "cardCount": 14,
+      "className": "page home-page"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 901.875
+      },
+      "heading": "Master\nYour\nSkills\nBuilt by\nFiddle.Digital",
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-welcome -inview"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 901.875,
+        "w": 1280,
+        "h": 6400
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-transition"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 7301.875,
+        "w": 1280,
+        "h": 9600
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-storm"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 16501.875,
+        "w": 1280,
+        "h": 4328
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-tree -light"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 20829.875,
+        "w": 1280,
+        "h": 2548.125
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-techniques -light"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 23527.5625,
+        "w": 1280,
+        "h": 726.3125
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 11,
+      "className": "c-masonry -light"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 24366.078125,
+        "w": 1280,
+        "h": 1604.109375
+      },
+      "heading": null,
+      "buttonCount": 1,
+      "cardCount": 3,
+      "className": "c-for -light"
+    },
+    {
+      "role": "content",
+      "tag": "section",
+      "bounds": {
+        "x": 0,
+        "y": 26082.390625,
+        "w": 1280,
+        "h": 9000
+      },
+      "heading": null,
+      "buttonCount": 0,
+      "cardCount": 0,
+      "className": "c-clarity -light"
+    },
+    {
+      "role": "footer",
+      "tag": "footer",
+      "bounds": {
+        "x": 0,
+        "y": 34082.390625,
+        "w": 1280,
+        "h": 1979.234375
+      },
+      "heading": null,
+      "buttonCount": 3,
+      "cardCount": 0,
+      "className": "-dark -home"
+    },
+    {
+      "role": "nav",
+      "tag": "nav",
+      "bounds": {
+        "x": 469.140625,
+        "y": 35101.515625,
+        "w": 341.703125,
+        "h": 32
+      },
+      "heading": null,
+      "buttonCount": 3,
+      "cardCount": 0,
+      "className": null
+    },
+    {
+      "role": "nav",
+      "tag": "header",
+      "bounds": {
+        "x": 0,
+        "y": -99.140625,
+        "w": 1280,
+        "h": 99.140625
+      },
+      "heading": null,
+      "buttonCount": 2,
+      "cardCount": 0,
+      "className": "-fdda"
+    },
+    {
+      "role": "nav",
+      "tag": "nav",
+      "bounds": {
+        "x": 731.421875,
+        "y": -36,
+        "w": 341.71875,
+        "h": 36
+      },
+      "heading": null,
+      "buttonCount": 2,
+      "cardCount": 0,
+      "className": "info"
+    }
+  ],
+  "componentClusters": [
+    {
+      "kind": "button",
+      "structuralHash": "button>span>span",
+      "instanceCount": 3,
+      "variants": [
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "padding": "4px 15.0038px 4px 15.0038px",
+            "borderRadius": "40px",
+            "border": "0px none rgb(255, 255, 255)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 3
+        }
+      ]
+    },
+    {
+      "kind": "card",
+      "structuralHash": "div>span>p",
+      "instanceCount": 3,
+      "variants": [
+        {
+          "css": {
+            "background": "rgb(255, 255, 255)",
+            "color": "rgb(16, 18, 20)",
+            "padding": "16px 24px 32px 24px",
+            "borderRadius": "20px",
+            "border": "0px none rgb(16, 18, 20)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 3
+        }
+      ]
+    },
+    {
+      "kind": "button",
+      "structuralHash": "a>span>span",
+      "instanceCount": 5,
+      "variants": [
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(16, 18, 20)",
+            "padding": "4px 26.66px 4px 26.66px",
+            "borderRadius": "40px",
+            "border": "0px none rgb(16, 18, 20)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 3
+        },
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "padding": "4px 26.66px 4px 26.66px",
+            "borderRadius": "40px",
+            "border": "0px none rgb(255, 255, 255)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 2
+        }
+      ]
+    },
+    {
+      "kind": "button",
+      "structuralHash": "a>span>svg",
+      "instanceCount": 1,
+      "variants": [
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "padding": "4px 16px 4px 16px",
+            "borderRadius": "40px",
+            "border": "0px none rgb(255, 255, 255)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 1
+        }
+      ]
+    },
+    {
+      "kind": "button",
+      "structuralHash": "a>span>svg>svg>svg",
+      "instanceCount": 1,
+      "variants": [
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "padding": "4px 16px 4px 16px",
+            "borderRadius": "40px",
+            "border": "0px none rgb(255, 255, 255)",
+            "fontSize": "20px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 1
+        }
+      ]
+    },
+    {
+      "kind": "button",
+      "structuralHash": "button",
+      "instanceCount": 3,
+      "variants": [
+        {
+          "css": {
+            "background": "rgba(0, 0, 0, 0)",
+            "color": "rgb(16, 18, 20)",
+            "padding": "0px 0px 0px 0px",
+            "borderRadius": "0px",
+            "border": "0px none rgb(16, 18, 20)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 1
+        },
+        {
+          "css": {
+            "background": "rgb(222, 212, 230)",
+            "color": "rgb(16, 18, 20)",
+            "padding": "12px 36px 12px 36px",
+            "borderRadius": "15.0038px",
+            "border": "0px none rgb(16, 18, 20)",
+            "fontSize": "14px",
+            "fontWeight": "400"
+          },
+          "instanceCount": 2
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "remediation": [
+      {
+        "fg": "#ffffff",
+        "bg": "#a7a7b4",
+        "ratio": 2.38,
+        "rule": "AA-large",
+        "suggestion": {
+          "replace": "fg",
+          "color": "#101214",
+          "newRatio": 7.89
+        }
+      },
+      {
+        "fg": "#ffffff",
+        "bg": "#e6dfe4",
+        "ratio": 1.31,
+        "rule": "AA-large",
+        "suggestion": {
+          "replace": "fg",
+          "color": "#101214",
+          "newRatio": 14.34
+        }
+      }
+    ]
+  },
+  "cssHealth": {
+    "sheets": [
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/GridRow.4f926f95.css",
+        "totalBytes": 8321,
+        "usedBytes": 5180,
+        "unusedBytes": 3141,
+        "unusedPercent": 38
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 954,
+        "usedBytes": 954,
+        "unusedBytes": 0,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 34472,
+        "usedBytes": 12367,
+        "unusedBytes": 22105,
+        "unusedPercent": 64
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 6266,
+        "usedBytes": 5702,
+        "unusedBytes": 564,
+        "unusedPercent": 9
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 1705,
+        "usedBytes": 85,
+        "unusedBytes": 1620,
+        "unusedPercent": 95
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 1691,
+        "usedBytes": 1563,
+        "unusedBytes": 128,
+        "unusedPercent": 8
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 1353,
+        "usedBytes": 847,
+        "unusedBytes": 506,
+        "unusedPercent": 37
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 13576,
+        "usedBytes": 0,
+        "unusedBytes": 13576,
+        "unusedPercent": 100
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 6802,
+        "usedBytes": 6534,
+        "unusedBytes": 268,
+        "unusedPercent": 4
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 4884,
+        "usedBytes": 3878,
+        "unusedBytes": 1006,
+        "unusedPercent": 21
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 838,
+        "usedBytes": 0,
+        "unusedBytes": 838,
+        "unusedPercent": 100
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 4319,
+        "usedBytes": 4311,
+        "unusedBytes": 8,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 15087,
+        "usedBytes": 12420,
+        "unusedBytes": 2667,
+        "unusedPercent": 18
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 1444,
+        "usedBytes": 1326,
+        "unusedBytes": 118,
+        "unusedPercent": 8
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 118,
+        "usedBytes": 0,
+        "unusedBytes": 118,
+        "unusedPercent": 100
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 4514,
+        "usedBytes": 3403,
+        "unusedBytes": 1111,
+        "unusedPercent": 25
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 203,
+        "usedBytes": 203,
+        "unusedBytes": 0,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/BaseImage.9a0fcbb2.css",
+        "totalBytes": 567,
+        "usedBytes": 566,
+        "unusedBytes": 1,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 611,
+        "usedBytes": 438,
+        "unusedBytes": 173,
+        "unusedPercent": 28
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/CharAvatar.559e0020.css",
+        "totalBytes": 1815,
+        "usedBytes": 0,
+        "unusedBytes": 1815,
+        "unusedPercent": 100
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 782,
+        "usedBytes": 774,
+        "unusedBytes": 8,
+        "unusedPercent": 1
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/MainFooter.a573e45e.css",
+        "totalBytes": 9667,
+        "usedBytes": 8949,
+        "unusedBytes": 718,
+        "unusedPercent": 7
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 114,
+        "usedBytes": 114,
+        "unusedBytes": 0,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 8810,
+        "usedBytes": 8785,
+        "unusedBytes": 25,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 335,
+        "usedBytes": 335,
+        "unusedBytes": 0,
+        "unusedPercent": 0
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 6808,
+        "usedBytes": 4534,
+        "unusedBytes": 2274,
+        "unusedPercent": 33
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 11016,
+        "usedBytes": 1965,
+        "unusedBytes": 9051,
+        "unusedPercent": 82
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/",
+        "totalBytes": 2506,
+        "usedBytes": 2386,
+        "unusedBytes": 120,
+        "unusedPercent": 5
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/index.e7e17433.css",
+        "totalBytes": 71213,
+        "usedBytes": 54053,
+        "unusedBytes": 17160,
+        "unusedPercent": 24
+      },
+      {
+        "url": "https://string-tune.fiddle.digital/_nuxt/default.70ced2fb.css",
+        "totalBytes": 57903,
+        "usedBytes": 18844,
+        "unusedBytes": 39059,
+        "unusedPercent": 67
+      }
+    ],
+    "totalBytes": 278694,
+    "usedBytes": 160516,
+    "unusedBytes": 118178,
+    "unusedPercent": 42,
+    "importantCount": 34,
+    "duplicates": 3228,
+    "vendorPrefixes": {
+      "webkit": 140,
+      "moz": 28,
+      "ms": 2,
+      "o": 2
+    },
+    "keyframes": [],
+    "specificity": {
+      "max": [
+        1,
+        8,
+        3
+      ],
+      "average": [
+        0,
+        3.35,
+        0.46
+      ],
+      "count": 2234
+    },
+    "issues": [
+      "34 !important rules",
+      "3228 duplicate declarations"
+    ]
+  }
+}

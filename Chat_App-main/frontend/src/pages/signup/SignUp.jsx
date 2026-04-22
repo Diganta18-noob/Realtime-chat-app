@@ -1,10 +1,14 @@
 import GenderCheckbox from "./GenderCheckbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
 import useAvailabilityCheck from "../../hooks/useAvailabilityCheck";
 import { User, Lock, UserPlus, Mail, Eye, EyeOff, CheckCircle2, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { GoogleLogin } from "@react-oauth/google";
+import axiosInstance from "../../api/axiosInstance";
+import { useAuthContext } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 const StatusIndicator = ({ status }) => {
   if (status === "idle") return null;
@@ -42,6 +46,8 @@ const SignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { loading, signup } = useSignup();
+  const { setAuthUser } = useAuthContext();
+  const navigate = useNavigate();
 
   // Real-time duplicate check for username
   const { status: usernameStatus, message: usernameMessage } = useAvailabilityCheck(inputs.username, "/auth/check-username");
@@ -53,6 +59,20 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(inputs);
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axiosInstance.post("/auth/google", {
+        token: credentialResponse.credential,
+      });
+      localStorage.setItem("chat-user", JSON.stringify(res.data));
+      setAuthUser(res.data);
+      toast.success("Signed in with Google!");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Google sign-in failed");
+    }
   };
 
   const isSubmitDisabled = 
@@ -233,7 +253,27 @@ const SignUp = () => {
           </motion.div>
         </motion.form>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-center mt-6 pt-4 border-t border-white/10">
+        {/* Google OAuth Divider */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }} className="flex items-center gap-3 mt-5">
+          <div className="flex-1 border-t border-white/10"></div>
+          <span className="text-xs text-base-content/40 font-medium uppercase tracking-wider">or</span>
+          <div className="flex-1 border-t border-white/10"></div>
+        </motion.div>
+
+        {/* Google Login Button */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="mt-4 flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error("Google sign-in failed")}
+            theme="filled_black"
+            size="large"
+            width="100%"
+            text="continue_with"
+            shape="pill"
+          />
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }} className="text-center mt-6 pt-4 border-t border-white/10">
           <Link
             to="/login"
             className="text-sm text-base-content/60 hover:text-base-content transition-colors font-medium"

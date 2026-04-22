@@ -1,0 +1,37 @@
+---
+description: Design system extracted from https://string-tune.fiddle.digital/ — use these tokens, do not invent new ones.
+globs: **/*.{ts,tsx,jsx,js,css,scss,html,vue,svelte,swift,kt,dart,php}
+alwaysApply: true
+---
+
+# Design system reference
+Source: https://string-tune.fiddle.digital/
+Extracted by designlang v7.0.0 on 2026-04-19T17:41:34.732Z
+
+## Semantic tokens (use these)
+- color.action.primary: #101214
+- color.surface.default: #101214
+- color.text.body: #ffffff
+- radius.control: 8px
+- typography.body.fontFamily: KHTeka
+
+## Regions
+- content
+- content
+- content
+- content
+- content
+- content
+- content
+- content
+- content
+- footer
+- nav
+- nav
+- nav
+
+## How to use
+- Prefer `semantic.*` tokens over `primitive.*`.
+- Never invent new tokens or hex values; reuse the ones above.
+- When a value is missing, pick the closest existing semantic token and flag the gap.
+- Reference tokens by their dotted path (e.g. `semantic.color.action.primary`).

@@ -164,11 +164,6 @@ const ProfileDrawer = ({ isOpen, onClose }) => {
                   {/* Info Cards */}
                   <div className="w-full space-y-3 mt-2">
                     <InfoRow
-                      icon={<User className="w-4 h-4" />}
-                      label="Full Name"
-                      value={profile.fullName}
-                    />
-                    <InfoRow
                       icon={<Mail className="w-4 h-4" />}
                       label="Email"
                       value={profile.email || "Not set"}
