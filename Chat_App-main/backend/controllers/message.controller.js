@@ -215,6 +215,8 @@ export const getMessage = async (req, res) => {
       conversationId: m.conversation_id,
       message: m.message,
       status: m.status,
+      isEdited: m.is_edited || false,
+      isSystemMessage: !m.sender_id,
       createdAt: m.created_at,
       updatedAt: m.updated_at
     }));
@@ -285,6 +287,49 @@ export const leaveGroup = async (req, res) => {
 
     if (leaveError) throw leaveError;
 
+    // Fetch the leaving user's name for the system message
+    const { data: leavingUser } = await supabase
+      .from('users')
+      .select('full_name, username')
+      .eq('id', userId)
+      .single();
+
+    const displayName = leavingUser?.full_name || leavingUser?.username || "A user";
+
+    // Insert a system message into the group conversation
+    const { data: systemMsg } = await supabase.from('messages').insert({
+      sender_id: null,
+      receiver_id: null,
+      conversation_id: groupId,
+      message: `${displayName} left the group`,
+      status: "sent"
+    }).select().single();
+
+    if (systemMsg) {
+      // Get remaining participants and broadcast the system message
+      const { data: remainingParts } = await supabase
+        .from('conversation_participants')
+        .select('user_id')
+        .eq('conversation_id', groupId);
+
+      const mappedSystemMsg = {
+        _id: systemMsg.id,
+        senderId: null,
+        receiverId: null,
+        conversationId: systemMsg.conversation_id,
+        message: systemMsg.message,
+        status: systemMsg.status,
+        createdAt: systemMsg.created_at,
+        updatedAt: systemMsg.updated_at,
+        isSystemMessage: true,
+      };
+
+      (remainingParts || []).forEach((p) => {
+        const socketId = getReceiverSocketId(p.user_id);
+        if (socketId) io.to(socketId).emit("newMessage", mappedSystemMsg);
+      });
+    }
+
     res.status(200).json({ message: "Left group successfully" });
   } catch (error) {
     logger.error("Error in leaveGroup:", { error: error.message });
@@ -321,6 +366,85 @@ export const deleteGroup = async (req, res) => {
     res.status(200).json({ message: "Group deleted successfully" });
   } catch (error) {
     logger.error("Error in deleteGroup:", { error: error.message });
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const editMessage = async (req, res) => {
+  try {
+    const { id: messageId } = req.params;
+    const { message: newText } = req.body;
+    const userId = req.user.id || req.user._id;
+
+    if (!newText || !newText.trim()) {
+      return res.status(400).json({ error: "Message cannot be empty" });
+    }
+
+    // Fetch the original message
+    const { data: originalMsg, error: fetchError } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('id', messageId)
+      .single();
+
+    if (fetchError || !originalMsg) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    // Verify ownership
+    if (originalMsg.sender_id !== userId) {
+      return res.status(403).json({ error: "You can only edit your own messages" });
+    }
+
+    // Update the message
+    const { data: updatedMsg, error: updateError } = await supabase
+      .from('messages')
+      .update({ message: newText.trim(), is_edited: true })
+      .eq('id', messageId)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+
+    const mappedMessage = {
+      _id: updatedMsg.id,
+      senderId: updatedMsg.sender_id,
+      receiverId: updatedMsg.receiver_id,
+      conversationId: updatedMsg.conversation_id,
+      message: updatedMsg.message,
+      status: updatedMsg.status,
+      isEdited: updatedMsg.is_edited,
+      createdAt: updatedMsg.created_at,
+      updatedAt: updatedMsg.updated_at,
+    };
+
+    // Determine participants to notify
+    const { data: conv } = await supabase
+      .from('conversations')
+      .select('id, is_group')
+      .eq('id', originalMsg.conversation_id)
+      .single();
+
+    if (conv?.is_group) {
+      const { data: parts } = await supabase
+        .from('conversation_participants')
+        .select('user_id')
+        .eq('conversation_id', conv.id);
+
+      (parts || []).forEach((p) => {
+        if (p.user_id !== userId) {
+          const socketId = getReceiverSocketId(p.user_id);
+          if (socketId) io.to(socketId).emit("messageEdited", mappedMessage);
+        }
+      });
+    } else if (originalMsg.receiver_id) {
+      const receiverSocketId = getReceiverSocketId(originalMsg.receiver_id);
+      if (receiverSocketId) io.to(receiverSocketId).emit("messageEdited", mappedMessage);
+    }
+
+    res.status(200).json(mappedMessage);
+  } catch (error) {
+    logger.error("Error in editMessage:", { error: error.message });
     res.status(500).json({ error: "Internal server error" });
   }
 };

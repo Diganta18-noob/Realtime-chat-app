@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axiosInstance from "../api/axiosInstance";
 import { useSocketContext } from "../context/SocketContext";
+import useConversation from "../zustand/useConversation";
 
 const useGetConversations = () => {
   const [loading, setLoading] = useState(false);
-  const [conversations, setConversations] = useState([]);
+  const { conversations, setConversations } = useConversation();
   const { socket } = useSocketContext();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const useGetConversations = () => {
     };
 
     getConversations();
-  }, []);
+  }, [setConversations]);
 
   // Listen for newly created groups
   useEffect(() => {
@@ -42,8 +43,15 @@ const useGetConversations = () => {
       setConversations((prev) => [formattedGroup, ...prev]);
     });
 
-    return () => socket.off("newGroupCreated");
-  }, [socket]);
+    socket.on("groupDeleted", (groupId) => {
+      setConversations((prev) => prev.filter((c) => c._id !== groupId));
+    });
+
+    return () => {
+      socket.off("newGroupCreated");
+      socket.off("groupDeleted");
+    };
+  }, [socket, setConversations]);
 
   return { loading, conversations };
 };

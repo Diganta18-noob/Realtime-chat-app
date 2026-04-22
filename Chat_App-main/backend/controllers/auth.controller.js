@@ -72,12 +72,17 @@ export const signup = async (req, res) => {
     }]);
 
     if (email) {
-      const verifyUrl = `${process.env.CLIENT_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
-      await sendEmail({
-        email,
-        subject: "Verify Your Email",
-        message: `<p>Please click the following link to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
-      });
+      try {
+        const verifyUrl = `${process.env.CLIENT_URL || "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+        await sendEmail({
+          email,
+          subject: "Verify Your Email",
+          message: `<p>Please click the following link to verify your email:</p><a href="${verifyUrl}">${verifyUrl}</a>`,
+        });
+      } catch (emailError) {
+        // Email failure should NOT block signup — user is already created
+        logger.error("Failed to send verification email during signup", { error: emailError.message, userId: newUser.id });
+      }
     }
 
     res.status(201).json({

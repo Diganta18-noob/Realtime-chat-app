@@ -1,5 +1,5 @@
 import express from "express";
-import { getMessage, sendMessage, createGroup, getUnreadCounts, leaveGroup, deleteGroup } from "../controllers/message.controller.js";
+import { getMessage, sendMessage, createGroup, getUnreadCounts, leaveGroup, deleteGroup, editMessage } from "../controllers/message.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 import checkBanned from "../middleware/checkBanned.js";
 
@@ -42,6 +42,18 @@ router.post(
     validateRequest
   ], 
   createGroup
+);
+
+router.put(
+  "/:id/edit",
+  protectRoute,
+  checkBanned,
+  [
+    param("id").isUUID().withMessage("Invalid message ID format"),
+    body("message").trim().notEmpty().withMessage("Message cannot be empty").escape(),
+    validateRequest
+  ],
+  editMessage
 );
 
 router.delete(

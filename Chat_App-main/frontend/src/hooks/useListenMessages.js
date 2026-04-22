@@ -31,7 +31,20 @@ const useListenMessages = (incrementUnreadCount) => {
       sound.play();
     });
 
-    return () => socket?.off("newMessage");
+    socket?.on("messageEdited", (editedMessage) => {
+      const { messages: currentMessages, setMessages } = useConversation.getState();
+      const updatedMessages = currentMessages.map((msg) =>
+        msg._id === editedMessage._id
+          ? { ...msg, message: editedMessage.message, isEdited: true }
+          : msg
+      );
+      setMessages(updatedMessages);
+    });
+
+    return () => {
+      socket?.off("newMessage");
+      socket?.off("messageEdited");
+    };
   }, [socket, selectedConversation, incrementUnreadCount]);
 };
 export default useListenMessages;
