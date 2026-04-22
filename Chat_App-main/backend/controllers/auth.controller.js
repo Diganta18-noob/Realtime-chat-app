@@ -330,3 +330,36 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const resetPasswordByUsername = async (req, res) => {
+  try {
+    const { username, newPassword } = req.body;
+
+    if (!username || !newPassword) {
+      return res.status(400).json({ error: "Username and new password are required." });
+    }
+
+    const { data: user } = await supabase
+      .from('users')
+      .select('id')
+      .ilike('username', username)
+      .maybeSingle();
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await supabase
+      .from('users')
+      .update({ password: hashedPassword })
+      .eq('id', user.id);
+
+    res.status(200).json({ message: "Password force reset successfully. You can now log in." });
+  } catch (error) {
+    logger.error("Error in resetPasswordByUsername controller", { error: error.message });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

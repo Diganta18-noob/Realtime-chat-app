@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import { loginLimiter, signupLimiter } from "../middleware/rateLimiters.js";
-import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword } from "../controllers/auth.controller.js";
+import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword, resetPasswordByUsername } from "../controllers/auth.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 import { body, param } from "express-validator";
 import { validateRequest } from "../middleware/validate.js";
@@ -83,6 +83,17 @@ router.post(
     validateRequest
   ],
   resetPassword
+);
+
+router.post(
+  "/reset-password-username", 
+  strictLimiter, 
+  [
+    body("username").trim().notEmpty().withMessage("Username is required").escape(),
+    body("newPassword").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+    validateRequest
+  ],
+  resetPasswordByUsername
 );
 
 export default router;

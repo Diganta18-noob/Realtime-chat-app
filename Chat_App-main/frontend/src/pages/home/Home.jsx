@@ -18,7 +18,7 @@ const Home = () => {
       animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
       exit={{ opacity: 0, scale: 0.98, filter: "blur(5px)" }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="flex w-full h-[100dvh] sm:h-[85vh] sm:max-w-6xl sm:mx-auto overflow-hidden glass-card sm:my-4 shadow-2xl shadow-black/50 ring-1 ring-white/5"
+      className="flex w-full h-[100dvh] sm:h-[85vh] sm:max-w-6xl sm:mx-auto overflow-hidden glass-card sm:my-4 shadow-2xl shadow-black/50 ring-1 ring-white/5 hover-glow"
     >
       {/* On mobile: show sidebar when no conversation selected, show messages when selected */}
       <div

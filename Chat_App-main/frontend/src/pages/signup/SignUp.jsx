@@ -72,7 +72,7 @@ const SignUp = () => {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center justify-center w-full max-w-md mx-auto my-6"
     >
-      <div className="w-full p-8 sm:p-10 glass-card">
+      <div className="w-full p-8 sm:p-10 glass-card hover-glow">
         {/* Brand */}
         <div className="text-center mb-8">
           <motion.h1 

@@ -24,7 +24,7 @@ const Login = () => {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center justify-center w-full max-w-md mx-auto"
     >
-      <div className="w-full p-8 sm:p-10 glass-card">
+      <div className="w-full p-8 sm:p-10 glass-card hover-glow">
         {/* Brand */}
         <div className="text-center mb-10">
           <motion.h1 
@@ -82,7 +82,13 @@ const Login = () => {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <div className="text-right mt-3">
+            <div className="flex justify-between items-center mt-3">
+              <Link
+                to="/reset-password-username"
+                className="text-xs text-secondary hover:text-secondary-focus transition-colors font-medium opacity-70"
+              >
+                Force Reset
+              </Link>
               <Link
                 to="/forgot-password"
                 className="text-xs text-primary hover:text-primary-focus transition-colors font-medium"

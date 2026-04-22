@@ -11,6 +11,7 @@ const Login = React.lazy(() => import("./pages/login/Login"));
 const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
 const ForgotPassword = React.lazy(() => import("./pages/forgot-password/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("./pages/reset-password/ResetPassword"));
+const ResetPasswordByUsername = React.lazy(() => import("./pages/reset-password/ResetPasswordByUsername"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 
 import AppSkeleton from "./components/skeletons/AppSkeleton";
@@ -26,7 +27,11 @@ function App() {
   const location = useLocation();
   
   return (
-    <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
+    <>
+      {/* Cinematic noise and vignette overlay */}
+      <div className="cinematic-overlay" />
+      
+      <div className="min-h-screen flex items-center justify-center px-2 sm:px-4">
       <Suspense fallback={<LoadingFallback />}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
@@ -55,6 +60,10 @@ function App() {
               element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPassword />}
             />
             <Route
+              path="/reset-password-username"
+              element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPasswordByUsername />}
+            />
+            <Route
               path="/admin"
               element={
                 <AdminRoute>
@@ -76,6 +85,7 @@ function App() {
         }}
       />
     </div>
+    </>
   );
 }
 
