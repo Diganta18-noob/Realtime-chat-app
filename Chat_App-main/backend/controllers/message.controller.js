@@ -46,6 +46,8 @@ export const createGroup = async (req, res) => {
     };
 
     allParticipants.forEach((userId) => {
+      // Skip the creator — they already get the group from the API response
+      if (userId === adminId.toString()) return;
       const socketId = getReceiverSocketId(userId);
       if (socketId) {
         io.to(socketId).emit("newGroupCreated", formattedGroup);

@@ -5,7 +5,7 @@ import useConversation from "../zustand/useConversation";
 
 const useCreateGroup = () => {
   const [loading, setLoading] = useState(false);
-  const { setSelectedConversation } = useConversation();
+  const { setSelectedConversation, setConversations } = useConversation();
 
   const createGroup = async (groupName, participants) => {
     if (!groupName.trim()) {
@@ -29,6 +29,14 @@ const useCreateGroup = () => {
         fullName: data.groupName,
         profilePic: data.groupAvatar,
       };
+
+      // Add the new group to the sidebar conversations list
+      setConversations((prev) => {
+        const exists = prev.some((c) => c._id === formattedGroup._id);
+        if (exists) return prev;
+        return [formattedGroup, ...prev];
+      });
+
       setSelectedConversation(formattedGroup);
       return true;
     } catch (error) {
@@ -43,3 +51,4 @@ const useCreateGroup = () => {
 };
 
 export default useCreateGroup;
+
