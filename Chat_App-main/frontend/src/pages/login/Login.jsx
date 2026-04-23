@@ -14,7 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { loading, login } = useLogin();
-  const { setAuthUser } = useAuthContext();
+  const { setAuthUser, setAccessToken } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,8 +27,12 @@ const Login = () => {
       const res = await axiosInstance.post("/auth/google", {
         token: credentialResponse.credential,
       });
-      localStorage.setItem("chat-user", JSON.stringify(res.data));
-      setAuthUser(res.data);
+      
+      const { accessToken, ...userProfile } = res.data;
+      localStorage.setItem("chat-user", JSON.stringify(userProfile));
+      setAuthUser(userProfile);
+      setAccessToken(accessToken);
+      
       toast.success("Signed in with Google!");
       
       if (res.data.isUsernameSet === false) {
