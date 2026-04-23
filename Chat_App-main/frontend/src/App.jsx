@@ -11,7 +11,7 @@ const Login = React.lazy(() => import("./pages/login/Login"));
 const SignUp = React.lazy(() => import("./pages/signup/SignUp"));
 const ForgotPassword = React.lazy(() => import("./pages/forgot-password/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("./pages/reset-password/ResetPassword"));
-const ResetPasswordByUsername = React.lazy(() => import("./pages/reset-password/ResetPasswordByUsername"));
+
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
 const SetUsername = React.lazy(() => import("./pages/set-username/SetUsername"));
 
@@ -60,10 +60,7 @@ function App() {
               path="/reset-password"
               element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPassword />}
             />
-            <Route
-              path="/reset-password-username"
-              element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPasswordByUsername />}
-            />
+
             <Route
               path="/set-username"
               element={

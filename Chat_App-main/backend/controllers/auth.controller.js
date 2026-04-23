@@ -294,7 +294,11 @@ export const forgotPassword = async (req, res) => {
       .eq('id', user.id);
 
     const resetUrl = `${process.env.CLIENT_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
-    await sendEmail({
+
+    // Always log the reset link so developers can test locally
+    logger.info(`Password reset link for ${user.email}: ${resetUrl}`);
+
+    const result = await sendEmail({
       email: user.email,
       subject: "Password Reset Request",
       message: `<p>You requested a password reset. Click the link below to set a new password:</p>
@@ -302,6 +306,14 @@ export const forgotPassword = async (req, res) => {
                 <p>If the link doesn't work, copy and paste this URL into your browser: <br/>${resetUrl}</p>
                 <p>This link is valid for 1 hour.</p>`,
     });
+
+    if (!result.success) {
+      logger.warn("Password reset email could not be delivered", { email: user.email, reason: result.reason });
+      return res.status(200).json({
+        message: "Password reset link generated. If email delivery fails, please contact an administrator.",
+        warning: "Email delivery may be unavailable. Check server logs for the reset link.",
+      });
+    }
 
     res.status(200).json({ message: "If an account with that email exists, we sent a password reset link." });
   } catch (error) {

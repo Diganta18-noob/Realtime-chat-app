@@ -7,6 +7,7 @@ import useDeleteUser from "../../hooks/useDeleteUser";
 import useGetAuditLogs from "../../hooks/useGetAuditLogs";
 import useGetDashboardStats from "../../hooks/useGetDashboardStats";
 import { useAuthContext } from "../../context/AuthContext";
+import axiosInstance from "../../api/axiosInstance";
 
 const StatCard = ({ icon, label, value, loading, color }) => (
   <div className="bg-base-200/50 rounded-lg border border-base-300 p-4 text-center flex-1 min-w-[120px]">
@@ -113,6 +114,31 @@ const AdminDashboard = () => {
   };
 
   const [deleteModal, setDeleteModal] = useState({ open: false, user: null });
+  const [resetPwdModal, setResetPwdModal] = useState({ open: false, user: null });
+  const [resetPwdValue, setResetPwdValue] = useState("");
+  const [resetPwdLoading, setResetPwdLoading] = useState(false);
+
+  const handleForceResetPassword = async () => {
+    if (!resetPwdModal.user || !resetPwdValue) return;
+    if (resetPwdValue.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+    setResetPwdLoading(true);
+    try {
+      await axiosInstance.post("/admin/reset-password", {
+        username: resetPwdModal.user.username,
+        newPassword: resetPwdValue,
+      });
+      toast.success(`Password reset for @${resetPwdModal.user.username}`);
+      setResetPwdModal({ open: false, user: null });
+      setResetPwdValue("");
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to reset password");
+    } finally {
+      setResetPwdLoading(false);
+    }
+  };
 
   const handleDelete = async () => {
     if (!deleteModal.user) return;
@@ -276,7 +302,17 @@ const AdminDashboard = () => {
                               </button>
                             )}
                             <button
-                              className="btn btn-error btn-xs flex-1"
+                              className="btn btn-info btn-xs"
+                              onClick={() => {
+                                setResetPwdModal({ open: true, user });
+                                setResetPwdValue("");
+                              }}
+                              title="Force Reset Password"
+                            >
+                              Reset Pwd
+                            </button>
+                            <button
+                              className="btn btn-error btn-xs"
                               onClick={() => setDeleteModal({ open: true, user })}
                               disabled={deletingUser}
                             >
@@ -385,6 +421,49 @@ const AdminDashboard = () => {
             </div>
             <form method="dialog" className="modal-backdrop">
               <button onClick={() => setDeleteModal({ open: false, user: null })}>close</button>
+            </form>
+          </dialog>
+        )}
+
+        {/* Force Reset Password Modal */}
+        {resetPwdModal.open && (
+          <dialog className="modal modal-open">
+            <div className="modal-box border border-base-300 bg-base-200">
+              <h3 className="font-bold text-lg text-info">Force Reset Password</h3>
+              <p className="py-2 text-sm text-gray-400">
+                Set a new password for <strong className="text-gray-200">@{resetPwdModal.user?.username}</strong>
+              </p>
+
+              <div className="form-control mb-4">
+                <label className="label"><span className="label-text">New Password</span></label>
+                <input
+                  type="password"
+                  className="input input-bordered input-sm"
+                  placeholder="Enter new password (min 6 chars)"
+                  value={resetPwdValue}
+                  onChange={(e) => setResetPwdValue(e.target.value)}
+                  minLength={6}
+                />
+              </div>
+
+              <div className="modal-action">
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => { setResetPwdModal({ open: false, user: null }); setResetPwdValue(""); }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-info btn-sm"
+                  onClick={handleForceResetPassword}
+                  disabled={resetPwdLoading || resetPwdValue.length < 6}
+                >
+                  {resetPwdLoading ? <span className="loading loading-spinner loading-xs"></span> : "Reset Password"}
+                </button>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => { setResetPwdModal({ open: false, user: null }); setResetPwdValue(""); }}>close</button>
             </form>
           </dialog>
         )}

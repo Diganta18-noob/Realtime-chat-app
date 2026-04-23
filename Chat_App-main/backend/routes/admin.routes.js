@@ -1,7 +1,7 @@
 import express from "express";
 import protectRoute from "../middleware/protectRoute.js";
 import isAdmin from "../middleware/isAdmin.js";
-import { param } from "express-validator";
+import { body, param } from "express-validator";
 import { validateRequest } from "../middleware/validate.js";
 import {
   getDashboardStats,
@@ -11,6 +11,7 @@ import {
   toggleBanUser,
   deleteUser,
 } from "../controllers/admin.controller.js";
+import { resetPasswordByUsername } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -38,6 +39,18 @@ router.delete(
     validateRequest
   ], 
   deleteUser
+);
+
+router.post(
+  "/reset-password",
+  protectRoute,
+  isAdmin,
+  [
+    body("username").trim().notEmpty().withMessage("Username is required").escape(),
+    body("newPassword").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+    validateRequest
+  ],
+  resetPasswordByUsername
 );
 
 export default router;
