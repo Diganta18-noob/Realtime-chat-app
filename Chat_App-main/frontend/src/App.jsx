@@ -13,6 +13,7 @@ const ForgotPassword = React.lazy(() => import("./pages/forgot-password/ForgotPa
 const ResetPassword = React.lazy(() => import("./pages/reset-password/ResetPassword"));
 const ResetPasswordByUsername = React.lazy(() => import("./pages/reset-password/ResetPasswordByUsername"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
+const SetUsername = React.lazy(() => import("./pages/set-username/SetUsername"));
 
 import AppSkeleton from "./components/skeletons/AppSkeleton";
 
@@ -62,6 +63,14 @@ function App() {
             <Route
               path="/reset-password-username"
               element={authUser && !isLoading ? <Navigate to="/" /> : <ResetPasswordByUsername />}
+            />
+            <Route
+              path="/set-username"
+              element={
+                <ProtectedRoute>
+                  <SetUsername />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/admin"

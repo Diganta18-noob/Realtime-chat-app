@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   is_banned BOOLEAN DEFAULT false,
   is_deleted BOOLEAN DEFAULT false,
   is_email_verified BOOLEAN DEFAULT false,
+  is_username_set BOOLEAN DEFAULT true,
   email_verification_token TEXT DEFAULT NULL,
   email_verification_expires TIMESTAMP WITH TIME ZONE DEFAULT NULL,
   reset_password_token TEXT DEFAULT NULL,

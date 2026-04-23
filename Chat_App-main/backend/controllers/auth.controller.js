@@ -94,6 +94,7 @@ export const signup = async (req, res) => {
       role: newUser.role,
       isBanned: newUser.is_banned,
       isEmailVerified: newUser.is_email_verified,
+      isUsernameSet: newUser.is_username_set ?? true,
       accessToken,
     });
   } catch (error) {
@@ -146,6 +147,7 @@ export const login = async (req, res) => {
       profilePic: user.profile_pic,
       role: user.role,
       isBanned: user.is_banned,
+      isUsernameSet: user.is_username_set ?? true,
       accessToken,
     });
   } catch (error) {
@@ -224,6 +226,7 @@ export const getMe = async (req, res) => {
       profilePic: req.user.profile_pic || req.user.profilePic,
       role: req.user.role,
       isBanned: req.user.is_banned || req.user.isBanned,
+      isUsernameSet: req.user.is_username_set ?? true,
     };
     res.status(200).json(user);
   } catch (error) {
@@ -445,6 +448,7 @@ export const googleAuth = async (req, res) => {
           profile_pic: picture || `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${encodeURIComponent(username)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
           is_email_verified: true,
           google_id: googleId,
+          is_username_set: false,
         }])
         .select()
         .single();
@@ -478,6 +482,7 @@ export const googleAuth = async (req, res) => {
       role: user.role || "user",
       isBanned: user.is_banned || false,
       isEmailVerified: user.is_email_verified || true,
+      isUsernameSet: user.is_username_set ?? true,
       accessToken,
     });
   } catch (error) {
@@ -488,3 +493,49 @@ export const googleAuth = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const setUsername = async (req, res) => {
+  try {
+    const { newUsername } = req.body;
+    const userId = req.user.id || req.user._id;
+
+    if (!newUsername || newUsername.trim().length < 3) {
+      return res.status(400).json({ error: "Username must be at least 3 characters long." });
+    }
+
+    const trimmedUsername = newUsername.trim();
+
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .ilike('username', trimmedUsername)
+      .neq('id', userId)
+      .maybeSingle();
+
+    if (existingUser) {
+      return res.status(400).json({ error: "Username already taken." });
+    }
+
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        username: trimmedUsername,
+        is_username_set: true,
+      })
+      .eq('id', userId);
+
+    if (updateError) {
+      if (updateError.code === '23505') {
+        return res.status(400).json({ error: "Username already taken." });
+      }
+      logger.error("Error updating username", { error: updateError.message });
+      return res.status(500).json({ error: "Failed to update username." });
+    }
+
+    res.status(200).json({ message: "Username updated successfully.", username: trimmedUsername });
+  } catch (error) {
+    logger.error("Error in setUsername controller", { error: error.message });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+

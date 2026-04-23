@@ -30,7 +30,12 @@ const Login = () => {
       localStorage.setItem("chat-user", JSON.stringify(res.data));
       setAuthUser(res.data);
       toast.success("Signed in with Google!");
-      navigate("/");
+      
+      if (res.data.isUsernameSet === false) {
+        navigate("/set-username");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       toast.error(error.response?.data?.error || "Google sign-in failed");
     }

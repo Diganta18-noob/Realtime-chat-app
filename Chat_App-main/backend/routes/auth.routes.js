@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import { loginLimiter, signupLimiter } from "../middleware/rateLimiters.js";
-import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword, resetPasswordByUsername, googleAuth } from "../controllers/auth.controller.js";
+import { login, logout, signup, refreshToken, checkUsername, getMe, verifyEmail, forgotPassword, resetPassword, resetPasswordByUsername, googleAuth, setUsername } from "../controllers/auth.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 import { body, param } from "express-validator";
 import { validateRequest } from "../middleware/validate.js";
@@ -54,6 +54,16 @@ router.get(
 );
 
 router.get("/me", protectRoute, getMe);
+
+router.put(
+  "/set-username",
+  protectRoute,
+  [
+    body("newUsername").trim().notEmpty().withMessage("Username is required").isLength({ min: 3 }).escape(),
+    validateRequest
+  ],
+  setUsername
+);
 
 router.post(
   "/verify-email", 
