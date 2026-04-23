@@ -42,27 +42,33 @@ const Sidebar = ({ unreadCounts = {} }) => {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-base-300 flex justify-between items-center bg-base-100/30">
-        <div className="flex items-center gap-2">
+      <div className="p-4 border-t border-base-300 flex items-center bg-base-100/30 gap-2">
+        <button
+          onClick={() => setIsProfileOpen(true)}
+          className="flex items-center gap-3 flex-1 min-w-0 text-left hover:bg-base-200/50 p-1.5 rounded-xl transition-colors cursor-pointer"
+          title="My Profile"
+        >
+          <Avatar
+            username={authUser?.username || authUser?.fullName}
+            role={authUser?.role}
+            profilePic={authUser?.profilePic}
+            size={36}
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-base-content truncate">
+              {authUser?.fullName}
+            </p>
+          </div>
+        </button>
+
+        <div className="flex items-center gap-1 shrink-0">
+          {authUser?.role === "admin" && (
+            <Link to="/admin" className="btn btn-sm btn-ghost btn-circle text-primary hover:text-primary-focus" title="Admin Dashboard">
+              <HiOutlineShieldCheck className="text-xl" />
+            </Link>
+          )}
           <LogoutButton />
-          <button
-            onClick={() => setIsProfileOpen(true)}
-            className="btn btn-ghost btn-sm btn-circle hover:bg-primary/10 transition-colors"
-            title="My Profile"
-          >
-            <Avatar
-              username={authUser?.username}
-              role={authUser?.role}
-              profilePic={authUser?.profilePic}
-              size={28}
-            />
-          </button>
         </div>
-        {authUser?.role === "admin" && (
-          <Link to="/admin" className="btn btn-sm btn-ghost text-primary hover:text-primary-focus" title="Admin Dashboard">
-            <HiOutlineShieldCheck className="text-xl" />
-          </Link>
-        )}
       </div>
 
       {/* Modals */}

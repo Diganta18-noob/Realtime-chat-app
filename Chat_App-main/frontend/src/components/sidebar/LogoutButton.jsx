@@ -20,30 +20,17 @@ const LogoutButton = () => {
 
   return (
     <>
-      <div className="flex items-center gap-3 w-full min-w-0">
-        <Avatar
-          username={authUser?.username || authUser?.fullName}
-          role={authUser?.role}
-          profilePic={authUser?.profilePic}
-          size={36}
-        />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-base-content truncate">
-            {authUser?.fullName}
-          </p>
-        </div>
-        {!loading ? (
-          <button
-            className="btn btn-ghost btn-sm btn-circle text-error hover:bg-error/10 tooltip tooltip-top"
-            data-tip="Logout"
-            onClick={handleLogoutClick}
-          >
-            <BiLogOut className="w-5 h-5" />
-          </button>
-        ) : (
-          <span className="loading loading-spinner loading-sm"></span>
-        )}
-      </div>
+      {!loading ? (
+        <button
+          className="btn btn-ghost btn-sm btn-circle text-error hover:bg-error/10 tooltip tooltip-top"
+          data-tip="Logout"
+          onClick={handleLogoutClick}
+        >
+          <BiLogOut className="w-5 h-5" />
+        </button>
+      ) : (
+        <span className="loading loading-spinner loading-sm"></span>
+      )}
 
       {/* Confirmation Modal */}
       {showModal && (
