@@ -281,7 +281,7 @@ const AdminDashboard = () => {
                         {user.role === "admin" ? (
                           <span className="badge badge-ghost badge-sm">Admin</span>
                         ) : (
-                          <div className="flex gap-1">
+                          <div className="flex gap-2 items-center flex-nowrap min-w-max">
                             {user.isBanned ? (
                               <button
                                 className="btn btn-success btn-xs"
@@ -291,7 +291,7 @@ const AdminDashboard = () => {
                               </button>
                             ) : (
                               <button
-                                className="btn btn-warning btn-xs flex-1"
+                                className="btn btn-warning btn-xs"
                                 onClick={() => {
                                   setSuspendModal({ open: true, user });
                                   setSuspendDuration("1h");
