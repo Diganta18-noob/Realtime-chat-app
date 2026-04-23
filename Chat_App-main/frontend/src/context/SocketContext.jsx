@@ -14,20 +14,21 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { authUser, accessToken, setAuthUser, setAccessToken } = useAuthContext();
-  const tokenRef = useRef(accessToken);
-
-  // Keep the ref in sync so reconnections use the latest token
-  useEffect(() => {
-    tokenRef.current = accessToken;
-  }, [accessToken]);
+  const socketRef = useRef(null);
 
   useEffect(() => {
-    if (authUser && accessToken) {
-      // WebSockets MUST connect directly to the backend — Vercel does NOT proxy WebSockets.
-      // In production (non-localhost), always connect to the Render backend URL.
+    // Only connect when we have BOTH a user AND a valid access token
+    if (authUser?._id && accessToken) {
+      // Tear down any previous connection first
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+
       const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
       const socketUrl = import.meta.env.VITE_BACKEND_URL
         || (isLocalhost ? "/" : "https://orbit-chat.onrender.com");
+
       const newSocket = io(socketUrl, {
         auth: {
           token: accessToken,
@@ -37,6 +38,7 @@ export const SocketContextProvider = ({ children }) => {
         reconnectionDelay: 1000,
       });
 
+      socketRef.current = newSocket;
       setSocket(newSocket);
 
       newSocket.on("getOnlineUsers", (users) => {
@@ -73,16 +75,20 @@ export const SocketContextProvider = ({ children }) => {
         }
       });
 
-      return () => newSocket.close();
+      return () => {
+        newSocket.close();
+        socketRef.current = null;
+      };
     } else {
-      if (socket) {
-        socket.close();
-        setSocket(null);
+      // User logged out or token cleared — disconnect
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
       }
+      setSocket(null);
+      setOnlineUsers([]);
     }
-    // Only re-run when authUser changes (login/logout), NOT on every token refresh
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authUser]);
+  }, [authUser, accessToken, setAuthUser, setAccessToken]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>
@@ -90,3 +96,4 @@ export const SocketContextProvider = ({ children }) => {
     </SocketContext.Provider>
   );
 };
+
