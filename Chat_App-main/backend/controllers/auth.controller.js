@@ -6,6 +6,7 @@ import { supabase } from "../config/supabase.js";
 import generateTokens from "../utils/generateToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import logger from "../utils/logger.js";
+import { io } from "../socket/socket.js";
 
 export const signup = async (req, res) => {
   try {
@@ -85,6 +86,15 @@ export const signup = async (req, res) => {
         logger.error("Failed to send verification email during signup", { error: emailError.message, userId: newUser.id });
       }
     }
+
+    // Broadcast to all connected clients so their sidebar updates instantly
+    io.emit("newUserJoined", {
+      _id: newUser.id,
+      fullName: newUser.full_name,
+      username: newUser.username,
+      profilePic: newUser.profile_pic,
+      isGroup: false,
+    });
 
     res.status(201).json({
       _id: newUser.id,
@@ -542,6 +552,23 @@ export const setUsername = async (req, res) => {
       }
       logger.error("Error updating username", { error: updateError.message });
       return res.status(500).json({ error: "Failed to update username." });
+    }
+
+    // Fetch the full user so we can broadcast to other clients
+    const { data: updatedUser } = await supabase
+      .from('users')
+      .select('id, full_name, username, profile_pic')
+      .eq('id', userId)
+      .single();
+
+    if (updatedUser) {
+      io.emit("newUserJoined", {
+        _id: updatedUser.id,
+        fullName: updatedUser.full_name,
+        username: updatedUser.username,
+        profilePic: updatedUser.profile_pic,
+        isGroup: false,
+      });
     }
 
     res.status(200).json({ message: "Username updated successfully.", username: trimmedUsername });
